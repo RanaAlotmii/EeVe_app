@@ -7,6 +7,7 @@ import 'package:eeve_app/Custom_Widget_/custom_button.dart';
 import 'package:eeve_app/auth_views/signup_view.dart';
 import 'package:eeve_app/main.dart';
 import 'package:eeve_app/views/home_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SigninView extends StatefulWidget {
@@ -74,8 +75,10 @@ class _SigninViewState extends State<SigninView> {
                     final emailConfirmed = user.emailConfirmedAt != null;
 
                     if (emailConfirmed) {
-                     Get.offAll(() => const MainNavShell());
+                      final prefs = await SharedPreferences.getInstance();
+                      await prefs.setBool('isLoggedIn', true);
 
+                      Get.offAll(() => const MainNavShell());
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
