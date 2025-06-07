@@ -40,3 +40,7 @@ flutter:
           weight: 500
         - asset: assets/fonts/PlusJakartaSans-Bold.ttf
           weight: 700
+
+
+dependency_overrides:
+  sign_in_with_apple: ^6.1.0
