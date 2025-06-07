@@ -86,13 +86,9 @@ class _VerificationCodeViewState extends State<VerificationCodeView> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset(
-                      'assets/Success alert .png',
-                      height: 80,
-                      width: 80,
-                    ),
-                    const SizedBox(height: 24),
-                    const Text(
+                    Image.asset('assets/success.png', height: 120, width: 120),
+                    SizedBox(height: 30),
+                    Text(
                       'Email Confirmed',
                       style: TextStyle(
                         color: Colors.white,
@@ -100,13 +96,13 @@ class _VerificationCodeViewState extends State<VerificationCodeView> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    const Text(
+                    SizedBox(height: 12),
+                    Text(
                       'You now have valid access to your account',
                       textAlign: TextAlign.center,
                       style: TextStyle(color: Colors.white54, fontSize: 14),
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24),
                     SizedBox(
                       width: double.infinity,
                       child: CustomButton(
@@ -116,7 +112,7 @@ class _VerificationCodeViewState extends State<VerificationCodeView> {
                         },
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
                   ],
                 ),
               ),
