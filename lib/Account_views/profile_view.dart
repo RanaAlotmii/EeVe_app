@@ -3,6 +3,7 @@ import 'package:eeve_app/Account_views/about_app_view.dart';
 import 'package:eeve_app/Account_views/edit_profile_view.dart';
 import 'package:eeve_app/Account_views/my_cards_view.dart';
 import 'package:eeve_app/auth_views/signin_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:get/route_manager.dart';
 
@@ -21,8 +22,6 @@ class _ProfileViewState extends State<ProfileView> {
 
   @override
   Widget build(BuildContext context) {
-    print(user?.userMetadata); // 👈 هذا السطر
-
     return Scaffold(
       backgroundColor: const Color(0xFF121212),
       appBar: AppBar(
@@ -103,7 +102,9 @@ class _ProfileViewState extends State<ProfileView> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const MyCardsView()),
+                    MaterialPageRoute(
+                      builder: (context) => const MyCardsView(),
+                    ),
                   );
                 },
               ),
@@ -119,7 +120,9 @@ class _ProfileViewState extends State<ProfileView> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const MyCardsView()),
+                    MaterialPageRoute(
+                      builder: (context) => const MyCardsView(),
+                    ),
                   );
                 },
               ),
@@ -175,7 +178,9 @@ class _ProfileViewState extends State<ProfileView> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const AboutAppView()),
+                    MaterialPageRoute(
+                      builder: (context) => const AboutAppView(),
+                    ),
                   );
                 },
               ),
@@ -188,6 +193,10 @@ class _ProfileViewState extends State<ProfileView> {
                 ),
                 onTap: () async {
                   await Supabase.instance.client.auth.signOut();
+
+                  final prefs = await SharedPreferences.getInstance();
+                  await prefs.setBool('isLoggedIn', false);
+
                   Get.offAll(() => const SigninView());
                 },
               ),
@@ -198,4 +207,3 @@ class _ProfileViewState extends State<ProfileView> {
     );
   }
 }
-
