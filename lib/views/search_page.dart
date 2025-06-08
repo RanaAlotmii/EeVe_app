@@ -119,6 +119,7 @@ class _SearchPageState extends State<SearchPage> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => EventDetail(
+                                    eventId: event['id'] ,
                                     title: event['title'] ?? '',
                                     location: event['location'] ?? '',
                                     image: event['image_detail'] ?? '',

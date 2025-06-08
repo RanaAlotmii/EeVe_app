@@ -24,6 +24,7 @@ class TrendingEventsList extends StatelessWidget {
                 MaterialPageRoute(
                   builder:
                       (_) => EventDetail(
+                        eventId: event['id'],
                         title: event['title'] ?? '',
                         image: event['image_detail'] ?? '',
                         imageCover:

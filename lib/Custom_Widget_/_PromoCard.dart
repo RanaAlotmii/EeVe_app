@@ -76,6 +76,7 @@ class _PromoCardState extends State<PromoCard> {
                               MaterialPageRoute(
                                 builder:
                                     (_) => EventDetail(
+                                      eventId: promoEvent!['id'],
                                       title: promoEvent!['title'] ?? '',
                                       image:
                                           promoEvent!['image_detail'] ??

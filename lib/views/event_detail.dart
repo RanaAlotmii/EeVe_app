@@ -1,49 +1,25 @@
 import 'package:eeve_app/custom_Widget_/Custom_button.dart';
 import 'package:eeve_app/custom_Widget_/_TrendingEventsList.dart';
-import 'package:eeve_app/custom_Widget_/image_ticket_card.dart';
 import 'package:eeve_app/views/search_page.dart';
 import 'package:eeve_app/views/booking_form_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter/material.dart';
-class FavoriteManager {
-  static final List<Map<String, dynamic>> _favorites = [];
-  static final ValueNotifier<List<Map<String, dynamic>>> favoritesNotifier =
-      ValueNotifier([]);
-
-  static List<Map<String, dynamic>> get favorites => _favorites;
-
-  static void toggleFavorite(Map<String, dynamic> event) {
-    if (_favorites.any(
-      (e) => e['title'] == event['title'] && e['location'] == event['location'],
-    )) {
-      _favorites.removeWhere(
-        (e) =>
-            e['title'] == event['title'] && e['location'] == event['location'],
-      );
-    } else {
-      _favorites.add(event);
-    }
-    favoritesNotifier.value = List.from(_favorites);
-  }
-
-  static bool isFavorite(Map<String, dynamic> event) {
-    return _favorites.any(
-      (e) => e['title'] == event['title'] && e['location'] == event['location'],
-    );
-  }
-}
+import 'package:eeve_app/managers/favorites_manager.dart';
 
 class EventDetail extends StatefulWidget {
+  final int eventId;
   final String title;
-  final String image; // ✅ image_detail
-  final String imageCover; // ✅ image_cover
+  final String image;
+  final String imageCover;
   final String location;
   final String price;
   final String description;
   final String eventTime;
+  final VoidCallback? onFavoriteChanged;
 
   const EventDetail({
     super.key,
+    required this.eventId,
     required this.title,
     required this.image,
     required this.imageCover,
@@ -51,6 +27,7 @@ class EventDetail extends StatefulWidget {
     required this.price,
     required this.description,
     required this.eventTime,
+    this.onFavoriteChanged,
   });
 
   @override
@@ -59,30 +36,128 @@ class EventDetail extends StatefulWidget {
 
 class _EventDetailState extends State<EventDetail> {
   late bool isFavorite;
+  final user = Supabase.instance.client.auth.currentUser;
+  bool isLoading = false;
+  final FavoritesManager _favoritesManager = FavoritesManager();
 
   List<Map<String, dynamic>> moreEvents = [];
 
   @override
   void initState() {
     super.initState();
-    isFavorite = FavoriteManager.isFavorite({
-      'title': widget.title,
-      'location': widget.location,
-    });
-
+    isFavorite = false;
     fetchMoreEvents();
+    _checkIfFavorite();
   }
 
   Future<void> fetchMoreEvents() async {
-    final response = await Supabase.instance.client
-        .from('events')
-        .select()
-        .neq('title', widget.title)
-        .limit(5);
+    try {
+      final response = await Supabase.instance.client
+          .from('events')
+          .select()
+          .neq('id', widget.eventId)
+          .limit(5);
+
+      if (mounted) {
+        setState(() {
+          moreEvents = List<Map<String, dynamic>>.from(response);
+        });
+      }
+    } catch (e) {
+      print('Error fetching more events: $e');
+    }
+  }
+
+  // استخدام FavoritesManager للفحص
+  Future<void> _checkIfFavorite() async {
+    final result = await _favoritesManager.isFavorite(widget.eventId);
+    if (mounted) {
+      setState(() {
+        isFavorite = result;
+      });
+    }
+  }
+
+  // استخدام FavoritesManager للتبديل
+  Future<void> _toggleFavorite() async {
+    final userId = user?.id;
+    if (userId == null) {
+      _showMessage('Please log in to add favorites', isError: true);
+      return;
+    }
+
+    if (isLoading) return;
 
     setState(() {
-      moreEvents = List<Map<String, dynamic>>.from(response);
+      isLoading = true;
     });
+
+    try {
+      bool success;
+      
+      if (isFavorite) {
+        // حذف من المفضلة
+        success = await _favoritesManager.removeFromFavorites(widget.eventId);
+        if (success) {
+          _showMessage('Removed from favorites');
+        }
+      } else {
+        // إضافة إلى المفضلة
+        final eventData = {
+          'id': widget.eventId,
+          'title': widget.title,
+          'image_detail': widget.image,
+          'image_cover': widget.imageCover,
+          'location': widget.location,
+          'price': double.tryParse(widget.price) ?? 0.0,
+          'description': widget.description,
+          'event_time': widget.eventTime,
+        };
+        
+        success = await _favoritesManager.addToFavorites(widget.eventId, eventData);
+        if (success) {
+          _showMessage('Added to favorites');
+        }
+      }
+
+      if (success && mounted) {
+        setState(() {
+          isFavorite = !isFavorite;
+          isLoading = false;
+        });
+
+        // استدعاء الـ callback (إضافي للتأكد)
+        widget.onFavoriteChanged?.call();
+      } else {
+        if (mounted) {
+          setState(() {
+            isLoading = false;
+          });
+          _showMessage('Failed to update favorites', isError: true);
+        }
+      }
+    } catch (e) {
+      print('Error toggling favorite: $e');
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+        _showMessage('Failed to update favorites', isError: true);
+      }
+    }
+  }
+
+  void _showMessage(String message, {bool isError = false}) {
+    if (!mounted) return;
+    
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: isError ? Colors.red : Colors.green,
+        duration: const Duration(seconds: 2),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
   }
 
   @override
@@ -98,34 +173,32 @@ class _EventDetailState extends State<EventDetail> {
           style: TextStyle(color: Colors.white),
         ),
         actions: [
-          IconButton(
-            onPressed: () {
-              setState(() {
-                final eventMap = {
-                  'title': widget.title,
-                  'location': widget.location,
-                  'image_cover': widget.imageCover,
-                  'image_detail': widget.image,
-                  'price': widget.price,
-                  'description': widget.description,
-                  'event_time': widget.eventTime,
-                };
-                FavoriteManager.toggleFavorite(eventMap);
-                isFavorite = !isFavorite;
-              });
-            },
-            icon: Icon(
-              isFavorite ? Icons.favorite : Icons.favorite_outline,
-              color: Colors.white,
-            ),
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              IconButton(
+                onPressed: isLoading ? null : _toggleFavorite,
+                icon: Icon(
+                  isFavorite ? Icons.favorite : Icons.favorite_outline,
+                  color: isLoading ? Colors.grey : (isFavorite ? Colors.red : Colors.white),
+                ),
+              ),
+              if (isLoading)
+                const SizedBox(
+                  width: 16,
+                  height: 16,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
+                ),
+            ],
           ),
         ],
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            Navigator.pop(
-              context,
-            ); // ✅ BEST: will go back to previous page (Home, Search, Favorites ... whatever)
+            Navigator.pop(context);
           },
         ),
       ),
@@ -172,6 +245,16 @@ class _EventDetailState extends State<EventDetail> {
                 width: double.infinity,
                 height: 200,
                 fit: BoxFit.cover,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Container(
+                    height: 200,
+                    color: Colors.grey[800],
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                },
                 errorBuilder: (context, error, stackTrace) {
                   return Container(
                     color: Colors.grey[800],
@@ -226,16 +309,15 @@ class _EventDetailState extends State<EventDetail> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder:
-                    (_) => BookingFormPage(
-                      eventData: {
-                        'title': widget.title,
-                        'location': widget.location,
-                        'image_cover': widget.imageCover,
-                        'price': widget.price,
-                        'event_date': widget.eventTime,
-                      },
-                    ),
+                builder: (_) => BookingFormPage(
+                  eventData: {
+                    'title': widget.title,
+                    'location': widget.location,
+                    'image_cover': widget.imageCover,
+                    'price': widget.price,
+                    'event_date': widget.eventTime,
+                  },
+                ),
               ),
             );
           },

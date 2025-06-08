@@ -1,74 +1,255 @@
-import 'package:flutter/material.dart';
 import 'package:eeve_app/custom_Widget_/event_card_small.dart';
+import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:eeve_app/views/event_detail.dart';
-
+import 'package:eeve_app/managers/favorites_manager.dart'; 
 
 class FavoritesView extends StatefulWidget {
-  const FavoritesView({super.key});
+  const FavoritesView({Key? key}) : super(key: key);
 
   @override
   State<FavoritesView> createState() => _FavoritesViewState();
 }
 
 class _FavoritesViewState extends State<FavoritesView> {
+  final user = Supabase.instance.client.auth.currentUser;
+  final FavoritesManager _favoritesManager = FavoritesManager();
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeFavorites();
+  }
+
+  Future<void> _initializeFavorites() async {
+    if (user != null) {
+      await _favoritesManager.initialize();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (user == null) {
+      return const Scaffold(
+        backgroundColor: Color(0xFF121212),
+        body: Center(
+          child: Text(
+            'Please log in to view your favorites.',
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: const Color(0xFF121212),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-        title: const Text('Favorites', style: TextStyle(color: Colors.white)),
+        title: const Text(
+          'My Favorites',
+          style: TextStyle(color: Colors.white),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh, color: Colors.white),
+            onPressed: () {
+              _initializeFavorites();
+            },
+            tooltip: 'Refresh favorites',
+          ),
+        ],
       ),
-      body: ValueListenableBuilder<List<Map<String, dynamic>>>(
-        valueListenable: FavoriteManager.favoritesNotifier,
-        builder: (context, favorites, _) {
-          if (favorites.isEmpty) {
-            return const Center(
-              child: Text(
-                'No favorites yet',
-                style: TextStyle(color: Colors.grey, fontSize: 16),
+      body: StreamBuilder<List<Map<String, dynamic>>>(
+        stream: _favoritesManager.favoritesStream,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasError) {
+            print('Error in favorites stream: ${snapshot.error}');
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'Error loading favorites',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: _initializeFavorites,
+                    child: const Text('Retry'),
+                  ),
+                ],
               ),
             );
           }
-          return ListView.separated(
-            padding: const EdgeInsets.all(16),
-            itemCount: favorites.length,
-            separatorBuilder: (context, index) => const SizedBox(height: 10),
-            itemBuilder: (context, index) {
-              final event = favorites[index];
 
-              return InkWell(
-                borderRadius: BorderRadius.circular(12),
-                onTap: () async {
-                  await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => EventDetail(
-                        title: event['title'],
-                        image: event['image_detail'],  // ✅ Show correct detail image
-                        imageCover: event['image_cover'], // ✅ we pass this too
-                        location: event['location'],
-                        price: event['price'],
-                        description: event['description'],
-                        eventTime: event['event_time'],
-                      ),
+          final favorites = snapshot.data ?? [];
+
+          if (favorites.isEmpty) {
+            return const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.favorite_border,
+                    size: 64,
+                    color: Colors.grey,
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    'No favorites yet!',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
                     ),
-                  );
-                },
-                child: CompactEventCard(
-                  title: event['title'],
-                  location: event['location'],
-                  imageAsset: event['image_cover'],  // ✅ Show only cover in small cards
-                  price: double.tryParse(event['price'].toString()) ?? 0.0,
-                ),
-              );
-            },
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'Start adding events to your favorites',
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+
+          return RefreshIndicator(
+            onRefresh: _initializeFavorites,
+            child: ListView.builder(
+              physics: const AlwaysScrollableScrollPhysics(),
+              itemCount: favorites.length,
+              itemBuilder: (context, index) {
+                final event = favorites[index];
+
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Stack(
+                    children: [
+                      CompactEventCard(
+                        title: event['title'] ?? 'Unknown Event',
+                        location: event['location'] ?? 'Unknown Location',
+                        imageAsset: event['image_cover'] ?? '',
+                        price: ((event['price'] ?? 0) as num).toDouble(),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => EventDetail(
+                                eventId: event['id'],
+                                title: event['title'] ?? 'Unknown Event',
+                                image: event['image_detail'] ?? '',
+                                imageCover: event['image_cover'] ?? '',
+                                location: event['location'] ?? 'Unknown Location',
+                                price: (event['price'] ?? 0).toString(),
+                                description: event['description'] ?? '',
+                                eventTime: event['event_time'] ?? '',
+                                // لا حاجة للـ callback مع FavoritesManager
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      Positioned(
+                        top: 55,
+                        right: 8,
+                        child: IconButton(
+                          icon: const Icon(Icons.delete, color: Colors.red),
+                          onPressed: () => _showDeleteConfirmation(event),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
           );
         },
       ),
     );
   }
-}
 
+  void _showDeleteConfirmation(Map<String, dynamic> event) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: const Color(0xFF1E1E1E),
+          title: const Text(
+            'Remove from Favorites',
+            style: TextStyle(color: Colors.white),
+          ),
+          content: Text(
+            'Are you sure you want to remove "${event['title']}" from your favorites?',
+            style: const TextStyle(color: Colors.white70),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _removeFromFavorites(event['id']);
+              },
+              child: const Text('Remove', style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _removeFromFavorites(int eventId) async {
+    try {
+      final success = await _favoritesManager.removeFromFavorites(eventId);
+      
+      if (success && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Removed from favorites'),
+            backgroundColor: Colors.green,
+            duration: Duration(seconds: 2),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      } else if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Failed to remove from favorites'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 2),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    } catch (e) {
+      print('Error removing from favorites: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Failed to remove from favorites'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 2),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    // لا تقم بـ dispose للمدير لأنه Singleton
+    super.dispose();
+  }
+}
