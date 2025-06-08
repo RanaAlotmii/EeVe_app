@@ -1,5 +1,5 @@
 import 'package:eeve_app/custom_Widget_/event_card_small.dart';
-import 'package:eeve_app/views/payment_page.dart';
+//import 'package:eeve_app/views/payment_page.dart';
 import 'package:flutter/material.dart';
 import 'package:eeve_app/custom_Widget_/Custom_button.dart';
 
@@ -206,12 +206,12 @@ class DetailOrderPage extends StatelessWidget {
         child: CustomButton(
           text: 'Pay Now',
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => PaymentPage(totalPrice: totalPrice),
-              ),
-            );
+            // Navigator.push(
+            // context,
+            //  MaterialPageRoute(
+            // builder: (_) => PaymentPage(totalPrice: totalPrice),
+            //),
+            // );
           },
         ),
       ),

@@ -18,10 +18,58 @@ class _ProfileViewState extends State<ProfileView> {
   bool isDarkMode = true;
   bool isNotificationsOn = false;
 
-  final user = Supabase.instance.client.auth.currentUser;
+  final _supabase = Supabase.instance.client;
+
+  String name = '';
+  String email = '';
+  String gender = '-';
+  String dob = '';
+  String profileImage = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    try {
+      final user = _supabase.auth.currentUser;
+      if (user == null) return;
+
+      final response =
+          await _supabase
+              .from('users')
+              .select()
+              .eq('id', user.id)
+              .maybeSingle();
+
+      if (response != null) {
+        setState(() {
+          name = response['name'] ?? 'User Name';
+          email = response['email'] ?? 'user@example.com';
+          gender = response['gender'] ?? '-';
+          dob = response['date_of_birth'] ?? '';
+          final img = response['profile_image'];
+          profileImage =
+              (img != null && img.toString().trim().isNotEmpty) ? img : '';
+        });
+      }
+    } catch (e) {
+      print('Error loading user data: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    ImageProvider profileImageWidget;
+
+    if (profileImage.startsWith('http')) {
+      profileImageWidget = NetworkImage(profileImage);
+    } else {
+      profileImageWidget = const AssetImage('assets/profileImage.png');
+    }
+
     return Scaffold(
       backgroundColor: const Color(0xFF121212),
       appBar: AppBar(
@@ -39,23 +87,13 @@ class _ProfileViewState extends State<ProfileView> {
               // Profile Info
               Row(
                 children: [
-                  CircleAvatar(
-                    radius: 30,
-                    backgroundImage:
-                        user?.userMetadata?['profile_image'] != null &&
-                                user!.userMetadata!['profile_image']
-                                    .toString()
-                                    .isNotEmpty
-                            ? NetworkImage(user?.userMetadata!['profile_image'])
-                            : const AssetImage('assets/profileImage.png')
-                                as ImageProvider,
-                  ),
+                  CircleAvatar(radius: 30, backgroundImage: profileImageWidget),
                   const SizedBox(width: 16),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        user?.userMetadata?['name'] ?? 'User Name',
+                        name,
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -63,7 +101,7 @@ class _ProfileViewState extends State<ProfileView> {
                         ),
                       ),
                       Text(
-                        user?.email ?? 'user@example.com',
+                        email,
                         style: const TextStyle(color: Colors.white70),
                       ),
                     ],
@@ -145,25 +183,6 @@ class _ProfileViewState extends State<ProfileView> {
                 ),
                 secondary: const Icon(
                   Icons.dark_mode_outlined,
-                  color: Colors.white,
-                ),
-                activeColor: const Color(0xFF8B57E6),
-              ),
-
-              // Notification Switch
-              SwitchListTile(
-                value: isNotificationsOn,
-                onChanged: (val) {
-                  setState(() {
-                    isNotificationsOn = val;
-                  });
-                },
-                title: const Text(
-                  'Notification',
-                  style: TextStyle(color: Colors.white),
-                ),
-                secondary: const Icon(
-                  Icons.notifications_none,
                   color: Colors.white,
                 ),
                 activeColor: const Color(0xFF8B57E6),
