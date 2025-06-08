@@ -47,7 +47,7 @@ class _OnboardingViewState extends State<OnboardingView> {
       // TODO: Navigate to Home/Login
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const MainNavShell()),
+        MaterialPageRoute(builder: (context) =>WelcomeView()),
       );
 
     }

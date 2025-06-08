@@ -1,3 +1,4 @@
+import 'package:eeve_app/views/splash_view.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: 'PlusJakartaSans'),
 
-      home: isLoggedIn ? const MainNavShell() : const SignupView(),
+      home:SplashView(),
     );
   }
 }
