@@ -21,6 +21,8 @@ dependencies:
   supabase_flutter: ^1.10.18
   dotted_line: ^3.2.3
   shared_preferences: ^2.5.3
+  image_picker: ^1.1.2
+
 
 dev_dependencies:
   flutter_test:

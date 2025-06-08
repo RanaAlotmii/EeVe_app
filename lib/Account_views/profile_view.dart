@@ -19,9 +19,37 @@ class _ProfileViewState extends State<ProfileView> {
   bool isNotificationsOn = false;
 
   final user = Supabase.instance.client.auth.currentUser;
+  Map<String, dynamic>? userData;
+
+  @override
+  void initState() {
+    super.initState();
+    getUserData();
+  }
+
+  Future<void> getUserData() async {
+    try {
+      final response =
+          await Supabase.instance.client
+              .from('users')
+              .select()
+              .eq('id', user?.id)
+              .maybeSingle();
+
+      setState(() {
+        userData = response;
+      });
+    } catch (e) {
+      print('Error fetching user data: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final profileImage = userData?['profile_image'];
+    final name = userData?['name'] ?? 'User Name';
+    final email = userData?['email'] ?? user?.email ?? 'user@example.com';
+
     return Scaffold(
       backgroundColor: const Color(0xFF121212),
       appBar: AppBar(
@@ -42,11 +70,8 @@ class _ProfileViewState extends State<ProfileView> {
                   CircleAvatar(
                     radius: 30,
                     backgroundImage:
-                        user?.userMetadata?['profile_image'] != null &&
-                                user!.userMetadata!['profile_image']
-                                    .toString()
-                                    .isNotEmpty
-                            ? NetworkImage(user?.userMetadata!['profile_image'])
+                        profileImage != null && profileImage.isNotEmpty
+                            ? NetworkImage(profileImage)
                             : const AssetImage('assets/profileImage.png')
                                 as ImageProvider,
                   ),
@@ -55,7 +80,7 @@ class _ProfileViewState extends State<ProfileView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        user?.userMetadata?['name'] ?? 'User Name',
+                        name,
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -63,14 +88,13 @@ class _ProfileViewState extends State<ProfileView> {
                         ),
                       ),
                       Text(
-                        user?.email ?? 'user@example.com',
+                        email,
                         style: const TextStyle(color: Colors.white70),
                       ),
                     ],
                   ),
                 ],
               ),
-
               const SizedBox(height: 32),
               const Text(
                 'Personal Info',
@@ -131,7 +155,6 @@ class _ProfileViewState extends State<ProfileView> {
               const Text('Settings', style: TextStyle(color: Colors.white54)),
               const SizedBox(height: 16),
 
-              // Dark Mode Switch
               SwitchListTile(
                 value: isDarkMode,
                 onChanged: (val) {
@@ -145,25 +168,6 @@ class _ProfileViewState extends State<ProfileView> {
                 ),
                 secondary: const Icon(
                   Icons.dark_mode_outlined,
-                  color: Colors.white,
-                ),
-                activeColor: const Color(0xFF8B57E6),
-              ),
-
-              // Notification Switch
-              SwitchListTile(
-                value: isNotificationsOn,
-                onChanged: (val) {
-                  setState(() {
-                    isNotificationsOn = val;
-                  });
-                },
-                title: const Text(
-                  'Notification',
-                  style: TextStyle(color: Colors.white),
-                ),
-                secondary: const Icon(
-                  Icons.notifications_none,
                   color: Colors.white,
                 ),
                 activeColor: const Color(0xFF8B57E6),
@@ -184,7 +188,6 @@ class _ProfileViewState extends State<ProfileView> {
                   );
                 },
               ),
-
               ListTile(
                 leading: const Icon(Icons.logout, color: Colors.white),
                 title: const Text(
@@ -193,10 +196,8 @@ class _ProfileViewState extends State<ProfileView> {
                 ),
                 onTap: () async {
                   await Supabase.instance.client.auth.signOut();
-
                   final prefs = await SharedPreferences.getInstance();
                   await prefs.setBool('isLoggedIn', false);
-
                   Get.offAll(() => const SigninView());
                 },
               ),
