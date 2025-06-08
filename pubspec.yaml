@@ -22,9 +22,10 @@ dependencies:
   dotted_line: ^3.2.3
   shared_preferences: ^2.5.3
   moyasar: ^2.0.1
-  flutter_credit_card: 3.0.1
+  flutter_credit_card: ^4.1.0
   http: ^1.2.1
   image_picker: ^1.1.2
+  credit_card_form: ^1.0.0
 
 dev_dependencies:
   flutter_test:
