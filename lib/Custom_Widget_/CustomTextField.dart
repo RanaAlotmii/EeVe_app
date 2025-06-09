@@ -61,7 +61,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
               fillColor:
                   hasFocus
                       ? const Color(0xFF1565FF).withOpacity(0.3)
-                      : const Color(0xFF745094),
+                      : const Color(0xFF1A1B25),
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 16,
                 vertical: 14,

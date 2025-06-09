@@ -107,6 +107,10 @@ class _SignupViewState extends State<SignupView> {
                           );
                         }
                       } catch (e) {
+                        // هنا نطبع الخطأ في الـ console للتست
+                        print("Sign Up Error: $e");
+
+                        // وإذا تبين تعرض رسالة للمستخدم، تفعل السطر التالي:
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text("Sign Up Error: $e")),
                         );
