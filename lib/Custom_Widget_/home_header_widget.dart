@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:eeve_app/views/search_page.dart';
+import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class HomeHeader extends StatefulWidget {
@@ -85,9 +86,11 @@ class _HomeHeaderState extends State<HomeHeader> {
         // Settings Icon with onTap
         GestureDetector(
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const SearchPage()),
+            Get.to(
+              () => const SearchPage(),
+              fullscreenDialog: true, 
+              transition:
+                  Transition.cupertino, 
             );
           },
           child: Container(

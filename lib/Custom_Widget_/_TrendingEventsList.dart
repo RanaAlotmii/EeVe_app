@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:eeve_app/views/event_detail.dart';
 import 'package:get/get.dart';
+import 'package:eeve_app/views/event_detail.dart';
 
 class TrendingEventsList extends StatelessWidget {
   final List<Map<String, dynamic>> events;
@@ -10,7 +10,7 @@ class TrendingEventsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 260, // slightly taller container
+      height: 260,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: events.length,
@@ -18,35 +18,40 @@ class TrendingEventsList extends StatelessWidget {
         itemBuilder: (context, index) {
           final event = events[index];
 
-          return GestureDetector(
-            onTap: () {
-              Get.to(
-                () => EventDetail(
-                  eventId: event['id'],
-                  title: event['title'] ?? '',
-                  image: event['image_detail'] ?? '',
-                  imageCover: event['image_cover'] ?? '',
-                  location: event['location'] ?? '',
-                  price:
-                      double.tryParse(
-                        event['price'].toString(),
-                      )?.toStringAsFixed(2) ??
-                      '0.00',
-                  description: event['description'] ?? '',
-                  eventTime: event['event_time'] ?? '',
-                ),
-              );
-            },
+          return Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () {
+                print("Tapped event: $event");
 
-            child: TrendingEventCard(
-              image: event['image_cover'] ?? 'https://via.placeholder.com/150',
-              title: event['title'] ?? 'No Title',
-              location: event['location'] ?? 'Unknown Location',
-              price:
-                  double.tryParse(
-                    event['price'].toString(),
-                  )?.toStringAsFixed(2) ??
-                  '0.00',
+                if (event['id'] != null && event['title'] != null) {
+                  Get.to(
+                    () => EventDetail(
+                      eventId: event['id'],
+                      title: event['title'] ?? 'Unknown Event',
+                      image: event['image_detail'] ?? '',
+                      imageCover: event['image_cover'] ?? '',
+                      location: event['location'] ?? 'Unknown Location',
+                      price: (event['price'] ?? 0).toString(),
+                      description: event['description'] ?? '',
+                      eventTime: event['event_time'] ?? '',
+                    ),
+                    transition: Transition.cupertino,
+                    fullscreenDialog: true,
+                    preventDuplicates: false, // ✅ هذا يخلي الصفحة تنفتح حتى لو كنتي فيها
+                  );
+                } else {
+                  print("❌ Missing event data!");
+                }
+              },
+              child: TrendingEventCard(
+                image: event['image_cover'] ?? 'https://via.placeholder.com/150',
+                title: event['title'] ?? 'No Title',
+                location: event['location'] ?? 'Unknown Location',
+                price: double.tryParse(event['price'].toString())
+                        ?.toStringAsFixed(2) ??
+                    '0.00',
+              ),
             ),
           );
         },
@@ -75,7 +80,7 @@ class TrendingEventCard extends StatelessWidget {
       color: Colors.transparent,
       child: Container(
         width: 180,
-        height: 240, // slightly taller container
+        height: 240,
         decoration: BoxDecoration(
           gradient: const LinearGradient(
             colors: [Color(0xFF01010C), Color(0xFF594C70)],
@@ -101,7 +106,7 @@ class TrendingEventCard extends StatelessWidget {
                   child: Image.network(
                     image,
                     width: 180,
-                    height: 140, // ✅ smaller image height — fits better
+                    height: 140,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
                       return Container(

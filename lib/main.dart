@@ -1,3 +1,7 @@
+import 'package:eeve_app/Account_views/profile_view.dart';
+import 'package:eeve_app/auth_views/welcome_view.dart';
+import 'package:eeve_app/navigation/main_nav_shell.dart';
+import 'package:eeve_app/views/home_view.dart';
 import 'package:eeve_app/views/splash_view.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,7 +39,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: 'PlusJakartaSans'),
 
-      home:SplashView(),
+      home:WelcomeView(),
     );
   }
 }

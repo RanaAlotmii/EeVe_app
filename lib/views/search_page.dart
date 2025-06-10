@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:eeve_app/custom_Widget_/event_card_small.dart';
 import 'package:eeve_app/views/event_detail.dart';
+import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SearchPage extends StatefulWidget {
@@ -26,9 +27,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Future<void> fetchEvents() async {
-    final response = await Supabase.instance.client
-        .from('events')
-        .select();
+    final response = await Supabase.instance.client.from('events').select();
 
     setState(() {
       allEvents = List<Map<String, dynamic>>.from(response);
@@ -40,11 +39,12 @@ class _SearchPageState extends State<SearchPage> {
   void _filterEvents() {
     final query = _searchController.text.toLowerCase();
     setState(() {
-      filteredEvents = allEvents.where((event) {
-        final title = event['title'].toString().toLowerCase();
-        final location = event['location'].toString().toLowerCase();
-        return title.contains(query) || location.contains(query);
-      }).toList();
+      filteredEvents =
+          allEvents.where((event) {
+            final title = event['title'].toString().toLowerCase();
+            final location = event['location'].toString().toLowerCase();
+            return title.contains(query) || location.contains(query);
+          }).toList();
     });
   }
 
@@ -94,52 +94,53 @@ class _SearchPageState extends State<SearchPage> {
             ),
           ),
           Expanded(
-            child: isLoading
-                ? const Center(child: CircularProgressIndicator()) // ⏳ أثناء التحميل
-                : filteredEvents.isEmpty
+            child:
+                isLoading
                     ? const Center(
-                        child: Text(
-                          'No events found.\nPlease try a different search.',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ) // ✅ لا يوجد نتائج
-                    : ListView.separated(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        itemCount: filteredEvents.length,
-                        separatorBuilder: (context, index) => const SizedBox(height: 10),
-                        itemBuilder: (context, index) {
-                          final event = filteredEvents[index];
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => EventDetail(
-                                    eventId: event['id'] ,
-                                    title: event['title'] ?? '',
-                                    location: event['location'] ?? '',
-                                    image: event['image_detail'] ?? '',
-                                    imageCover: event['image_cover'] ?? '',
-                                    price: double.tryParse(event['price'].toString())?.toStringAsFixed(2) ?? '0.00',
-                                    description: event['description'] ?? '',
-                                    eventTime: event['event_time'] ?? '',
-                                  ),
-                                ),
-                              );
-                            },
-                            child: CompactEventCard(
-                              title: event['title'] ?? '',
-                              location: event['location'] ?? '',
-                              imageAsset: event['image_cover'] ?? '',
-                              price: double.tryParse(event['price'].toString()) ?? 0.0,
-                            ),
-                          );
-                        },
+                      child: CircularProgressIndicator(),
+                    ) // ⏳ أثناء التحميل
+                    : filteredEvents.isEmpty
+                    ? const Center(
+                      child: Text(
+                        'No events found.\nPlease try a different search.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.grey, fontSize: 16),
                       ),
+                    ) // ✅ لا يوجد نتائج
+                    : ListView.separated(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      itemCount: filteredEvents.length,
+                      separatorBuilder:
+                          (context, index) => const SizedBox(height: 10),
+                      itemBuilder: (context, index) {
+                        final event = filteredEvents[index];
+                        return GestureDetector(
+                          onTap: () {
+                            Get.to(
+                              () => EventDetail(
+                                eventId: event['id'],
+                                title: event['title'] ?? 'Unknown Event',
+                                image: event['image_detail'] ?? '',
+                                imageCover: event['image_cover'] ?? '',
+                                location:
+                                    event['location'] ?? 'Unknown Location',
+                                price: (event['price'] ?? 0).toString(),
+                                description: event['description'] ?? '',
+                                eventTime: event['event_time'] ?? '',
+                              ),
+                            );
+                          },
+                          child: CompactEventCard(
+                            title: event['title'] ?? '',
+                            location: event['location'] ?? '',
+                            imageAsset: event['image_cover'] ?? '',
+                            price:
+                                double.tryParse(event['price'].toString()) ??
+                                0.0,
+                          ),
+                        );
+                      },
+                    ),
           ),
         ],
       ),

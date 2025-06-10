@@ -31,7 +31,7 @@ class CompactEventCard extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: Image.network( // ✅ FIXED — use network!
+              child: Image.network(
                 imageAsset,
                 width: 80,
                 height: 80,
@@ -41,7 +41,9 @@ class CompactEventCard extends StatelessWidget {
                     width: 80,
                     height: 80,
                     color: Colors.grey[800],
-                    child: const Center(child: Icon(Icons.broken_image, color: Colors.white30)),
+                    child: const Center(
+                      child: Icon(Icons.broken_image, color: Colors.white30),
+                    ),
                   );
                 },
               ),
@@ -62,12 +64,25 @@ class CompactEventCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 6),
-                  Text(
-                    location,
-                    style: const TextStyle(
-                      color: Colors.white70,
-                      fontSize: 12,
-                    ),
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.location_on,
+                        color: Colors.white70,
+                        size: 14,
+                      ),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: Text(
+                          location,
+                          style: const TextStyle(
+                            color: Colors.white70,
+                            fontSize: 12,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 6),
                   Text(
@@ -87,3 +102,4 @@ class CompactEventCard extends StatelessWidget {
     );
   }
 }
+
