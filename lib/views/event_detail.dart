@@ -227,16 +227,22 @@ class _EventDetailState extends State<EventDetail> {
               ],
             ),
             const SizedBox(height: 8),
-            Row(
-              children: [
-                const Icon(Icons.access_time, color: Colors.grey, size: 16),
-                const SizedBox(width: 6),
-                Text(
-                  widget.eventTime,
-                  style: const TextStyle(color: Colors.grey, fontSize: 13),
-                ),
-              ],
-            ),
+           Row(
+  crossAxisAlignment: CrossAxisAlignment.start,
+  children: [
+    const Icon(Icons.access_time, color: Colors.grey, size: 16),
+    const SizedBox(width: 6),
+    Expanded(
+      child: Text(
+        widget.eventTime,
+        style: const TextStyle(color: Colors.grey, fontSize: 13),
+        softWrap: true,
+        overflow: TextOverflow.visible,
+      ),
+    ),
+  ],
+),
+
             const SizedBox(height: 16),
             ClipRRect(
               borderRadius: BorderRadius.circular(16),

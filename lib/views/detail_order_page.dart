@@ -1,6 +1,5 @@
 import 'package:eeve_app/custom_Widget_/event_card_small.dart';
 import 'package:eeve_app/views/payment_page.dart';
-//import 'package:eeve_app/views/payment_page.dart';
 import 'package:flutter/material.dart';
 import 'package:eeve_app/custom_Widget_/Custom_button.dart';
 
@@ -21,7 +20,7 @@ class DetailOrderPage extends StatelessWidget {
     final String imageCover = eventData['image_cover'] ?? '';
     final double ticketPrice =
         double.tryParse(eventData['price'].toString()) ?? 0.0;
-    final String eventDate = eventData['event_date'] ?? ''; // ✅ date added here
+    final String eventDate = eventData['event_date'] ?? '';
 
     final double totalPrice = ticketAmount * ticketPrice;
 
@@ -52,7 +51,6 @@ class DetailOrderPage extends StatelessWidget {
               price: ticketPrice,
             ),
             const SizedBox(height: 16),
-
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
@@ -74,7 +72,6 @@ class DetailOrderPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
-
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(16),
@@ -109,14 +106,21 @@ class DetailOrderPage extends StatelessWidget {
                   const SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text('Dates', style: TextStyle(color: Colors.grey)),
-                      Text(
-                        eventDate,
-                        style: const TextStyle(color: Colors.white),
-                      ), // ✅ show the event date here!
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          eventDate,
+                          style: const TextStyle(color: Colors.white),
+                          textAlign: TextAlign.right,
+                          softWrap: true,
+                        ),
+                      ),
                     ],
                   ),
+
                   const SizedBox(height: 16),
                   const Text(
                     'Price Details',
@@ -153,9 +157,7 @@ class DetailOrderPage extends StatelessWidget {
                 ],
               ),
             ),
-
             const SizedBox(height: 24),
-
             const Text(
               'Payment Method',
               style: TextStyle(
@@ -197,7 +199,6 @@ class DetailOrderPage extends StatelessWidget {
                 ],
               ),
             ),
-
             const SizedBox(height: 80),
           ],
         ),
