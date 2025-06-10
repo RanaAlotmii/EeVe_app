@@ -9,7 +9,6 @@ import 'package:get/get.dart';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -20,7 +19,7 @@ void main() async {
   );
 
   final prefs = await SharedPreferences.getInstance();
-  final bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+  final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
 
   runApp(MyApp(isLoggedIn: isLoggedIn));
 }
@@ -38,8 +37,7 @@ class MyApp extends StatelessWidget {
       title: 'EEVE',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: 'PlusJakartaSans'),
-
-      home:WelcomeView(),
+      home: const SplashView(),
     );
   }
 }

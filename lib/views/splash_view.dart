@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'onboarding_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:eeve_app/navigation/main_nav_shell.dart';
+import 'package:eeve_app/auth_views/welcome_view.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({super.key});
@@ -12,13 +14,25 @@ class _SplashViewState extends State<SplashView> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 3), () {
-      if (!mounted) return;
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const OnboardingView()),
-      );
-    });
+    _checkLoginStatus();
+  }
+
+  Future<void> _checkLoginStatus() async {
+    await Future.delayed(const Duration(seconds: 3));
+
+    final prefs = await SharedPreferences.getInstance();
+    final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+
+    if (!mounted) return;
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder:
+            (context) =>
+                isLoggedIn ? const MainNavShell() : const WelcomeView(),
+      ),
+    );
   }
 
   @override
@@ -26,7 +40,7 @@ class _SplashViewState extends State<SplashView> {
     return Scaffold(
       body: Center(
         child: Image.asset(
-          'assets/splashscreen.jpg', // full screen splash image
+          'assets/splashscreen.jpg',
           fit: BoxFit.cover,
           height: double.infinity,
           width: double.infinity,

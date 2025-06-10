@@ -1,3 +1,5 @@
+import 'package:eeve_app/views/my_ticket_view.dart';
+import 'package:eeve_app/views/my_ticket_view2.dart';
 import 'package:flutter/material.dart';
 import 'package:eeve_app/Account_views/about_app_view.dart';
 import 'package:eeve_app/Account_views/edit_profile_view.dart';
@@ -158,9 +160,7 @@ class _ProfileViewState extends State<ProfileView> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => const MyCardsView(),
-                    ),
+                    MaterialPageRoute(builder: (context) => const Myticket()),
                   );
                 },
               ),
