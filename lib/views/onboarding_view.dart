@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:eeve_app/Custom_Widget_/Custom_button.dart';
-import 'package:eeve_app/auth_views/signup_view.dart';
 import 'package:eeve_app/auth_views/welcome_view.dart';
-import 'package:eeve_app/navigation/main_nav_shell.dart';
 
 
 class OnboardingView extends StatefulWidget {

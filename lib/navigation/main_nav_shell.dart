@@ -7,7 +7,6 @@ import 'package:eeve_app/views/my_ticket_view2.dart';
 
 import '../views/home_view.dart';
 import '../views/favorites_view.dart';
-import '../views/my_ticket_view.dart';
 import '../Ai_views/Ai_getstarted.dart';
 
 

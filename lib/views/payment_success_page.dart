@@ -1,8 +1,6 @@
 import 'package:eeve_app/navigation/main_nav_shell.dart';
 import 'package:flutter/material.dart';
 import 'package:eeve_app/custom_Widget_/Custom_button.dart';
-import 'package:eeve_app/views/home_view.dart';
-import 'package:eeve_app/views/search_page.dart';
 class PaymentSuccessPage extends StatelessWidget {
   const PaymentSuccessPage({super.key});
 

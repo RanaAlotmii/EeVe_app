@@ -5,8 +5,6 @@ import 'package:get/get.dart';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'package:eeve_app/auth_views/signup_view.dart';
-import 'package:eeve_app/navigation/main_nav_shell.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

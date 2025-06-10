@@ -53,19 +53,18 @@ class HomeView extends StatelessWidget {
               const SizedBox(height: 16),
 
               // ✅ Perfect — keep this
-             const SizedBox(height: 16),
+              const SizedBox(height: 16),
 
-// ✅ Fixed — now safe!
-Obx(() {
-  final filteredEvents = controller.getFilteredEvents();
+              // ✅ Fixed — now safe!
+              Obx(() {
+                final filteredEvents = controller.getFilteredEvents();
 
-  if (controller.events.isEmpty) {
-    return const Center(child: CircularProgressIndicator());
-  }
+                if (controller.events.isEmpty) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-  return TrendingEventsList(events: filteredEvents);
-}),
-
+                return TrendingEventsList(events: filteredEvents);
+              }),
             ],
           ),
         ),

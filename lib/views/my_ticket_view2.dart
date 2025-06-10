@@ -2,8 +2,6 @@
 // import 'package:eeve_app/myTicket/ticketDetails.dart';
 import 'package:flutter/material.dart';
 import 'package:dotted_line/dotted_line.dart'; //flutter pub add dotted_line
-import 'package:get/get.dart';
-import 'package:flutter/rendering.dart';
 import 'package:eeve_app/Custom_Widget_/ticketDetails.dart';
 
 class Myticket extends StatefulWidget {
@@ -171,13 +169,13 @@ class TicketCard extends StatelessWidget {
   final String image_url;
 
   const TicketCard({
-    Key? key,
+    super.key,
     required this.eventName,
     required this.time,
     required this.date,
     required this.ticketNumber,
     required this.image_url,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

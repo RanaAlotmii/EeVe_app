@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:eeve_app/Custom_Widget_/Custom_button.dart';
-import 'package:eeve_app/Ai_views/ai_assistant_view.dart';
 import 'package:eeve_app/Ai_views/Ai_onboarding_view.dart';
 
 

@@ -1,11 +1,12 @@
 import 'package:eeve_app/custom_Widget_/event_card_small.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:eeve_app/views/event_detail.dart';
-import 'package:eeve_app/managers/favorites_manager.dart'; 
+import 'package:eeve_app/managers/favorites_manager.dart';
 
 class FavoritesView extends StatefulWidget {
-  const FavoritesView({Key? key}) : super(key: key);
+  const FavoritesView({super.key});
 
   @override
   State<FavoritesView> createState() => _FavoritesViewState();
@@ -95,11 +96,7 @@ class _FavoritesViewState extends State<FavoritesView> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    Icons.favorite_border,
-                    size: 64,
-                    color: Colors.grey,
-                  ),
+                  Icon(Icons.favorite_border, size: 64, color: Colors.grey),
                   SizedBox(height: 16),
                   Text(
                     'No favorites yet!',
@@ -112,10 +109,7 @@ class _FavoritesViewState extends State<FavoritesView> {
                   SizedBox(height: 8),
                   Text(
                     'Start adding events to your favorites',
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 14,
-                    ),
+                    style: TextStyle(color: Colors.grey, fontSize: 14),
                   ),
                 ],
               ),
@@ -140,20 +134,16 @@ class _FavoritesViewState extends State<FavoritesView> {
                         imageAsset: event['image_cover'] ?? '',
                         price: ((event['price'] ?? 0) as num).toDouble(),
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => EventDetail(
-                                eventId: event['id'],
-                                title: event['title'] ?? 'Unknown Event',
-                                image: event['image_detail'] ?? '',
-                                imageCover: event['image_cover'] ?? '',
-                                location: event['location'] ?? 'Unknown Location',
-                                price: (event['price'] ?? 0).toString(),
-                                description: event['description'] ?? '',
-                                eventTime: event['event_time'] ?? '',
-                                // لا حاجة للـ callback مع FavoritesManager
-                              ),
+                          Get.to(
+                            () => EventDetail(
+                              eventId: event['id'],
+                              title: event['title'] ?? 'Unknown Event',
+                              image: event['image_detail'] ?? '',
+                              imageCover: event['image_cover'] ?? '',
+                              location: event['location'] ?? 'Unknown Location',
+                              price: (event['price'] ?? 0).toString(),
+                              description: event['description'] ?? '',
+                              eventTime: event['event_time'] ?? '',
                             ),
                           );
                         },
@@ -212,7 +202,7 @@ class _FavoritesViewState extends State<FavoritesView> {
   Future<void> _removeFromFavorites(int eventId) async {
     try {
       final success = await _favoritesManager.removeFromFavorites(eventId);
-      
+
       if (success && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(

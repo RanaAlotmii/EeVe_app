@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:eeve_app/views/event_detail.dart';
+import 'package:get/get.dart';
 
 class TrendingEventsList extends StatelessWidget {
   final List<Map<String, dynamic>> events;
@@ -19,28 +20,24 @@ class TrendingEventsList extends StatelessWidget {
 
           return GestureDetector(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder:
-                      (_) => EventDetail(
-                        eventId: event['id'],
-                        title: event['title'] ?? '',
-                        image: event['image_detail'] ?? '',
-                        imageCover:
-                            event['image_cover'] ?? '', // ✅ هذا هو التعديل
-                        location: event['location'] ?? '',
-                        price:
-                            double.tryParse(
-                              event['price'].toString(),
-                            )?.toStringAsFixed(2) ??
-                            '0.00',
-                        description: event['description'] ?? '',
-                        eventTime: event['event_time'] ?? '',
-                      ),
+              Get.to(
+                () => EventDetail(
+                  eventId: event['id'],
+                  title: event['title'] ?? '',
+                  image: event['image_detail'] ?? '',
+                  imageCover: event['image_cover'] ?? '',
+                  location: event['location'] ?? '',
+                  price:
+                      double.tryParse(
+                        event['price'].toString(),
+                      )?.toStringAsFixed(2) ??
+                      '0.00',
+                  description: event['description'] ?? '',
+                  eventTime: event['event_time'] ?? '',
                 ),
               );
             },
+
             child: TrendingEventCard(
               image: event['image_cover'] ?? 'https://via.placeholder.com/150',
               title: event['title'] ?? 'No Title',

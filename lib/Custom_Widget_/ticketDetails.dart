@@ -1,8 +1,6 @@
 import 'package:dotted_line/dotted_line.dart';
 // import 'package:eeve_app/custom_Widget_/appColors.dart' as appColors;
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class Ticketdetails extends StatelessWidget {
   final String name;

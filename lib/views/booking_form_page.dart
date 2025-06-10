@@ -30,7 +30,7 @@ class BookingFormPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 12),
+            const SizedBox(height: 20),
             const Text(
               'How many tickets would you like to book?',
               style: TextStyle(

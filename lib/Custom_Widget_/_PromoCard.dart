@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:eeve_app/views/event_detail.dart';
+import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
 
 class PromoCard extends StatefulWidget {
   const PromoCard({super.key});
@@ -16,7 +16,7 @@ class _PromoCardState extends State<PromoCard> {
   @override
   void initState() {
     super.initState();
-    fetchPromoEvent(); 
+    fetchPromoEvent();
   }
 
   // ✅ نجيب Event معين: Angham Live Concert
@@ -24,7 +24,7 @@ class _PromoCardState extends State<PromoCard> {
     final response = await Supabase.instance.client
         .from('events')
         .select()
-        .eq('title', 'Angham Live Concert in Riyadh') 
+        .eq('title', 'Angham Live Concert in Riyadh')
         .limit(1);
 
     if (response.isNotEmpty) {
@@ -65,36 +65,26 @@ class _PromoCardState extends State<PromoCard> {
                   'From Stage to Screen:\nFeel the Magic',
                   style: TextStyle(color: Colors.white70, fontSize: 14),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
                 ElevatedButton(
                   onPressed:
                       promoEvent == null
                           ? null
                           : () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder:
-                                    (_) => EventDetail(
-                                      eventId: promoEvent!['id'],
-                                      title: promoEvent!['title'] ?? '',
-                                      image:
-                                          promoEvent!['image_detail'] ??
-                                          '', 
-                                      imageCover:
-                                          promoEvent!['image_cover'] ??
-                                          '',
-                                      location: promoEvent!['location'] ?? '',
-                                      price:
-                                          double.tryParse(
-                                            promoEvent!['price'].toString(),
-                                          )?.toStringAsFixed(2) ??
-                                          '0.00',
-                                      description:
-                                          promoEvent!['description'] ?? '',
-                                      eventTime:
-                                          promoEvent!['event_time'] ?? '',
-                                    ),
+                            Get.to(
+                              () => EventDetail(
+                                eventId: promoEvent!['id'],
+                                title: promoEvent!['title'] ?? '',
+                                image: promoEvent!['image_detail'] ?? '',
+                                imageCover: promoEvent!['image_cover'] ?? '',
+                                location: promoEvent!['location'] ?? '',
+                                price:
+                                    double.tryParse(
+                                      promoEvent!['price'].toString(),
+                                    )?.toStringAsFixed(2) ??
+                                    '0.00',
+                                description: promoEvent!['description'] ?? '',
+                                eventTime: promoEvent!['event_time'] ?? '',
                               ),
                             );
                           },

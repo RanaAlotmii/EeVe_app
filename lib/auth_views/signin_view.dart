@@ -1,12 +1,10 @@
 import 'package:eeve_app/navigation/main_nav_shell.dart';
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
-import 'package:eeve_app/Account_views/profile_view.dart';
+import 'package:get/route_manager.dart' show Get, GetNavigation;
 import 'package:eeve_app/Custom_Widget_/CustomTextField.dart';
 import 'package:eeve_app/Custom_Widget_/custom_button.dart';
 import 'package:eeve_app/auth_views/signup_view.dart';
-import 'package:eeve_app/main.dart';
-import 'package:eeve_app/views/home_view.dart';
+import 'package:eeve_app/main.dart' show supabase;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -30,7 +28,7 @@ class _SigninViewState extends State<SigninView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 50),
+            const SizedBox(height: 70),
             const Text(
               'Welcome Back! 👋',
               style: TextStyle(
@@ -39,7 +37,7 @@ class _SigninViewState extends State<SigninView> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 82),
+            const SizedBox(height: 60),
 
             const Text("Email", style: TextStyle(color: Colors.white70)),
             const SizedBox(height: 8),
