@@ -6,8 +6,9 @@ import 'package:eeve_app/views/detail_order_page.dart';
 
 class BookingFormPage extends StatelessWidget {
   final Map<String, dynamic> eventData;
+  final int eventId;
 
-  BookingFormPage({super.key, required this.eventData});
+  BookingFormPage({super.key, required this.eventData, required this.eventId});
 
   final TextEditingController amountController = TextEditingController();
 
@@ -77,6 +78,8 @@ class BookingFormPage extends StatelessWidget {
                             'event_date': eventData['event_date'], // ✅ CORRECT
                           },
                           ticketAmount: ticketAmount,
+                          eventId: eventId,
+
                         ),
                   ),
                 );

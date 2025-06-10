@@ -1,20 +1,20 @@
 import 'package:dotted_line/dotted_line.dart';
-// import 'package:eeve_app/custom_Widget_/appColors.dart' as appColors;
 import 'package:flutter/material.dart';
 
 class Ticketdetails extends StatelessWidget {
   final String name;
-  final String date;
   final String time;
   final String id;
   final String image_url;
+  final String quantity;
+
   const Ticketdetails({
     super.key,
     required this.name,
-    required this.date,
     required this.time,
     required this.id,
-    required this.image_url,
+    required this.image_url, 
+    required this.quantity,
   });
 
   @override
@@ -71,7 +71,7 @@ class Ticketdetails extends StatelessWidget {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
                           image: DecorationImage(
-                            image: AssetImage(image_url),
+                            image: NetworkImage(image_url),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -96,65 +96,57 @@ class Ticketdetails extends StatelessWidget {
 
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 31.0),
-                      child: Row(
-                        // mainAxisAlignment: MainAxisAlignment.center,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Date',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 12,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                              Text(
-                                // 'September 14, 2024',
-                                date,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
+
+                          Text(
+                            'Time',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 12,
+                              color: Colors.grey,
+                            ),
                           ),
-                          SizedBox(width: 16),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Time',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 12,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                              Text(
-                                // '5:00 PM – 10:00 PM',
-                                time,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
+                          Text(
+                            // '5:00 PM – 10:00 PM',
+                            time,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                              color: Colors.white,
+                            ),
+                          ),
+                          SizedBox(height: 10,),
+                          Text(
+                            'Quantity:',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 12,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          Text(
+                            // '5:00 PM – 10:00 PM',
+                            quantity,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                              color: Colors.white,
+                            ),
                           ),
                         ],
                       ),
                     ),
 
-                    SizedBox(height: 20),
+                    SizedBox(height: 0),
 
                     Expanded(
                       child: Stack(
                         children: <Widget>[
                           Positioned(
-                            top: 115,
+                            top: 85,
                             left: 20,
                             right: 15,
                             child: DottedLine(
@@ -167,7 +159,7 @@ class Ticketdetails extends StatelessWidget {
                           ),
                           Positioned(
                             left: 0,
-                            top: 100,
+                            top: 70,
                             // right: 0,
                             child: Container(
                               width: 15,
@@ -184,7 +176,7 @@ class Ticketdetails extends StatelessWidget {
 
                           Positioned(
                             // left: 100,
-                            top: 100,
+                            top: 70,
                             right: 0,
                             child: Container(
                               width: 15,
@@ -218,24 +210,24 @@ class Ticketdetails extends StatelessWidget {
               ),
               SizedBox(height: 49),
 
-              ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xff1565ff),
-                  minimumSize: Size(327, 52),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: Text(
-                  'Explore more events',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
+              // ElevatedButton(
+              //   onPressed: () {},
+              //   style: ElevatedButton.styleFrom(
+              //     backgroundColor: Color(0xff1565ff),
+              //     minimumSize: Size(327, 52),
+              //     shape: RoundedRectangleBorder(
+              //       borderRadius: BorderRadius.circular(12),
+              //     ),
+              //   ),
+              //   child: Text(
+              //     'Explore more events',
+              //     style: TextStyle(
+              //       color: Colors.white,
+              //       fontSize: 16,
+              //       fontWeight: FontWeight.w600,
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),

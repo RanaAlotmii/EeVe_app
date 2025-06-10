@@ -1,26 +1,68 @@
-// import 'package:eeve_app/custom_Widget_/appColors.dart' as appColors;
-// import 'package:eeve_app/myTicket/ticketDetails.dart';
 import 'package:flutter/material.dart';
-import 'package:dotted_line/dotted_line.dart'; //flutter pub add dotted_line
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:eeve_app/Custom_Widget_/ticketDetails.dart';
+import 'package:dotted_line/dotted_line.dart';
 
 class Myticket extends StatefulWidget {
   const Myticket({super.key});
-
   @override
-  State<Myticket> createState() => _MyticketState();
+  State<Myticket> createState() => MyticketState();
 }
 
-class _MyticketState extends State<Myticket> {
+class MyticketState extends State<Myticket> with RouteAware {
   bool isUpcoming = true;
+  List<dynamic> tickets = [];
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchTickets();
+  }
+
+  @override
+  void didPopNext() {
+    super.didPopNext();
+    fetchTickets(); 
+  }
+
+  Future<void> fetchTickets() async {
+    setState(() {
+      isLoading = true;
+    });
+    
+    try {
+      final userId = Supabase.instance.client.auth.currentUser!.id;
+      final data = await Supabase.instance.client
+          .from('tickets')
+          .select(
+            'id, booking_date, quantity, event_id, event_id(title, event_time, image_cover)',
+          )
+          .eq('user_id', userId)
+          .order('booking_date', ascending: false);
+      
+      setState(() {
+        tickets = data;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      print('Error fetching tickets: $e');
+    }
+  }
+
+  Future<void> _refreshTickets() async {
+    await fetchTickets();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        // backgroundColor: appColors.background1,
         backgroundColor: Color(0xFF121212),
-
         appBar: AppBar(
           title: Text(
             'My Ticket',
@@ -28,135 +70,55 @@ class _MyticketState extends State<Myticket> {
           ),
           centerTitle: true,
           backgroundColor: Color(0xFF121212),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.refresh, color: Colors.white),
+              onPressed: _refreshTickets,
+            ),
+          ],
         ),
-
-        body: Center(
-          child: Column(
-            children: [
-              SizedBox(height: 32),
-
-              Container(
-                width: 327,
-                height: 57,
-                decoration: BoxDecoration(
-                  color: Color(0xFF1A1B25),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Row(
+        body: RefreshIndicator(
+          onRefresh: _refreshTickets,
+          child: isLoading
+              ? Center(child: CircularProgressIndicator())
+              : tickets.isEmpty
+              ? Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            isUpcoming = true;
-                          });
-                        },
-                        child: Container(
-                          width: 151.5,
-                          height: 41,
-                          decoration: BoxDecoration(
-                            color:
-                                isUpcoming
-                                    ? Color(0xff1565ff)
-                                    : Color(0xFF1A1B25),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'Upcoming',
-                              style: TextStyle(
-                                color:
-                                    isUpcoming
-                                        ? Colors.white
-                                        : Color(0xff818898),
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ),
+                      Text(
+                        'No Tickets',
+                        style: TextStyle(color: Colors.white, fontSize: 20),
                       ),
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            isUpcoming = false;
-                          });
-                        },
-                        child: Container(
-                          width: 151.5,
-                          height: 41,
-                          decoration: BoxDecoration(
-                            color:
-                                isUpcoming
-                                    ? Color(0xFF1A1B25)
-                                    : Color(0xff1565ff),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'Past Tikect',
-                              style: TextStyle(
-                                color:
-                                    isUpcoming
-                                        ? Color(0xff818898)
-                                        : Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ),
+                      SizedBox(height: 10),
+                      ElevatedButton(
+                        onPressed: _refreshTickets,
+                        child: Text('Refresh'),
                       ),
                     ],
                   ),
+                )
+              : ListView.builder(
+                  padding: EdgeInsets.all(16),
+                  itemCount: tickets.length,
+                  itemBuilder: (context, index) {
+                    final ticket = tickets[index];
+                    final event = ticket['event_id'];
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: TicketCard(
+                        eventName: event['title'] ?? 'No title',
+                        time: event['event_time'] ?? '',
+                        date: 'null',
+                        ticketNumber: ticket['id'].toString(),
+                        image_url: event['image_cover'] ?? 'assets/default.png',
+                        quantity: ticket['quantity'].toString(),
+                      ),
+                    );
+                  },
                 ),
-              ),
-
-              SizedBox(height: 32),
-
-              isUpcoming
-                  ? viewTicketCard()
-                  : Text(
-                    'test',
-                    style: TextStyle(color: Colors.white, fontSize: 27),
-                  ),
-            ],
-          ),
         ),
       ),
-    );
-  }
-}
-
-class viewTicketCard extends StatelessWidget {
-  const viewTicketCard({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TicketCard(
-          eventName: 'E-Sports World Cup Riyadh 2025',
-          time: '6:30 PM',
-          date: 'Fri, 14 September',
-          ticketNumber: '126548',
-          image_url: 'assets/event2.png'
-          
-        ),
-
-        SizedBox(height: 32),
-
-        TicketCard(
-          eventName: 'E-Sports World Cup Riyadh 2025',
-          time: '6:30 PM',
-          date: 'Fri, 14 September',
-          ticketNumber: '126548',
-          image_url:  'assets/event2.png'
-
-        ),
-      ],
     );
   }
 }
@@ -167,56 +129,44 @@ class TicketCard extends StatelessWidget {
   final String date;
   final String ticketNumber;
   final String image_url;
+  final String quantity;
 
   const TicketCard({
-    super.key,
+    Key? key,
     required this.eventName,
     required this.time,
     required this.date,
     required this.ticketNumber,
     required this.image_url,
-  });
+    required this.quantity,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Get.to(
-        //   Ticketdetails(
-        //   name: eventName,
-        //   time: time,
-        //   date: date,
-        //   id: ticketNumber,
-        //   image_url: image_url,
-        //   ),
-        // );
-        
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => 
-          Ticketdetails(
-          name: eventName,
-          time: time,
-          date: date,
-          id: ticketNumber,
-          image_url: image_url,
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Ticketdetails(
+              name: eventName,
+              time: time,
+              id: ticketNumber,
+              image_url: image_url,
+              quantity: quantity,
+            ),
           ),
-        )
-      );
-
+        );
       },
       child: Container(
         width: 327,
         height: 144,
         decoration: BoxDecoration(
-          // color: Colors.red,
           gradient: const LinearGradient(
             colors: [Color(0xFF2B1B4D), Color(0xFF1A1C33)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
-          
           borderRadius: BorderRadius.circular(16),
         ),
         child: ClipRRect(
@@ -237,7 +187,6 @@ class TicketCard extends StatelessWidget {
                           'Time',
                           style: TextStyle(color: Colors.grey, fontSize: 12),
                         ),
-                        const SizedBox(height: 4),
                         Text(
                           time,
                           style: const TextStyle(
@@ -245,26 +194,12 @@ class TicketCard extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                             fontSize: 14,
                           ),
-                        ),
-                        const SizedBox(height: 16),
-                        const Text(
-                          'Date',
-                          style: TextStyle(color: Colors.grey, fontSize: 12),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          date,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                          ),
+                          maxLines: 4 ,
                         ),
                       ],
                     ),
                   ),
                 ),
-
                 Stack(
                   children: <Widget>[
                     Positioned(
@@ -280,27 +215,23 @@ class TicketCard extends StatelessWidget {
                         ),
                       ),
                     ),
-
                     Positioned(
                       left: 13,
                       top: 15,
                       bottom: 15,
                       child: DottedLine(
                         lineLength: 100,
-                        // dashLength: 9,
-                        // dashColor: Color(0Xff272835),
                         dashColor: Colors.white,
                         direction: Axis.vertical,
                       ),
                     ),
-
                     Positioned(
                       bottom: 0,
                       child: Container(
                         width: 30,
                         height: 15,
                         decoration: BoxDecoration(
-                          color:Color(0xFF121212),
+                          color: Color(0xFF121212),
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(20),
                             topRight: Radius.circular(20),
@@ -310,7 +241,6 @@ class TicketCard extends StatelessWidget {
                     ),
                   ],
                 ),
-
                 Expanded(
                   flex: 3,
                   child: Padding(
@@ -330,13 +260,26 @@ class TicketCard extends StatelessWidget {
                         const SizedBox(height: 16),
                         Align(
                           alignment: Alignment.bottomRight,
-                          child: Text(
-                            '#$ticketNumber',
-                            style: const TextStyle(
-                              color: Colors.white70,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Quantity: $quantity',
+                                style: const TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                '#$ticketNumber',
+                                style: const TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],

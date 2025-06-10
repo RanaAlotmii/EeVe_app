@@ -6,11 +6,13 @@ import 'package:eeve_app/custom_Widget_/Custom_button.dart';
 class DetailOrderPage extends StatelessWidget {
   final Map<String, dynamic> eventData;
   final int ticketAmount;
-
+  final int eventId;
+  
   const DetailOrderPage({
     super.key,
     required this.eventData,
-    required this.ticketAmount,
+    required this.ticketAmount, 
+    required this.eventId,
   });
 
   @override
@@ -211,7 +213,7 @@ class DetailOrderPage extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) => PaymentPage(totalPrice: totalPrice),
+                builder: (_) => PaymentPage(totalPrice: totalPrice, eventId: eventId, ticketAmount: ticketAmount,),
               ),
             );
           },

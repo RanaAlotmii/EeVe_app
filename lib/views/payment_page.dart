@@ -4,11 +4,14 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_credit_card/flutter_credit_card.dart';
 import 'package:eeve_app/custom_Widget_/Custom_button.dart';
 import 'package:eeve_app/views/payment_success_page.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class PaymentPage extends StatefulWidget {
   final double totalPrice;
+  final int eventId;
+  final int ticketAmount;
 
-  const PaymentPage({super.key, required this.totalPrice});
+  const PaymentPage({super.key, required this.totalPrice, required this.eventId, required this.ticketAmount});
 
   @override
   State<PaymentPage> createState() => _PaymentPageState();
@@ -157,6 +160,13 @@ class _PaymentPageState extends State<PaymentPage> {
       );
 
       if (response.statusCode == 201) {
+        await Supabase.instance.client.from('tickets').insert({
+          'event_id': widget.eventId,
+          'quantity': widget.ticketAmount,
+          'user_id': Supabase.instance.client.auth.currentUser!.id,
+          'booking_date': DateTime.now().toIso8601String(),
+        });
+
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (_) => const PaymentSuccessPage()),

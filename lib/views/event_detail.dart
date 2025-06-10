@@ -323,6 +323,7 @@ class _EventDetailState extends State<EventDetail> {
                     'price': widget.price,
                     'event_date': widget.eventTime,
                   },
+                  eventId:widget.eventId ,
                 ),
               ),
             );
