@@ -116,7 +116,7 @@ class _ProfileViewState extends State<ProfileView> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => HomeView()),
+                    MaterialPageRoute(builder: (context) => const EditProfileView()),
                   );
                 },
               ),
