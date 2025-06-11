@@ -6,6 +6,8 @@ import 'package:eeve_app/views/splash_view.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart'; // ✅ إضافة
+import 'package:eeve_app/managers/theme_service.dart'; // ✅ إضافة
 
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -21,7 +23,12 @@ void main() async {
   final prefs = await SharedPreferences.getInstance();
   final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
 
-  runApp(MyApp(isLoggedIn: isLoggedIn));
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => ThemeService(),
+      child: MyApp(isLoggedIn: isLoggedIn),
+    ),
+  );
 }
 
 final supabase = Supabase.instance.client;
@@ -33,11 +40,52 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'EEVE',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(fontFamily: 'PlusJakartaSans'),
-      home: const SplashView(),
+    return Consumer<ThemeService>(
+      builder: (context, themeService, _) {
+        return GetMaterialApp(
+          title: 'EEVE',
+          debugShowCheckedModeBanner: false,
+
+          // ✅ Light Theme
+          theme: ThemeData(
+            fontFamily: 'PlusJakartaSans',
+            brightness: Brightness.light,
+            scaffoldBackgroundColor: Colors.white,
+            appBarTheme: const AppBarTheme(
+              backgroundColor: Colors.white,
+              elevation: 0,
+              iconTheme: IconThemeData(color: Colors.black),
+              titleTextStyle: TextStyle(color: Colors.black, fontSize: 20),
+            ),
+            bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+              backgroundColor: Colors.white,
+              selectedItemColor: Color(0xFF8B57E6),
+              unselectedItemColor: Colors.black45,
+            ),
+          ),
+
+          // ✅ Dark Theme
+          darkTheme: ThemeData(
+            fontFamily: 'PlusJakartaSans',
+            brightness: Brightness.dark,
+            scaffoldBackgroundColor: Color(0xFF121212),
+            appBarTheme: const AppBarTheme(
+              backgroundColor: Color(0xFF121212),
+              elevation: 0,
+              iconTheme: IconThemeData(color: Colors.white),
+              titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+              backgroundColor: Color(0xFF121212),
+              selectedItemColor: Color(0xFF8B57E6),
+              unselectedItemColor: Colors.white54,
+            ),
+          ),
+
+          themeMode: themeService.themeMode, // ✅ استخدام الوضع حسب المستخدم
+          home: const SplashView(),
+        );
+      },
     );
   }
 }

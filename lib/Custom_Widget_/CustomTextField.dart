@@ -40,60 +40,54 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return Focus(
-      child: Builder(
-        builder: (context) {
-          final hasFocus = Focus.of(context).hasFocus;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
-          return TextField(
-            controller: widget.controller,
-            obscureText: _obscureText,
-            keyboardType: widget.keyboardType,
-            textInputAction: widget.textInputAction,
-            inputFormatters: widget.inputFormatters ?? [],
-            style: const TextStyle(color: Colors.white),
-            decoration: InputDecoration(
-              hintText: widget.hintText,
-              hintStyle: TextStyle(
-                color: hasFocus ? Colors.white70 : Colors.white54,
-              ),
-              filled: true,
-              fillColor:
-                  hasFocus
-                      ? const Color(0xFF1565FF).withOpacity(0.3)
-                      : const Color(0xFF1A1B25),
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 14,
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide.none,
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(
-                  color: Color(0xFF1565FF),
-                  width: 2.0,
+    final backgroundColor = isDark
+        ? const Color(0xFF1A1B25)
+        : const Color(0xFFF2F2F5); // فاتح جدًا في اللايت
+
+    final hintColor = isDark ? Colors.white60 : Colors.grey.shade600;
+    final textColor = isDark ? Colors.white : Colors.black87;
+    final iconColor = isDark ? Colors.white70 : Colors.grey;
+
+    return TextField(
+      controller: widget.controller,
+      obscureText: _obscureText,
+      keyboardType: widget.keyboardType,
+      textInputAction: widget.textInputAction,
+      inputFormatters: widget.inputFormatters ?? [],
+      style: TextStyle(color: textColor),
+      decoration: InputDecoration(
+        hintText: widget.hintText,
+        hintStyle: TextStyle(color: hintColor),
+        filled: true,
+        fillColor: backgroundColor,
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(
+            color: isDark ? const Color(0xFF1565FF) : Colors.grey.shade400,
+            width: 1.5,
+          ),
+        ),
+        suffixIcon: widget.obscureText
+            ? IconButton(
+                icon: Icon(
+                  _obscureText ? Icons.visibility_off : Icons.visibility,
+                  color: iconColor,
                 ),
-              ),
-              suffixIcon:
-                  widget.obscureText
-                      ? IconButton(
-                        icon: Icon(
-                          _obscureText
-                              ? Icons.visibility_off
-                              : Icons.visibility,
-                          color: Colors.white70,
-                        ),
-                        onPressed: _toggleObscure,
-                      )
-                      : null,
-            ),
-            cursorColor: Colors.white,
-          );
-        },
+                onPressed: _toggleObscure,
+              )
+            : null,
       ),
+      cursorColor: textColor,
     );
   }
 }

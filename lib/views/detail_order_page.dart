@@ -7,37 +7,38 @@ class DetailOrderPage extends StatelessWidget {
   final Map<String, dynamic> eventData;
   final int ticketAmount;
   final int eventId;
-  
+
   const DetailOrderPage({
     super.key,
     required this.eventData,
-    required this.ticketAmount, 
+    required this.ticketAmount,
     required this.eventId,
   });
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bgColor = Theme.of(context).scaffoldBackgroundColor;
+    final primaryTextColor = isDark ? Colors.white : Colors.black87;
+    final secondaryTextColor = isDark ? Colors.white70 : Colors.black54;
+    final cardColor = isDark ? const Color(0xFF1C1C1E) : Colors.grey[100];
+
     final String title = eventData['title'] ?? '';
     final String location = eventData['location'] ?? '';
     final String imageCover = eventData['image_cover'] ?? '';
-    final double ticketPrice =
-        double.tryParse(eventData['price'].toString()) ?? 0.0;
+    final double ticketPrice = double.tryParse(eventData['price'].toString()) ?? 0.0;
     final String eventDate = eventData['event_date'] ?? '';
-
     final double totalPrice = ticketAmount * ticketPrice;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF121212),
+      backgroundColor: bgColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-        title: const Text(
-          'Detail Order',
-          style: TextStyle(color: Colors.white),
-        ),
+        title: Text('Detail Order', style: TextStyle(color: primaryTextColor)),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: Icon(Icons.arrow_back, color: primaryTextColor),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -61,13 +62,13 @@ class DetailOrderPage extends StatelessWidget {
                 border: Border.all(color: const Color(0xFF1565FF)),
               ),
               child: Row(
-                children: const [
-                  Icon(Icons.info_outline, color: Color(0xFF1565FF), size: 18),
-                  SizedBox(width: 8),
+                children: [
+                  const Icon(Icons.info_outline, color: Color(0xFF1565FF), size: 18),
+                  const SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       'Your booking is protected by EeVe.',
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: primaryTextColor),
                     ),
                   ),
                 ],
@@ -78,31 +79,23 @@ class DetailOrderPage extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: const Color(0xFF1C1C1E),
+                color: cardColor,
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Your Events',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  Text('Your Events',
+                      style: TextStyle(
+                        color: primaryTextColor,
+                        fontWeight: FontWeight.bold,
+                      )),
                   const SizedBox(height: 12),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        'Ticket',
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                      Text(
-                        '$ticketAmount ticket',
-                        style: const TextStyle(color: Colors.white),
-                      ),
+                      Text('Ticket', style: TextStyle(color: secondaryTextColor)),
+                      Text('$ticketAmount ticket', style: TextStyle(color: primaryTextColor)),
                     ],
                   ),
                   const SizedBox(height: 8),
@@ -110,60 +103,50 @@ class DetailOrderPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Dates', style: TextStyle(color: Colors.grey)),
+                      Text('Dates', style: TextStyle(color: secondaryTextColor)),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
                           eventDate,
-                          style: const TextStyle(color: Colors.white),
+                          style: TextStyle(color: primaryTextColor),
                           textAlign: TextAlign.right,
                           softWrap: true,
                         ),
                       ),
                     ],
                   ),
-
                   const SizedBox(height: 16),
-                  const Text(
-                    'Price Details',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  Text('Price Details',
+                      style: TextStyle(
+                        color: primaryTextColor,
+                        fontWeight: FontWeight.bold,
+                      )),
                   const SizedBox(height: 12),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('Price', style: TextStyle(color: Colors.grey)),
-                      Text(
-                        '$ticketAmount x ${ticketPrice.toStringAsFixed(2)} SR',
-                        style: const TextStyle(color: Colors.white),
-                      ),
+                      Text('Price', style: TextStyle(color: secondaryTextColor)),
+                      Text('$ticketAmount x ${ticketPrice.toStringAsFixed(2)} SR',
+                          style: TextStyle(color: primaryTextColor)),
                     ],
                   ),
                   const SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        'Total Price',
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                      Text(
-                        '${totalPrice.toStringAsFixed(2)} SR',
-                        style: const TextStyle(color: Colors.white),
-                      ),
+                      Text('Total Price', style: TextStyle(color: secondaryTextColor)),
+                      Text('${totalPrice.toStringAsFixed(2)} SR',
+                          style: TextStyle(color: primaryTextColor)),
                     ],
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 24),
-            const Text(
+            Text(
               'Payment Method',
               style: TextStyle(
-                color: Colors.white,
+                color: primaryTextColor,
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
               ),
@@ -172,7 +155,7 @@ class DetailOrderPage extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
-                color: const Color(0xFF1C1C1E),
+                color: cardColor,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Row(
@@ -194,10 +177,7 @@ class DetailOrderPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 12),
-                  const Text(
-                    'Card',
-                    style: TextStyle(color: Colors.white, fontSize: 14),
-                  ),
+                  Text('Card', style: TextStyle(color: primaryTextColor, fontSize: 14)),
                 ],
               ),
             ),
@@ -213,7 +193,11 @@ class DetailOrderPage extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) => PaymentPage(totalPrice: totalPrice, eventId: eventId, ticketAmount: ticketAmount,),
+                builder: (_) => PaymentPage(
+                  totalPrice: totalPrice,
+                  eventId: eventId,
+                  ticketAmount: ticketAmount,
+                ),
               ),
             );
           },

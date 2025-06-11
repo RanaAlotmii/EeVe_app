@@ -8,29 +8,41 @@ class MyCardsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDark ? Colors.white : Colors.black87;
+    final cardBackground = isDark ? Colors.white : Colors.black;
+
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: const Text('My Cards', style: TextStyle(color: Colors.white)),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        centerTitle: true,
+        title: Text('My Cards', style: TextStyle(color: textColor)),
+        iconTheme: IconThemeData(color: textColor),
       ),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 24, 16, 40), //  lifted bottom
+        padding: const EdgeInsets.fromLTRB(16, 24, 16, 0), // فقط من الأعلى
         child: Column(
           children: [
-            const CustomCreditCard(),
-            const Spacer(),
-            CustomButton(
-              text: "Add New Card",
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const AddCardView()),
-                );
-              },
+            CustomCreditCard(
+              backgroundColor: cardBackground,
             ),
-            const SizedBox(height: 20),
+            const Spacer(),
           ],
+        ),
+      ),
+
+      /// ✅ هنا زر الإضافة في الأسفل
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 25),
+        child: CustomButton(
+          text: "Add New Card",
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const AddCardView()),
+            );
+          },
         ),
       ),
     );

@@ -11,7 +11,12 @@ class PaymentPage extends StatefulWidget {
   final int eventId;
   final int ticketAmount;
 
-  const PaymentPage({super.key, required this.totalPrice, required this.eventId, required this.ticketAmount});
+  const PaymentPage({
+    super.key,
+    required this.totalPrice,
+    required this.eventId,
+    required this.ticketAmount,
+  });
 
   @override
   State<PaymentPage> createState() => _PaymentPageState();
@@ -29,15 +34,19 @@ class _PaymentPageState extends State<PaymentPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDark ? Colors.white : Colors.black87;
+    final bgColor = Theme.of(context).scaffoldBackgroundColor;
+
     return Scaffold(
-      backgroundColor: const Color(0xFF121212),
+      backgroundColor: bgColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-        title: const Text('Add Card', style: TextStyle(color: Colors.white)),
+        title: Text('Add Card', style: TextStyle(color: textColor)),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: Icon(Icons.arrow_back, color: textColor),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -64,8 +73,12 @@ class _PaymentPageState extends State<PaymentPage> {
               Theme(
                 data: Theme.of(context).copyWith(
                   textTheme: Theme.of(context).textTheme.apply(
-                    bodyColor: Colors.white,
-                    displayColor: Colors.white,
+                        bodyColor: textColor,
+                        displayColor: textColor,
+                      ),
+                  inputDecorationTheme: InputDecorationTheme(
+                    labelStyle: TextStyle(color: textColor),
+                    hintStyle: TextStyle(color: textColor.withOpacity(0.5)),
                   ),
                 ),
                 child: CreditCardForm(
@@ -139,8 +152,7 @@ class _PaymentPageState extends State<PaymentPage> {
       final response = await http.post(
         url,
         headers: {
-          'Authorization':
-              'Basic ${base64Encode(utf8.encode('sk_test_MKvC2oeFkZf8dN2TeS7AQbVYNkBrZekZQrCxfPQU'))}',
+          'Authorization': 'Basic ${base64Encode(utf8.encode('sk_test_MKvC2oeFkZf8dN2TeS7AQbVYNkBrZekZQrCxfPQU'))}',
           'Content-Type': 'application/json',
         },
         body: jsonEncode({
@@ -177,9 +189,9 @@ class _PaymentPageState extends State<PaymentPage> {
         );
       }
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Error: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e')),
+      );
     } finally {
       setState(() {
         isPaying = false;

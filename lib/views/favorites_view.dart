@@ -30,34 +30,37 @@ class _FavoritesViewState extends State<FavoritesView> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final background = Theme.of(context).scaffoldBackgroundColor;
+    final textColor = Theme.of(context).textTheme.bodyLarge!.color;
+
     if (user == null) {
-      return const Scaffold(
-        backgroundColor: Color(0xFF121212),
+      return Scaffold(
+        backgroundColor: background,
         body: Center(
           child: Text(
             'Please log in to view your favorites.',
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: textColor),
           ),
         ),
       );
     }
 
     return Scaffold(
-      backgroundColor: const Color(0xFF121212),
+      backgroundColor: background,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: background,
         elevation: 0,
         centerTitle: true,
-        title: const Text(
+        title: Text(
           'My Favorites',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: textColor),
         ),
+        iconTheme: IconThemeData(color: textColor),
         actions: [
           IconButton(
-            icon: const Icon(Icons.refresh, color: Colors.white),
-            onPressed: () {
-              _initializeFavorites();
-            },
+            icon: Icon(Icons.refresh, color: textColor),
+            onPressed: _initializeFavorites,
             tooltip: 'Refresh favorites',
           ),
         ],
@@ -70,14 +73,13 @@ class _FavoritesViewState extends State<FavoritesView> {
           }
 
           if (snapshot.hasError) {
-            print('Error in favorites stream: ${snapshot.error}');
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
+                  Text(
                     'Error loading favorites',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: textColor),
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton(
@@ -92,22 +94,22 @@ class _FavoritesViewState extends State<FavoritesView> {
           final favorites = snapshot.data ?? [];
 
           if (favorites.isEmpty) {
-            return const Center(
+            return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.favorite_border, size: 64, color: Colors.grey),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Text(
                     'No favorites yet!',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: textColor,
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  SizedBox(height: 8),
-                  Text(
+                  const SizedBox(height: 8),
+                  const Text(
                     'Start adding events to your favorites',
                     style: TextStyle(color: Colors.grey, fontSize: 14),
                   ),
@@ -168,23 +170,26 @@ class _FavoritesViewState extends State<FavoritesView> {
   }
 
   void _showDeleteConfirmation(Map<String, dynamic> event) {
+    final textColor = Theme.of(context).textTheme.bodyLarge!.color;
+    final bgColor = Theme.of(context).dialogBackgroundColor;
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: const Color(0xFF1E1E1E),
-          title: const Text(
+          backgroundColor: bgColor,
+          title: Text(
             'Remove from Favorites',
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: textColor),
           ),
           content: Text(
             'Are you sure you want to remove "${event['title']}" from your favorites?',
-            style: const TextStyle(color: Colors.white70),
+            style: TextStyle(color: textColor?.withOpacity(0.8)),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
+              child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
@@ -235,11 +240,5 @@ class _FavoritesViewState extends State<FavoritesView> {
         );
       }
     }
-  }
-
-  @override
-  void dispose() {
-    // لا تقم بـ dispose للمدير لأنه Singleton
-    super.dispose();
   }
 }

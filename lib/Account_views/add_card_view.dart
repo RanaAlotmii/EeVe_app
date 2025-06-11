@@ -6,37 +6,42 @@ class AddCardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDark ? Colors.white : Colors.black87;
+
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: const Text(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        centerTitle: true,
+        title: Text(
           'Add Card',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: textColor),
         ),
+        iconTheme: IconThemeData(color: textColor),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            const TextField(
-              style: TextStyle(color: Colors.white),
+            TextField(
+              style: TextStyle(color: textColor),
               decoration: InputDecoration(
                 labelText: 'Card Name',
-                labelStyle: TextStyle(color: Colors.white),
+                labelStyle: TextStyle(color: textColor),
                 filled: true,
-                fillColor: Colors.white12,
+                fillColor: isDark ? Colors.white12 : Colors.black12,
               ),
             ),
             const SizedBox(height: 16),
-            const TextField(
-              style: TextStyle(color: Colors.white),
+            TextField(
+              style: TextStyle(color: textColor),
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 labelText: 'Card Number',
-                labelStyle: TextStyle(color: Colors.white),
+                labelStyle: TextStyle(color: textColor),
                 filled: true,
-                fillColor: Colors.white12,
+                fillColor: isDark ? Colors.white12 : Colors.black12,
               ),
             ),
             const SizedBox(height: 16),
@@ -44,26 +49,26 @@ class AddCardView extends StatelessWidget {
               children: [
                 Expanded(
                   child: TextField(
-                    style: const TextStyle(color: Colors.white),
+                    style: TextStyle(color: textColor),
                     keyboardType: TextInputType.datetime,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'Expiry Date',
-                      labelStyle: TextStyle(color: Colors.white),
+                      labelStyle: TextStyle(color: textColor),
                       filled: true,
-                      fillColor: Colors.white12,
+                      fillColor: isDark ? Colors.white12 : Colors.black12,
                     ),
                   ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
                   child: TextField(
-                    style: const TextStyle(color: Colors.white),
+                    style: TextStyle(color: textColor),
                     keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'CVC / CVV',
-                      labelStyle: TextStyle(color: Colors.white),
+                      labelStyle: TextStyle(color: textColor),
                       filled: true,
-                      fillColor: Colors.white12,
+                      fillColor: isDark ? Colors.white12 : Colors.black12,
                     ),
                   ),
                 ),
@@ -75,7 +80,6 @@ class AddCardView extends StatelessWidget {
             CustomButton(
               text: 'Add Card',
               onPressed: () {
-                // TODO: Save the card logic
                 Navigator.pop(context);
               },
             ),

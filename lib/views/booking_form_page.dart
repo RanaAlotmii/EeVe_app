@@ -14,15 +14,19 @@ class BookingFormPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDark ? Colors.white : Colors.black;
+    final backgroundColor = Theme.of(context).scaffoldBackgroundColor;
+
     return Scaffold(
-      backgroundColor: const Color(0xFF121212),
+      backgroundColor: backgroundColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-        title: const Text('Booking', style: TextStyle(color: Colors.white)),
+        title: Text('Booking', style: TextStyle(color: textColor)),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: Icon(Icons.arrow_back, color: textColor),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -32,10 +36,10 @@ class BookingFormPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 20),
-            const Text(
+            Text(
               'How many tickets would you like to book?',
               style: TextStyle(
-                color: Colors.white,
+                color: textColor,
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
@@ -55,7 +59,6 @@ class BookingFormPage extends StatelessWidget {
                 final ticketAmount = int.tryParse(amountController.text) ?? 0;
 
                 if (ticketAmount <= 0) {
-                  // Show error if invalid
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Please enter a valid ticket amount.'),
@@ -64,23 +67,20 @@ class BookingFormPage extends StatelessWidget {
                   return;
                 }
 
-                // ✅ Pass also event_date!
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder:
-                        (_) => DetailOrderPage(
-                          eventData: {
-                            'title': eventData['title'],
-                            'location': eventData['location'],
-                            'image_cover': eventData['image_cover'],
-                            'price': eventData['price'],
-                            'event_date': eventData['event_date'], // ✅ CORRECT
-                          },
-                          ticketAmount: ticketAmount,
-                          eventId: eventId,
-
-                        ),
+                    builder: (_) => DetailOrderPage(
+                      eventData: {
+                        'title': eventData['title'],
+                        'location': eventData['location'],
+                        'image_cover': eventData['image_cover'],
+                        'price': eventData['price'],
+                        'event_date': eventData['event_date'],
+                      },
+                      ticketAmount: ticketAmount,
+                      eventId: eventId,
+                    ),
                   ),
                 );
               },
@@ -91,4 +91,3 @@ class BookingFormPage extends StatelessWidget {
     );
   }
 }
-

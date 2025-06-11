@@ -18,12 +18,17 @@ class CompactEventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final backgroundColor = isDark ? const Color(0xFF1E1E2C) : const Color(0xFFE0E0E0); // أغمق من F2F2F2
+    final textColor = isDark ? Colors.white : Colors.black;
+    final subTextColor = isDark ? Colors.white70 : Colors.black54;
+
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
       child: Container(
         decoration: BoxDecoration(
-          color: const Color(0xFF1E1E2C),
+          color: backgroundColor,
           borderRadius: BorderRadius.circular(12),
         ),
         padding: const EdgeInsets.all(12),
@@ -57,8 +62,8 @@ class CompactEventCard extends StatelessWidget {
                     title,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: Colors.white,
+                    style: TextStyle(
+                      color: textColor,
                       fontWeight: FontWeight.bold,
                       fontSize: 14,
                     ),
@@ -66,17 +71,17 @@ class CompactEventCard extends StatelessWidget {
                   const SizedBox(height: 6),
                   Row(
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.location_on,
-                        color: Colors.white70,
+                        color: subTextColor,
                         size: 14,
                       ),
                       const SizedBox(width: 4),
                       Expanded(
                         child: Text(
                           location,
-                          style: const TextStyle(
-                            color: Colors.white70,
+                          style: TextStyle(
+                            color: subTextColor,
                             fontSize: 12,
                           ),
                           overflow: TextOverflow.ellipsis,
@@ -102,4 +107,3 @@ class CompactEventCard extends StatelessWidget {
     );
   }
 }
-

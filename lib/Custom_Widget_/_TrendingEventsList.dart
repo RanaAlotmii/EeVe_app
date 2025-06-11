@@ -38,7 +38,7 @@ class TrendingEventsList extends StatelessWidget {
                     ),
                     transition: Transition.cupertino,
                     fullscreenDialog: true,
-                    preventDuplicates: false, // ✅ هذا يخلي الصفحة تنفتح حتى لو كنتي فيها
+                    preventDuplicates: false, 
                   );
                 } else {
                   print("❌ Missing event data!");

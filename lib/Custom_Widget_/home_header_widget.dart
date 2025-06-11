@@ -37,73 +37,66 @@ class _HomeHeaderState extends State<HomeHeader> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final name = userData?['name'] ?? 'User';
-    final profileImage = userData?['profile_image'];
+@override
+Widget build(BuildContext context) {
+  final name = userData?['name'] ?? 'User';
+  final profileImage = userData?['profile_image'];
+  final isDark = Theme.of(context).brightness == Brightness.dark;
+  final textColor = isDark ? Colors.white : Colors.black87;
+  final subTextColor = isDark ? Colors.white70 : Colors.black54;
 
-    return Row(
-      children: [
-        // Profile Image
-        CircleAvatar(
-          radius: 24,
-          backgroundImage:
-              profileImage != null && profileImage.isNotEmpty
-                  ? NetworkImage(profileImage)
-                  : const AssetImage('assets/profileImage.png')
-                      as ImageProvider,
-        ),
-        const SizedBox(width: 12),
-
-        // Text & Location
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Hi, $name 👋',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                ),
+  return Row(
+    children: [
+      CircleAvatar(
+        radius: 24,
+        backgroundImage: profileImage != null && profileImage.isNotEmpty
+            ? NetworkImage(profileImage)
+            : const AssetImage('assets/profileImage.png') as ImageProvider,
+      ),
+      const SizedBox(width: 12),
+      Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Hi, $name 👋',
+              style: TextStyle(
+                color: textColor,
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
               ),
-              const SizedBox(height: 4),
-              const Row(
-                children: [
-                  Icon(Icons.location_on, color: Colors.blueAccent, size: 16),
-                  SizedBox(width: 4),
-                  Text(
-                    'Riyadh, SA',
-                    style: TextStyle(color: Colors.white70, fontSize: 13),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-
-        // Settings Icon with onTap
-        GestureDetector(
-          onTap: () {
-            Get.to(
-              () => const SearchPage(),
-              fullscreenDialog: true, 
-              transition:
-                  Transition.cupertino, 
-            );
-          },
-          child: Container(
-            height: 38,
-            width: 38,
-            decoration: BoxDecoration(
-              color: const Color(0xFF1E1E2C),
-              borderRadius: BorderRadius.circular(12),
             ),
-            child: const Icon(Icons.search, color: Colors.white, size: 20),
-          ),
+            const SizedBox(height: 4),
+            Row(
+              children: [
+                Icon(Icons.location_on, color: subTextColor, size: 16),
+                const SizedBox(width: 4),
+                Text(
+                  'Riyadh, SA',
+                  style: TextStyle(color: subTextColor, fontSize: 13),
+                ),
+              ],
+            ),
+          ],
         ),
-      ],
-    );
-  }
+      ),
+      GestureDetector(
+        onTap: () {
+          Get.to(() => const SearchPage(),
+              fullscreenDialog: true, transition: Transition.cupertino);
+        },
+        child: Container(
+          height: 38,
+          width: 38,
+          decoration: BoxDecoration(
+            color: isDark ? const Color(0xFF1E1E2C) : Colors.black12,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Icon(Icons.search, color: textColor, size: 20),
+        ),
+      ),
+    ],
+  );
+}
+
 }

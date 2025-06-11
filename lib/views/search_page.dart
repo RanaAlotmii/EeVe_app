@@ -56,18 +56,24 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bgColor = isDark ? const Color(0xFF121212) : Colors.white;
+    final textColor = isDark ? Colors.white : Colors.black;
+    final hintColor = isDark ? Colors.grey[400] : Colors.grey[600];
+    final fieldColor = isDark ? const Color(0xFF1C1C1E) : Colors.grey[200];
+
     return Scaffold(
-      backgroundColor: const Color(0xFF121212),
+      backgroundColor: bgColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-        title: const Text(
+        title: Text(
           'Search Events',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: textColor),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: Icon(Icons.arrow_back, color: textColor),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -81,16 +87,16 @@ class _SearchPageState extends State<SearchPage> {
               controller: _searchController,
               decoration: InputDecoration(
                 hintText: 'Search for events...',
-                hintStyle: TextStyle(color: Colors.grey[400]),
-                prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                hintStyle: TextStyle(color: hintColor),
+                prefixIcon: Icon(Icons.search, color: hintColor),
                 filled: true,
-                fillColor: const Color(0xFF1C1C1E),
+                fillColor: fieldColor,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide.none,
                 ),
               ),
-              style: const TextStyle(color: Colors.white),
+              style: TextStyle(color: textColor),
             ),
           ),
           Expanded(
@@ -100,11 +106,11 @@ class _SearchPageState extends State<SearchPage> {
                       child: CircularProgressIndicator(),
                     ) // ⏳ أثناء التحميل
                     : filteredEvents.isEmpty
-                    ? const Center(
+                    ? Center(
                       child: Text(
                         'No events found.\nPlease try a different search.',
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.grey, fontSize: 16),
+                        style: TextStyle(color: hintColor, fontSize: 16),
                       ),
                     ) // ✅ لا يوجد نتائج
                     : ListView.separated(

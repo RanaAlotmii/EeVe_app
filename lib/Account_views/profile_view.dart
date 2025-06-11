@@ -1,5 +1,6 @@
+import 'package:eeve_app/views/home_view.dart';
 import 'package:eeve_app/views/my_ticket_view.dart';
-import 'package:eeve_app/views/my_ticket_view2.dart';
+import 'package:eeve_app/views/my_ticket_view.dart';
 import 'package:flutter/material.dart';
 import 'package:eeve_app/Account_views/about_app_view.dart';
 import 'package:eeve_app/Account_views/edit_profile_view.dart';
@@ -8,6 +9,8 @@ import 'package:eeve_app/auth_views/signin_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:get/route_manager.dart';
+import 'package:provider/provider.dart' as app_provider; // ✅ هنا استخدمنا prefix
+import 'package:eeve_app/managers/theme_service.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
@@ -28,10 +31,19 @@ class _ProfileViewState extends State<ProfileView> {
   String dob = '';
   String profileImage = '';
 
+  late ThemeService _themeService;
+
   @override
   void initState() {
     super.initState();
     _loadUserData();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _themeService = app_provider.Provider.of<ThemeService>(context, listen: false);
+    isDarkMode = _themeService.themeMode == ThemeMode.dark;
   }
 
   Future<void> _loadUserData() async {
@@ -39,12 +51,11 @@ class _ProfileViewState extends State<ProfileView> {
       final user = _supabase.auth.currentUser;
       if (user == null) return;
 
-      final response =
-          await _supabase
-              .from('users')
-              .select()
-              .eq('id', user.id)
-              .maybeSingle();
+      final response = await _supabase
+          .from('users')
+          .select()
+          .eq('id', user.id)
+          .maybeSingle();
 
       if (response != null) {
         setState(() {
@@ -58,7 +69,7 @@ class _ProfileViewState extends State<ProfileView> {
         });
       }
     } catch (e) {
-      print('Error loading user data: $e');
+      print('Error loading user data: \$e');
     }
   }
 
@@ -73,11 +84,8 @@ class _ProfileViewState extends State<ProfileView> {
     }
 
     return Scaffold(
-      backgroundColor: const Color(0xFF121212),
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: const Text('My Account', style: TextStyle(color: Colors.white)),
+        title: const Text('My Account'),
         centerTitle: true,
       ),
       body: SafeArea(
@@ -86,7 +94,6 @@ class _ProfileViewState extends State<ProfileView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Profile Info
               Row(
                 children: [
                   CircleAvatar(radius: 30, backgroundImage: profileImageWidget),
@@ -94,69 +101,38 @@ class _ProfileViewState extends State<ProfileView> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        name,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                      Text(
-                        email,
-                        style: const TextStyle(color: Colors.white70),
-                      ),
+                      Text(name, style: Theme.of(context).textTheme.bodyLarge),
+                      Text(email, style: Theme.of(context).textTheme.bodySmall),
                     ],
                   ),
                 ],
               ),
-
               const SizedBox(height: 32),
-              const Text(
-                'Personal Info',
-                style: TextStyle(color: Colors.white54),
-              ),
+              Text('Personal Info', style: Theme.of(context).textTheme.bodyMedium),
               const SizedBox(height: 16),
-
               ListTile(
-                leading: const Icon(Icons.person_outline, color: Colors.white),
-                title: const Text(
-                  'Edit Profile',
-                  style: TextStyle(color: Colors.white),
-                ),
+                leading: const Icon(Icons.person_outline),
+                title: const Text('Edit Profile'),
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => const EditProfileView(),
-                    ),
+                    MaterialPageRoute(builder: (context) => HomeView()),
                   );
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.credit_card, color: Colors.white),
-                title: const Text(
-                  'My Cards',
-                  style: TextStyle(color: Colors.white),
-                ),
+                leading: const Icon(Icons.credit_card),
+                title: const Text('My Cards'),
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => const MyCardsView(),
-                    ),
+                    MaterialPageRoute(builder: (context) => const MyCardsView()),
                   );
                 },
               ),
               ListTile(
-                leading: const Icon(
-                  Icons.confirmation_number,
-                  color: Colors.white,
-                ),
-                title: const Text(
-                  'Tickets',
-                  style: TextStyle(color: Colors.white),
-                ),
+                leading: const Icon(Icons.confirmation_number),
+                title: const Text('Tickets'),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -164,58 +140,38 @@ class _ProfileViewState extends State<ProfileView> {
                   );
                 },
               ),
-
               const SizedBox(height: 24),
-              const Text('Settings', style: TextStyle(color: Colors.white54)),
+              Text('Settings', style: Theme.of(context).textTheme.bodyMedium),
               const SizedBox(height: 16),
-
-              // Dark Mode Switch
               SwitchListTile(
                 value: isDarkMode,
                 onChanged: (val) {
                   setState(() {
                     isDarkMode = val;
+                    _themeService.toggleTheme(val);
                   });
                 },
-                title: const Text(
-                  'Dark mode',
-                  style: TextStyle(color: Colors.white),
-                ),
-                secondary: const Icon(
-                  Icons.dark_mode_outlined,
-                  color: Colors.white,
-                ),
+                title: const Text('Dark mode'),
+                secondary: const Icon(Icons.dark_mode_outlined),
                 activeColor: const Color(0xFF8B57E6),
               ),
-
               ListTile(
-                leading: const Icon(Icons.info_outline, color: Colors.white),
-                title: const Text(
-                  'About App',
-                  style: TextStyle(color: Colors.white),
-                ),
+                leading: const Icon(Icons.info_outline),
+                title: const Text('About App'),
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => const AboutAppView(),
-                    ),
+                    MaterialPageRoute(builder: (context) => const AboutAppView()),
                   );
                 },
               ),
-
               ListTile(
-                leading: const Icon(Icons.logout, color: Colors.white),
-                title: const Text(
-                  'Log out',
-                  style: TextStyle(color: Colors.white),
-                ),
+                leading: const Icon(Icons.logout),
+                title: const Text('Log out'),
                 onTap: () async {
                   await Supabase.instance.client.auth.signOut();
-
                   final prefs = await SharedPreferences.getInstance();
                   await prefs.setBool('isLoggedIn', false);
-
                   Get.offAll(() => const SigninView());
                 },
               ),
