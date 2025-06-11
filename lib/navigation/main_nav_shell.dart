@@ -29,7 +29,7 @@ class _MainNavShellState extends State<MainNavShell> {
     return [
       HomeView(),
       FavoritesView(key: UniqueKey()),
-      const Myticket(),
+      Myticket(),
       const AiGetStartedView(),
       const ProfileView(),
     ];

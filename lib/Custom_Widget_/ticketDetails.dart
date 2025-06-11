@@ -1,4 +1,7 @@
 import 'package:dotted_line/dotted_line.dart';
+import 'package:eeve_app/main.dart';
+import 'package:eeve_app/navigation/main_nav_shell.dart';
+import 'package:eeve_app/views/my_ticket_view.dart';
 import 'package:flutter/material.dart';
 
 class Ticketdetails extends StatelessWidget {
@@ -13,9 +16,10 @@ class Ticketdetails extends StatelessWidget {
     required this.name,
     required this.time,
     required this.id,
-    required this.image_url, 
+    required this.image_url,
     required this.quantity,
   });
+
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +39,54 @@ class Ticketdetails extends StatelessWidget {
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 24.0),
-            child: Icon(Icons.more_vert, color: theme.iconTheme.color),
+            padding: const EdgeInsets.only(right: 16.0),
+            child: PopupMenuButton<String>(
+              icon: Icon(Icons.more_vert, color: theme.iconTheme.color),
+              offset: const Offset(-17, 40),
+              onSelected: (value) {
+                if (value == 'delete') {
+                  showDialog(
+                    context: context,
+                    builder:
+                        (context) => AlertDialog(
+                          title: Text('Delete Ticket'),
+                          content: Text(
+                            'Are you sure you want to delete this ticket?',
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              child: Text('Cancel'),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                await supabase.from("tickets").delete().eq('id', id);
+
+
+                                Navigator.pushReplacement(
+                                  context,
+                                  PageRouteBuilder(pageBuilder: (context, _,__) => MainNavShell()),
+                                );
+
+                              },
+                              child: Text(
+                                'Delete',
+                                style: TextStyle(color: Colors.red),
+                              ),
+                            ),
+                          ],
+                        ),
+                  );
+                }
+              },
+              itemBuilder:
+                  (BuildContext context) => <PopupMenuEntry<String>>[
+                    PopupMenuItem<String>(
+                      value: 'delete',
+                      child: Container(width: 120, child: Text('Delete')),
+                    ),
+                  ],
+            ),
           ),
         ],
         title: Text('Ticket Detail', style: theme.textTheme.titleMedium),
@@ -51,16 +101,17 @@ class Ticketdetails extends StatelessWidget {
 
             // TicketDetailsCard(),
             Container(
-              height: 536,
+              height: 566,
               width: 340,
               decoration: BoxDecoration(
-                gradient: isDark
-                    ? const LinearGradient(
-                        colors: [Color(0xFF2B1B4D), Color(0xFF1A1C33)],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      )
-                    : null,
+                gradient:
+                    isDark
+                        ? const LinearGradient(
+                          colors: [Color(0xFF2B1B4D), Color(0xFF1A1C33)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        )
+                        : null,
                 color: isDark ? null : Colors.grey[300],
                 borderRadius: BorderRadius.circular(16),
               ),
@@ -105,13 +156,13 @@ class Ticketdetails extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-
                         Text(
                           'Time',
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
                             fontSize: 12,
-                            color: theme.textTheme.bodySmall?.color?.withOpacity(0.6),
+                            color: theme.textTheme.bodySmall?.color
+                                ?.withOpacity(0.6),
                           ),
                         ),
                         Text(
@@ -123,13 +174,14 @@ class Ticketdetails extends StatelessWidget {
                             color: theme.textTheme.bodyMedium?.color,
                           ),
                         ),
-                        SizedBox(height: 10,),
+                        SizedBox(height: 10),
                         Text(
                           'Quantity:',
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
                             fontSize: 12,
-                            color: theme.textTheme.bodySmall?.color?.withOpacity(0.6),
+                            color: theme.textTheme.bodySmall?.color
+                                ?.withOpacity(0.6),
                           ),
                         ),
                         Text(
@@ -157,7 +209,9 @@ class Ticketdetails extends StatelessWidget {
                           child: DottedLine(
                             lineLength: 300,
                             dashLength: 6,
-                            dashColor: theme.textTheme.bodyMedium?.color ?? Colors.grey,
+                            dashColor:
+                                theme.textTheme.bodyMedium?.color ??
+                                Colors.grey,
                           ),
                         ),
                         Positioned(

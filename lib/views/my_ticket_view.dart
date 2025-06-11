@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:eeve_app/Custom_Widget_/ticketDetails.dart';
 import 'package:dotted_line/dotted_line.dart';
+import 'dart:async';
 
 class Myticket extends StatefulWidget {
   const Myticket({super.key});
@@ -13,48 +14,142 @@ class MyticketState extends State<Myticket> with RouteAware {
   bool isUpcoming = true;
   List<dynamic> tickets = [];
   bool isLoading = true;
+  late StreamSubscription _ticketsSubscription;
 
   @override
   void initState() {
     super.initState();
-    fetchTickets();
+    _subscribeToTickets();
+  }
+
+  @override
+  void dispose() {
+    _ticketsSubscription.cancel();
+    super.dispose();
   }
 
   @override
   void didPopNext() {
     super.didPopNext();
-    fetchTickets();
   }
 
-  Future<void> fetchTickets() async {
+  void _subscribeToTickets() {
     setState(() {
       isLoading = true;
     });
 
     try {
       final userId = Supabase.instance.client.auth.currentUser!.id;
-      final data = await Supabase.instance.client
+      
+      _ticketsSubscription = Supabase.instance.client
           .from('tickets')
-          .select(
-            'id, booking_date, quantity, event_id, event_id(title, event_time, image_cover)',
-          )
+          .stream(primaryKey: ['id'])
+          .eq('user_id', userId)
+          .order('booking_date', ascending: false)
+          .listen((data) async {
+            await _handleTicketsUpdate(data);
+          }, onError: (error) {
+            print('Stream error: $error');
+            if (mounted) {
+              setState(() {
+                isLoading = false;
+              });
+            }
+          });
+    } catch (e) {
+      print('Error setting up stream: $e');
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _handleTicketsUpdate(List<dynamic> streamData) async {
+    if (!mounted) return;
+
+    try {
+      final userId = Supabase.instance.client.auth.currentUser!.id;
+      final completeData = await Supabase.instance.client
+          .from('tickets')
+          .select('''
+            id, 
+            booking_date, 
+            quantity, 
+            event_id,
+            events!inner(
+              id,
+              title,
+              event_time,
+              image_cover
+            )
+          ''')
           .eq('user_id', userId)
           .order('booking_date', ascending: false);
 
-      setState(() {
-        tickets = data;
-        isLoading = false;
-      });
+      final formattedData = completeData.map((ticket) {
+        return {
+          ...ticket,
+          'event_id': ticket['events']
+        };
+      }).toList();
+
+      if (mounted) {
+        setState(() {
+          tickets = formattedData;
+          isLoading = false;
+        });
+      }
     } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
-      print('Error fetching tickets: $e');
+      print('Error handling tickets update: $e');
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 
   Future<void> _refreshTickets() async {
-    await fetchTickets();
+    setState(() {
+      isLoading = true;
+    });
+    
+    try {
+      final userId = Supabase.instance.client.auth.currentUser!.id;
+      final data = await Supabase.instance.client
+          .from('tickets')
+          .select('''
+            id, 
+            booking_date, 
+            quantity, 
+            event_id,
+            events!inner(
+              id,
+              title,
+              event_time,
+              image_cover
+            )
+          ''')
+          .eq('user_id', userId)
+          .order('booking_date', ascending: false);
+
+      final formattedData = data.map((ticket) {
+        return {
+          ...ticket,
+          'event_id': ticket['events']
+        };
+      }).toList();
+
+      setState(() {
+        tickets = formattedData;
+        isLoading = false;
+      });
+    } catch (e) {
+      print('Error refreshing tickets: $e');
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   @override
@@ -266,6 +361,7 @@ class TicketCard extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
                           ),
+                          maxLines: 3,
                         ),
                         const SizedBox(height: 16),
                         Align(
