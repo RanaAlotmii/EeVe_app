@@ -213,7 +213,7 @@ class _FavoritesViewState extends State<FavoritesView> {
           const SnackBar(
             content: Text('Removed from favorites'),
             backgroundColor: Colors.green,
-            duration: Duration(seconds: 2),
+            duration: Duration(milliseconds: 1100),
             behavior: SnackBarBehavior.floating,
           ),
         );
@@ -222,7 +222,7 @@ class _FavoritesViewState extends State<FavoritesView> {
           const SnackBar(
             content: Text('Failed to remove from favorites'),
             backgroundColor: Colors.red,
-            duration: Duration(seconds: 2),
+            duration: Duration(milliseconds: 1100),
             behavior: SnackBarBehavior.floating,
           ),
         );
@@ -234,7 +234,7 @@ class _FavoritesViewState extends State<FavoritesView> {
           const SnackBar(
             content: Text('Failed to remove from favorites'),
             backgroundColor: Colors.red,
-            duration: Duration(seconds: 2),
+            duration: Duration(milliseconds: 1100),
             behavior: SnackBarBehavior.floating,
           ),
         );

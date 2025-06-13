@@ -148,7 +148,7 @@ class _EventDetailState extends State<EventDetail> {
       SnackBar(
         content: Text(message),
         backgroundColor: isError ? Colors.red : Colors.green,
-        duration: const Duration(seconds: 2),
+        duration: const Duration(milliseconds: 1100),
         behavior: SnackBarBehavior.floating,
       ),
     );

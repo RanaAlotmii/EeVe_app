@@ -6,10 +6,16 @@ import 'package:eeve_app/Custom_Widget_/home_header_widget.dart';
 import 'package:eeve_app/Custom_Widget_/CategoryList.dart';
 import 'package:get/get.dart';
 
-class HomeView extends StatelessWidget {
-  final EventsController controller = Get.find<EventsController>();
+class HomeView extends StatefulWidget {
 
   HomeView({super.key});
+
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  final EventsController controller = Get.find<EventsController>();
 
   @override
   Widget build(BuildContext context) {
