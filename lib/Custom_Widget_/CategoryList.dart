@@ -17,6 +17,10 @@ class CategoryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final Color iconBackground = isDark ? const Color(0xFF1E1E2C) : Colors.grey[200]!;
+    final Color textColor = isDark ? Colors.white : Colors.black87;
+
     return SizedBox(
       height: 110,
       child: Obx(() {
@@ -64,9 +68,9 @@ class CategoryList extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(3),
                       child: Container(
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Color(0xFF1E1E2C),
+                          color: iconBackground,
                         ),
                         child: Center(
                           child: Image.asset(
@@ -81,8 +85,8 @@ class CategoryList extends StatelessWidget {
                   const SizedBox(height: 8),
                   Text(
                     category['name'] ?? '',
-                    style: const TextStyle(
-                      color: Colors.white,
+                    style: TextStyle(
+                      color: textColor,
                       fontSize: 12.5,
                       fontWeight: FontWeight.w500,
                     ),

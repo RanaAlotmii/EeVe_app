@@ -20,15 +20,15 @@ class Ticketdetails extends StatelessWidget {
     required this.quantity,
   });
 
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+    final primaryTextColor = isDark ? Colors.white : Colors.black87;
+    final secondaryTextColor = isDark ? Colors.white70 : Colors.black54;
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
-
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -47,45 +47,38 @@ class Ticketdetails extends StatelessWidget {
                 if (value == 'delete') {
                   showDialog(
                     context: context,
-                    builder:
-                        (context) => AlertDialog(
-                          title: Text('Delete Ticket'),
-                          content: Text(
-                            'Are you sure you want to delete this ticket?',
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.of(context).pop(),
-                              child: Text('Cancel'),
-                            ),
-                            TextButton(
-                              onPressed: () async {
-                                await supabase.from("tickets").delete().eq('id', id);
-
-
-                                Navigator.pushReplacement(
-                                  context,
-                                  PageRouteBuilder(pageBuilder: (context, _,__) => MainNavShell()),
-                                );
-
-                              },
-                              child: Text(
-                                'Delete',
-                                style: TextStyle(color: Colors.red),
-                              ),
-                            ),
-                          ],
+                    builder: (context) => AlertDialog(
+                      title: Text('Delete Ticket'),
+                      content: const Text('Are you sure you want to delete this ticket?'),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: const Text('Cancel'),
                         ),
+                        TextButton(
+                          onPressed: () async {
+                            await supabase.from("tickets").delete().eq('id', id);
+                            Navigator.pushReplacement(
+                              context,
+                              PageRouteBuilder(pageBuilder: (context, _, __) => const MainNavShell()),
+                            );
+                          },
+                          child: const Text(
+                            'Delete',
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ),
+                      ],
+                    ),
                   );
                 }
               },
-              itemBuilder:
-                  (BuildContext context) => <PopupMenuEntry<String>>[
-                    PopupMenuItem<String>(
-                      value: 'delete',
-                      child: Container(width: 120, child: Text('Delete')),
-                    ),
-                  ],
+              itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                const PopupMenuItem<String>(
+                  value: 'delete',
+                  child: SizedBox(width: 120, child: Text('Delete')),
+                ),
+              ],
             ),
           ),
         ],
@@ -93,33 +86,32 @@ class Ticketdetails extends StatelessWidget {
         centerTitle: true,
         backgroundColor: theme.scaffoldBackgroundColor,
       ),
-
       body: Center(
         child: Column(
           children: [
-            SizedBox(height: 30),
-
-            // TicketDetailsCard(),
+            const SizedBox(height: 30),
             Container(
               height: 566,
               width: 340,
               decoration: BoxDecoration(
-                gradient:
-                    isDark
-                        ? const LinearGradient(
-                          colors: [Color(0xFF2B1B4D), Color(0xFF1A1C33)],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        )
-                        : null,
-                color: isDark ? null : Colors.grey[300],
+                gradient: isDark
+                    ? const LinearGradient(
+                        colors: [Color(0xFF2B1B4D), Color(0xFF1A1C33)],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      )
+                    : const LinearGradient(
+                        colors: [Color.fromARGB(255, 165, 159, 182),  Color.fromARGB(255, 110, 81, 159)],
+                        //   colors: [Color.fromARGB(255, 165, 159, 182),  Color.fromARGB(255, 110, 81, 159)],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 17),
-
+                  const SizedBox(height: 17),
                   Center(
                     child: Container(
                       width: 279,
@@ -133,27 +125,22 @@ class Ticketdetails extends StatelessWidget {
                       ),
                     ),
                   ),
-
-                  SizedBox(height: 12),
+                  const SizedBox(height: 12),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 31.0),
                     child: Text(
-                      // 'E-Sports World Cup Riyadh 2025',
                       name,
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
-                        color: theme.textTheme.bodyMedium?.color,
+                        color: primaryTextColor,
                       ),
                     ),
                   ),
-
-                  SizedBox(height: 20),
-
+                  const SizedBox(height: 20),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 31.0),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
@@ -161,44 +148,37 @@ class Ticketdetails extends StatelessWidget {
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
                             fontSize: 12,
-                            color: theme.textTheme.bodySmall?.color
-                                ?.withOpacity(0.6),
+                            color: secondaryTextColor,
                           ),
                         ),
                         Text(
-                          // '5:00 PM – 10:00 PM',
                           time,
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 14,
-                            color: theme.textTheme.bodyMedium?.color,
+                            color: primaryTextColor,
                           ),
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         Text(
                           'Quantity:',
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
                             fontSize: 12,
-                            color: theme.textTheme.bodySmall?.color
-                                ?.withOpacity(0.6),
+                            color: secondaryTextColor,
                           ),
                         ),
                         Text(
-                          // '5:00 PM – 10:00 PM',
                           quantity,
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 14,
-                            color: theme.textTheme.bodyMedium?.color,
+                            color: primaryTextColor,
                           ),
                         ),
                       ],
                     ),
                   ),
-
-                  SizedBox(height: 0),
-
                   Expanded(
                     child: Stack(
                       children: <Widget>[
@@ -209,30 +189,25 @@ class Ticketdetails extends StatelessWidget {
                           child: DottedLine(
                             lineLength: 300,
                             dashLength: 6,
-                            dashColor:
-                                theme.textTheme.bodyMedium?.color ??
-                                Colors.grey,
+                            dashColor: secondaryTextColor,
                           ),
                         ),
                         Positioned(
                           left: 0,
                           top: 70,
-                          // right: 0,
                           child: Container(
                             width: 15,
                             height: 30,
                             decoration: BoxDecoration(
                               color: theme.scaffoldBackgroundColor,
-                              borderRadius: BorderRadius.only(
+                              borderRadius: const BorderRadius.only(
                                 bottomRight: Radius.circular(20),
                                 topRight: Radius.circular(20),
                               ),
                             ),
                           ),
                         ),
-
                         Positioned(
-                          // left: 100,
                           top: 70,
                           right: 0,
                           child: Container(
@@ -240,7 +215,7 @@ class Ticketdetails extends StatelessWidget {
                             height: 30,
                             decoration: BoxDecoration(
                               color: theme.scaffoldBackgroundColor,
-                              borderRadius: BorderRadius.only(
+                              borderRadius: const BorderRadius.only(
                                 bottomLeft: Radius.circular(20),
                                 topLeft: Radius.circular(20),
                               ),
@@ -250,22 +225,21 @@ class Ticketdetails extends StatelessWidget {
                       ],
                     ),
                   ),
-
                   Center(
                     child: Text(
                       '#$id',
                       style: TextStyle(
                         fontSize: 43,
                         fontWeight: FontWeight.w700,
-                        color: theme.textTheme.bodyMedium?.color,
+                        color: primaryTextColor,
                       ),
                     ),
                   ),
-                  SizedBox(height: 40),
+                  const SizedBox(height: 40),
                 ],
               ),
             ),
-            SizedBox(height: 49),
+            const SizedBox(height: 49),
           ],
         ),
       ),

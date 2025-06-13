@@ -63,14 +63,27 @@ class FavoritesManager {
         .stream(primaryKey: ['id'])
         .eq('user_id', currentUser!.id)
         .listen((data) {
-          _loadFavorites();
-        });
+      _loadFavorites();
+    });
   }
 
   Future<bool> addToFavorites(int eventId, Map<String, dynamic> eventData) async {
     if (currentUser == null) return false;
 
     try {
+      // ✅ تحقق إذا كان موجود مسبقًا لتجنب التكرار
+      final existing = await Supabase.instance.client
+          .from('user_favorites')
+          .select('id')
+          .eq('user_id', currentUser!.id)
+          .eq('event_id', eventId)
+          .maybeSingle();
+
+      if (existing != null) {
+        print('Already in favorites');
+        return true;
+      }
+
       await Supabase.instance.client.from('user_favorites').insert({
         'event_id': eventId,
         'added_at': DateTime.now().toIso8601String(),
@@ -140,3 +153,4 @@ class FavoritesManager {
     _favoritesController.close();
   }
 }
+

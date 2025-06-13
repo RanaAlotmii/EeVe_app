@@ -28,11 +28,6 @@ class MyticketState extends State<Myticket> with RouteAware {
     super.dispose();
   }
 
-  @override
-  void didPopNext() {
-    super.didPopNext();
-  }
-
   void _subscribeToTickets() {
     setState(() {
       isLoading = true;
@@ -40,22 +35,22 @@ class MyticketState extends State<Myticket> with RouteAware {
 
     try {
       final userId = Supabase.instance.client.auth.currentUser!.id;
-      
+
       _ticketsSubscription = Supabase.instance.client
           .from('tickets')
           .stream(primaryKey: ['id'])
           .eq('user_id', userId)
           .order('booking_date', ascending: false)
           .listen((data) async {
-            await _handleTicketsUpdate(data);
-          }, onError: (error) {
-            print('Stream error: $error');
-            if (mounted) {
-              setState(() {
-                isLoading = false;
-              });
-            }
+        await _handleTicketsUpdate(data);
+      }, onError: (error) {
+        print('Stream error: $error');
+        if (mounted) {
+          setState(() {
+            isLoading = false;
           });
+        }
+      });
     } catch (e) {
       print('Error setting up stream: $e');
       setState(() {
@@ -113,7 +108,7 @@ class MyticketState extends State<Myticket> with RouteAware {
     setState(() {
       isLoading = true;
     });
-    
+
     try {
       final userId = Supabase.instance.client.auth.currentUser!.id;
       final data = await Supabase.instance.client
@@ -264,11 +259,19 @@ class TicketCard extends StatelessWidget {
         width: 327,
         height: 144,
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [Color(0xFF2B1B4D), Color(0xFF1A1C33)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+          gradient: isDark
+              ? const LinearGradient(
+                  colors: [Color(0xFF2B1B4D), Color(0xFF1A1C33)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                )
+              : const LinearGradient(
+                  // colors: [Color.fromARGB(255, 205, 198, 198), Color.fromARGB(255, 105, 80, 134)],
+                  colors: [Color.fromARGB(255, 165, 159, 182),  Color.fromARGB(255, 110, 81, 159)],
+                  
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
           borderRadius: BorderRadius.circular(16),
         ),
         child: ClipRRect(
@@ -288,14 +291,14 @@ class TicketCard extends StatelessWidget {
                         Text(
                           'Time',
                           style: TextStyle(
-                            color: Colors.grey.shade400,
+                            color: isDark ? Colors.grey.shade400 : Colors.black54,
                             fontSize: 12,
                           ),
                         ),
                         Text(
                           time,
-                          style: const TextStyle(
-                            color: Colors.white,
+                          style: TextStyle(
+                            color: isDark ? Colors.white : Colors.black87,
                             fontWeight: FontWeight.bold,
                             fontSize: 14,
                           ),
@@ -356,8 +359,8 @@ class TicketCard extends StatelessWidget {
                       children: [
                         Text(
                           eventName,
-                          style: const TextStyle(
-                            color: Colors.white,
+                          style: TextStyle(
+                            color: isDark ? Colors.white : Colors.black87,
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
                           ),
@@ -371,16 +374,16 @@ class TicketCard extends StatelessWidget {
                             children: [
                               Text(
                                 'Quantity: $quantity',
-                                style: const TextStyle(
-                                  color: Colors.white70,
+                                style: TextStyle(
+                                  color: isDark ? Colors.white70 : Colors.black54,
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                               Text(
                                 '#$ticketNumber',
-                                style: const TextStyle(
-                                  color: Colors.white70,
+                                style: TextStyle(
+                                  color: isDark ? Colors.white70 : Colors.black54,
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -400,3 +403,4 @@ class TicketCard extends StatelessWidget {
     );
   }
 }
+

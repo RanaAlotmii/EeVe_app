@@ -19,7 +19,6 @@ class _PromoCardState extends State<PromoCard> {
     fetchPromoEvent();
   }
 
-  // ✅ نجيب Event معين: Angham Live Concert
   Future<void> fetchPromoEvent() async {
     final response = await Supabase.instance.client
         .from('events')
@@ -36,11 +35,17 @@ class _PromoCardState extends State<PromoCard> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final List<Color> gradientColors = isDark
+        ? [const Color(0xFF0F0F10), const Color(0xFF8B57E6)]
+        : [const Color.fromARGB(255, 165, 159, 182), const Color.fromARGB(255, 110, 81, 159)];
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF0F0F10), Color(0xFF8B57E6)],
+        gradient: LinearGradient(
+          colors: gradientColors,
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -67,27 +72,24 @@ class _PromoCardState extends State<PromoCard> {
                 ),
                 const SizedBox(height: 10),
                 ElevatedButton(
-                  onPressed:
-                      promoEvent == null
-                          ? null
-                          : () {
-                            Get.to(
-                              () => EventDetail(
-                                eventId: promoEvent!['id'],
-                                title: promoEvent!['title'] ?? '',
-                                image: promoEvent!['image_detail'] ?? '',
-                                imageCover: promoEvent!['image_cover'] ?? '',
-                                location: promoEvent!['location'] ?? '',
-                                price:
-                                    double.tryParse(
-                                      promoEvent!['price'].toString(),
-                                    )?.toStringAsFixed(2) ??
-                                    '0.00',
-                                description: promoEvent!['description'] ?? '',
-                                eventTime: promoEvent!['event_time'] ?? '',
-                              ),
-                            );
-                          },
+                  onPressed: promoEvent == null
+                      ? null
+                      : () {
+                          Get.to(
+                            () => EventDetail(
+                              eventId: promoEvent!['id'],
+                              title: promoEvent!['title'] ?? '',
+                              image: promoEvent!['image_detail'] ?? '',
+                              imageCover: promoEvent!['image_cover'] ?? '',
+                              location: promoEvent!['location'] ?? '',
+                              price: double.tryParse(promoEvent!['price'].toString())
+                                      ?.toStringAsFixed(2) ??
+                                  '0.00',
+                              description: promoEvent!['description'] ?? '',
+                              eventTime: promoEvent!['event_time'] ?? '',
+                            ),
+                          );
+                        },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
                     foregroundColor: Colors.deepPurple,
@@ -109,33 +111,32 @@ class _PromoCardState extends State<PromoCard> {
           const SizedBox(width: 12),
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child:
-                promoEvent == null
-                    ? Container(
-                      width: 170,
-                      height: 160,
-                      color: Colors.grey[800],
-                      child: const Center(child: CircularProgressIndicator()),
-                    )
-                    : Image.network(
-                      promoEvent!['image_cover'] ?? '',
-                      width: 170,
-                      height: 160,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Container(
-                          width: 170,
-                          height: 160,
-                          color: Colors.grey[800],
-                          child: const Center(
-                            child: Icon(
-                              Icons.broken_image,
-                              color: Colors.white30,
-                            ),
+            child: promoEvent == null
+                ? Container(
+                    width: 170,
+                    height: 160,
+                    color: Colors.grey[800],
+                    child: const Center(child: CircularProgressIndicator()),
+                  )
+                : Image.network(
+                    promoEvent!['image_cover'] ?? '',
+                    width: 170,
+                    height: 160,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        width: 170,
+                        height: 160,
+                        color: Colors.grey[800],
+                        child: const Center(
+                          child: Icon(
+                            Icons.broken_image,
+                            color: Colors.white30,
                           ),
-                        );
-                      },
-                    ),
+                        ),
+                      );
+                    },
+                  ),
           ),
         ],
       ),

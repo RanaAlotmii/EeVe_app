@@ -21,7 +21,7 @@ class DetailOrderPage extends StatelessWidget {
     final bgColor = Theme.of(context).scaffoldBackgroundColor;
     final primaryTextColor = isDark ? Colors.white : Colors.black87;
     final secondaryTextColor = isDark ? Colors.white70 : Colors.black54;
-    final cardColor = isDark ? const Color(0xFF1C1C1E) : Colors.grey[100];
+    final cardColor = isDark ? const Color(0xFF1C1C1E) :  Color(0xFFE0E0E0);
 
     final String title = eventData['title'] ?? '';
     final String location = eventData['location'] ?? '';
