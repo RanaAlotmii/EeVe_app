@@ -1,3 +1,4 @@
+import 'package:eeve_app/navigation/main_nav_shell.dart';
 import 'package:eeve_app/views/home_view.dart';
 import 'package:eeve_app/views/my_ticket_view.dart';
 import 'package:eeve_app/views/my_ticket_view.dart';
@@ -9,7 +10,8 @@ import 'package:eeve_app/auth_views/signin_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:get/route_manager.dart';
-import 'package:provider/provider.dart' as app_provider; // ✅ هنا استخدمنا prefix
+import 'package:provider/provider.dart'
+    as app_provider; // ✅ هنا استخدمنا prefix
 import 'package:eeve_app/managers/theme_service.dart';
 
 class ProfileView extends StatefulWidget {
@@ -42,7 +44,10 @@ class _ProfileViewState extends State<ProfileView> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _themeService = app_provider.Provider.of<ThemeService>(context, listen: false);
+    _themeService = app_provider.Provider.of<ThemeService>(
+      context,
+      listen: false,
+    );
     isDarkMode = _themeService.themeMode == ThemeMode.dark;
   }
 
@@ -51,11 +56,12 @@ class _ProfileViewState extends State<ProfileView> {
       final user = _supabase.auth.currentUser;
       if (user == null) return;
 
-      final response = await _supabase
-          .from('users')
-          .select()
-          .eq('id', user.id)
-          .maybeSingle();
+      final response =
+          await _supabase
+              .from('users')
+              .select()
+              .eq('id', user.id)
+              .maybeSingle();
 
       if (response != null) {
         setState(() {
@@ -83,11 +89,20 @@ class _ProfileViewState extends State<ProfileView> {
       profileImageWidget = const AssetImage('assets/profileImage.png');
     }
 
+    // onTap: () {
+    // Get.to(
+    //   () => Ticketdetails(
+    //             name: eventName,
+    //             time: time,
+    //             id: ticketNumber,
+    //             image_url: image_url,
+    //             quantity: quantity,
+    //           ),
+    //         );
+    //       },
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('My Account'),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text('My Account'), centerTitle: true),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
@@ -108,17 +123,18 @@ class _ProfileViewState extends State<ProfileView> {
                 ],
               ),
               const SizedBox(height: 32),
-              Text('Personal Info', style: Theme.of(context).textTheme.bodyMedium),
+              Text(
+                'Personal Info',
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
               const SizedBox(height: 16),
               ListTile(
                 leading: const Icon(Icons.person_outline),
                 title: const Text('Edit Profile'),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const EditProfileView() 
+                  Get.to(
+                    () =>  const EditProfileView(),
                     // HomeView()
-                    ),
                   );
                 },
               ),
@@ -126,9 +142,8 @@ class _ProfileViewState extends State<ProfileView> {
                 leading: const Icon(Icons.credit_card),
                 title: const Text('My Cards'),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const MyCardsView()),
+                  Get.to(
+                    () => const MyCardsView(),
                   );
                 },
               ),
@@ -136,10 +151,9 @@ class _ProfileViewState extends State<ProfileView> {
                 leading: const Icon(Icons.confirmation_number),
                 title: const Text('Tickets'),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const Myticket()),
-                  );
+                  MainNavShell.mainTabController.jumpToTab(
+                    2,
+                  ); 
                 },
               ),
               const SizedBox(height: 24),
@@ -161,10 +175,9 @@ class _ProfileViewState extends State<ProfileView> {
                 leading: const Icon(Icons.info_outline),
                 title: const Text('About App'),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const AboutAppView()),
-                  );
+                  Get.to(
+                    () => const AboutAppView(),
+                    );
                 },
               ),
               ListTile(

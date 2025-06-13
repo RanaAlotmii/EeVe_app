@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:eeve_app/Custom_Widget_/ticketDetails.dart';
 import 'package:dotted_line/dotted_line.dart';
@@ -41,16 +42,19 @@ class MyticketState extends State<Myticket> with RouteAware {
           .stream(primaryKey: ['id'])
           .eq('user_id', userId)
           .order('booking_date', ascending: false)
-          .listen((data) async {
-        await _handleTicketsUpdate(data);
-      }, onError: (error) {
-        print('Stream error: $error');
-        if (mounted) {
-          setState(() {
-            isLoading = false;
-          });
-        }
-      });
+          .listen(
+            (data) async {
+              await _handleTicketsUpdate(data);
+            },
+            onError: (error) {
+              print('Stream error: $error');
+              if (mounted) {
+                setState(() {
+                  isLoading = false;
+                });
+              }
+            },
+          );
     } catch (e) {
       print('Error setting up stream: $e');
       setState(() {
@@ -81,12 +85,10 @@ class MyticketState extends State<Myticket> with RouteAware {
           .eq('user_id', userId)
           .order('booking_date', ascending: false);
 
-      final formattedData = completeData.map((ticket) {
-        return {
-          ...ticket,
-          'event_id': ticket['events']
-        };
-      }).toList();
+      final formattedData =
+          completeData.map((ticket) {
+            return {...ticket, 'event_id': ticket['events']};
+          }).toList();
 
       if (mounted) {
         setState(() {
@@ -128,12 +130,10 @@ class MyticketState extends State<Myticket> with RouteAware {
           .eq('user_id', userId)
           .order('booking_date', ascending: false);
 
-      final formattedData = data.map((ticket) {
-        return {
-          ...ticket,
-          'event_id': ticket['events']
-        };
-      }).toList();
+      final formattedData =
+          data.map((ticket) {
+            return {...ticket, 'event_id': ticket['events']};
+          }).toList();
 
       setState(() {
         tickets = formattedData;
@@ -174,44 +174,46 @@ class MyticketState extends State<Myticket> with RouteAware {
         ),
         body: RefreshIndicator(
           onRefresh: _refreshTickets,
-          child: isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : tickets.isEmpty
+          child:
+              isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : tickets.isEmpty
                   ? Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'No Tickets',
-                            style: TextStyle(color: textColor, fontSize: 20),
-                          ),
-                          const SizedBox(height: 10),
-                          ElevatedButton(
-                            onPressed: _refreshTickets,
-                            child: const Text('Refresh'),
-                          ),
-                        ],
-                      ),
-                    )
-                  : ListView.builder(
-                      padding: const EdgeInsets.all(16),
-                      itemCount: tickets.length,
-                      itemBuilder: (context, index) {
-                        final ticket = tickets[index];
-                        final event = ticket['event_id'];
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 16),
-                          child: TicketCard(
-                            eventName: event['title'] ?? 'No title',
-                            time: event['event_time'] ?? '',
-                            date: 'null',
-                            ticketNumber: ticket['id'].toString(),
-                            image_url: event['image_cover'] ?? 'assets/default.png',
-                            quantity: ticket['quantity'].toString(),
-                          ),
-                        );
-                      },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'No Tickets',
+                          style: TextStyle(color: textColor, fontSize: 20),
+                        ),
+                        const SizedBox(height: 10),
+                        ElevatedButton(
+                          onPressed: _refreshTickets,
+                          child: const Text('Refresh'),
+                        ),
+                      ],
                     ),
+                  )
+                  : ListView.builder(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: tickets.length,
+                    itemBuilder: (context, index) {
+                      final ticket = tickets[index];
+                      final event = ticket['event_id'];
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: TicketCard(
+                          eventName: event['title'] ?? 'No title',
+                          time: event['event_time'] ?? '',
+                          date: 'null',
+                          ticketNumber: ticket['id'].toString(),
+                          image_url:
+                              event['image_cover'] ?? 'assets/default.png',
+                          quantity: ticket['quantity'].toString(),
+                        ),
+                      );
+                    },
+                  ),
         ),
       ),
     );
@@ -242,36 +244,52 @@ class TicketCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Ticketdetails(
-              name: eventName,
-              time: time,
-              id: ticketNumber,
-              image_url: image_url,
-              quantity: quantity,
-            ),
+        Get.to(
+          () => Ticketdetails(
+            name: eventName,
+            time: time,
+            id: ticketNumber,
+            image_url: image_url,
+            quantity: quantity,
           ),
         );
       },
+
+      // onTap: () {
+      //   Navigator.push(
+      //     context,
+      //     MaterialPageRoute(
+      //       builder: (context) => Ticketdetails(
+      //         name: eventName,
+      //         time: time,
+      //         id: ticketNumber,
+      //         image_url: image_url,
+      //         quantity: quantity,
+      //       ),
+      //     ),
+      //   );
+      // },
       child: Container(
         width: 327,
         height: 144,
         decoration: BoxDecoration(
-          gradient: isDark
-              ? const LinearGradient(
-                  colors: [Color(0xFF2B1B4D), Color(0xFF1A1C33)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                )
-              : const LinearGradient(
-                  // colors: [Color.fromARGB(255, 205, 198, 198), Color.fromARGB(255, 105, 80, 134)],
-                  colors: [Color.fromARGB(255, 165, 159, 182),  Color.fromARGB(255, 110, 81, 159)],
-                  
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
+          gradient:
+              isDark
+                  ? const LinearGradient(
+                    colors: [Color(0xFF2B1B4D), Color(0xFF1A1C33)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  )
+                  : const LinearGradient(
+                    // colors: [Color.fromARGB(255, 205, 198, 198), Color.fromARGB(255, 105, 80, 134)],
+                    colors: [
+                      Color.fromARGB(255, 165, 159, 182),
+                      Color.fromARGB(255, 110, 81, 159),
+                    ],
+
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
           borderRadius: BorderRadius.circular(16),
         ),
         child: ClipRRect(
@@ -291,7 +309,8 @@ class TicketCard extends StatelessWidget {
                         Text(
                           'Time',
                           style: TextStyle(
-                            color: isDark ? Colors.grey.shade400 : Colors.black54,
+                            color:
+                                isDark ? Colors.grey.shade400 : Colors.black54,
                             fontSize: 12,
                           ),
                         ),
@@ -375,7 +394,8 @@ class TicketCard extends StatelessWidget {
                               Text(
                                 'Quantity: $quantity',
                                 style: TextStyle(
-                                  color: isDark ? Colors.white70 : Colors.black54,
+                                  color:
+                                      isDark ? Colors.white70 : Colors.black54,
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -383,7 +403,8 @@ class TicketCard extends StatelessWidget {
                               Text(
                                 '#$ticketNumber',
                                 style: TextStyle(
-                                  color: isDark ? Colors.white70 : Colors.black54,
+                                  color:
+                                      isDark ? Colors.white70 : Colors.black54,
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -403,4 +424,3 @@ class TicketCard extends StatelessWidget {
     );
   }
 }
-
