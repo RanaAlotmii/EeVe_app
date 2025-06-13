@@ -255,20 +255,7 @@ class TicketCard extends StatelessWidget {
         );
       },
 
-      // onTap: () {
-      //   Navigator.push(
-      //     context,
-      //     MaterialPageRoute(
-      //       builder: (context) => Ticketdetails(
-      //         name: eventName,
-      //         time: time,
-      //         id: ticketNumber,
-      //         image_url: image_url,
-      //         quantity: quantity,
-      //       ),
-      //     ),
-      //   );
-      // },
+
       child: Container(
         width: 327,
         height: 144,
@@ -283,8 +270,8 @@ class TicketCard extends StatelessWidget {
                   : const LinearGradient(
                     // colors: [Color.fromARGB(255, 205, 198, 198), Color.fromARGB(255, 105, 80, 134)],
                     colors: [
-                      Color.fromARGB(255, 165, 159, 182),
-                      Color.fromARGB(255, 110, 81, 159),
+                      Color.fromARGB(255, 213, 209, 221),
+                      Color.fromARGB(255, 156, 136, 191),
                     ],
 
                     begin: Alignment.topLeft,

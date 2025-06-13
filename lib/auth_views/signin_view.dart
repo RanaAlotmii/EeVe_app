@@ -21,25 +21,30 @@ class _SigninViewState extends State<SigninView> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDark ? Colors.white : Colors.black87;
+    final subTextColor = isDark ? Colors.white70 : Colors.black54;
+    final bgColor = isDark ? const Color.fromARGB(255, 0, 0, 0) : Colors.white;
+
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+      backgroundColor: bgColor,
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 70),
-            const Text(
+            Text(
               'Welcome Back! 👋',
               style: TextStyle(
                 fontSize: 24,
-                color: Colors.white,
+                color: textColor,
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 60),
 
-            const Text("Email", style: TextStyle(color: Colors.white70)),
+            Text("Email", style: TextStyle(color: subTextColor)),
             const SizedBox(height: 8),
             CustomTextField(
               hintText: 'Enter your email',
@@ -48,7 +53,7 @@ class _SigninViewState extends State<SigninView> {
             ),
 
             const SizedBox(height: 16),
-            const Text("Password", style: TextStyle(color: Colors.white70)),
+            Text("Password", style: TextStyle(color: subTextColor)),
             const SizedBox(height: 8),
             CustomTextField(
               hintText: 'Enter your password',
@@ -118,18 +123,18 @@ class _SigninViewState extends State<SigninView> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
+                  Text(
                     "Don’t have an account? ",
-                    style: TextStyle(color: Colors.white70, fontSize: 16),
+                    style: TextStyle(color: subTextColor, fontSize: 16),
                   ),
                   GestureDetector(
                     onTap: () {
                       Get.to(SignupView());
                     },
-                    child: const Text(
+                    child: Text(
                       "Sign Up",
                       style: TextStyle(
-                        color: Color(0xFF1565FF),
+                        color: const Color(0xFF1565FF),
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                       ),

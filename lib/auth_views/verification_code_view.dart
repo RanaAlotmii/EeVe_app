@@ -74,7 +74,7 @@ class _VerificationCodeViewState extends State<VerificationCodeView> {
         context: context,
         builder: (BuildContext context) {
           return Dialog(
-            backgroundColor: const Color(0xFF0C0C0C),
+            backgroundColor: Theme.of(context).dialogBackgroundColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
@@ -86,33 +86,38 @@ class _VerificationCodeViewState extends State<VerificationCodeView> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset('assets/success.png', height: 120, width: 120),
-                    SizedBox(height: 30),
+                    Image.asset('assets/check.png', height: 120, width: 120),
+                    const SizedBox(height: 30),
                     Text(
                       'Email Confirmed',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 12),
+                    const SizedBox(height: 12),
                     Text(
                       'You now have valid access to your account',
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.white54, fontSize: 14),
+                      style: TextStyle(
+                        color: Theme.of(
+                          context,
+                        ).textTheme.bodySmall?.color?.withOpacity(0.6),
+                        fontSize: 14,
+                      ),
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                     SizedBox(
                       width: double.infinity,
                       child: CustomButton(
                         text: "Login Now",
                         onPressed: () {
-                          Get.offAll(SigninView());
+                          Get.offAll(const SigninView());
                         },
                       ),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                   ],
                 ),
               ),
@@ -129,91 +134,100 @@ class _VerificationCodeViewState extends State<VerificationCodeView> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bgColor = Theme.of(context).scaffoldBackgroundColor;
+    final primaryTextColor = isDark ? Colors.white : Colors.black87;
+    final secondaryTextColor = isDark ? Colors.white54 : Colors.black54;
+    final fillColor = isDark ? const Color(0xFF1C1C1E) : Colors.grey.shade200;
+
     return Scaffold(
-      backgroundColor: const Color(0xFF0C0C0C),
-      body: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(height: 100),
-            const Text(
-              'Enter Verification Code',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+      backgroundColor: bgColor,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: 80),
+              Text(
+                'Enter Verification Code',
+                style: TextStyle(
+                  color: primaryTextColor,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            const SizedBox(height: 85),
-            PinCodeTextField(
-              appContext: context,
-              length: 6,
-              onChanged: (value) {
-                otpCode = value;
-              },
-              pinTheme: PinTheme(
-                shape: PinCodeFieldShape.box,
-                borderRadius: BorderRadius.circular(10),
-                fieldHeight: 48,
-                fieldWidth: 48,
-                activeColor: const Color(0xFF1565FF),
-                selectedColor: const Color(0xFF1565FF),
-                inactiveColor: const Color(0xFF1C1C1E),
-                activeFillColor: const Color(0xFF1565FF).withOpacity(0.3),
-                selectedFillColor: const Color(0xFF1565FF).withOpacity(0.3),
-                inactiveFillColor: const Color(0xFF1C1C1E),
+              const SizedBox(height: 60),
+              PinCodeTextField(
+                appContext: context,
+                length: 6,
+                onChanged: (value) {
+                  otpCode = value;
+                },
+                pinTheme: PinTheme(
+                  shape: PinCodeFieldShape.box,
+                  borderRadius: BorderRadius.circular(10),
+                  fieldHeight: 48,
+                  fieldWidth: 48,
+                  activeColor: const Color(0xFF1565FF),
+                  selectedColor: const Color(0xFF1565FF),
+                  inactiveColor: fillColor,
+                  activeFillColor: const Color(0xFF1565FF).withOpacity(0.3),
+                  selectedFillColor: const Color(0xFF1565FF).withOpacity(0.3),
+                  inactiveFillColor: fillColor,
+                ),
+                keyboardType: TextInputType.number,
+                textStyle: TextStyle(color: primaryTextColor),
+                enableActiveFill: true,
               ),
-              keyboardType: TextInputType.number,
-              textStyle: const TextStyle(color: Colors.white),
-              enableActiveFill: true,
-            ),
-            const SizedBox(height: 48),
-            Text.rich(
-              TextSpan(
-                children: [
-                  const TextSpan(
-                    text: 'You can resend the code in ',
-                    style: TextStyle(color: Colors.white54, fontSize: 16),
-                  ),
-                  TextSpan(
-                    text: '$_secondsRemaining',
-                    style: const TextStyle(
-                      color: Color(0xFF1565FF),
-                      fontSize: 16,
+              const SizedBox(height: 32),
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'You can resend the code in ',
+                      style: TextStyle(color: secondaryTextColor, fontSize: 16),
                     ),
-                  ),
-                  const TextSpan(
-                    text: ' seconds',
-                    style: TextStyle(color: Colors.white54, fontSize: 16),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 8),
-            TextButton(
-              onPressed: _resendCode,
-              child: const Text(
-                'Resend Code',
-                style: TextStyle(color: Color(0xFF1565FF), fontSize: 16),
-              ),
-            ),
-            const SizedBox(height: 32),
-            CustomButton(
-              text: "Sign Up",
-              onPressed: () {
-                if (otpCode.length < 4) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Please enter the complete code'),
+                    TextSpan(
+                      text: '$_secondsRemaining',
+                      style: const TextStyle(
+                        color: Color(0xFF1565FF),
+                        fontSize: 16,
+                      ),
                     ),
-                  );
-                  return;
-                }
-                _verifyCode();
-              },
-            ),
-          ],
+                    TextSpan(
+                      text: ' seconds',
+                      style: TextStyle(color: secondaryTextColor, fontSize: 16),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 8),
+              TextButton(
+                onPressed: _resendCode,
+                child: const Text(
+                  'Resend Code',
+                  style: TextStyle(color: Color(0xFF1565FF), fontSize: 16),
+                ),
+              ),
+              const SizedBox(height: 32),
+              CustomButton(
+                text: "Sign Up",
+                onPressed: () {
+                  if (otpCode.length < 4) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Please enter the complete code'),
+                      ),
+                    );
+                    return;
+                  }
+                  _verifyCode();
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

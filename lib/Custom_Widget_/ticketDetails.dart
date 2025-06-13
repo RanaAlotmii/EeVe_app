@@ -101,7 +101,7 @@ class Ticketdetails extends StatelessWidget {
                         end: Alignment.bottomRight,
                       )
                     : const LinearGradient(
-                        colors: [Color.fromARGB(255, 165, 159, 182),  Color.fromARGB(255, 110, 81, 159)],
+                        colors: [Color.fromARGB(255, 196, 191, 209), Color.fromARGB(255, 122, 109, 143)],
                         //   colors: [Color.fromARGB(255, 165, 159, 182),  Color.fromARGB(255, 110, 81, 159)],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,

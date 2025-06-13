@@ -89,18 +89,6 @@ class _ProfileViewState extends State<ProfileView> {
       profileImageWidget = const AssetImage('assets/profileImage.png');
     }
 
-    // onTap: () {
-    // Get.to(
-    //   () => Ticketdetails(
-    //             name: eventName,
-    //             time: time,
-    //             id: ticketNumber,
-    //             image_url: image_url,
-    //             quantity: quantity,
-    //           ),
-    //         );
-    //       },
-
     return Scaffold(
       appBar: AppBar(title: const Text('My Account'), centerTitle: true),
       body: SafeArea(

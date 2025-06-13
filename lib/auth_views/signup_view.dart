@@ -20,157 +20,159 @@ class _SignupViewState extends State<SignupView> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.black,
-        resizeToAvoidBottomInset: true,
-        body: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.only(bottom: 24),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 20),
-                      const Text(
-                        'Create Your Account',
-                        style: TextStyle(
-                          fontSize: 24,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 70),
-                      const Text("Full Name", style: TextStyle(color: Colors.white70)),
-                      const SizedBox(height: 8),
-                      CustomTextField(
-                        hintText: 'Enter your name',
-                        keyboardType: TextInputType.name,
-                        controller: nameController,
-                      ),
-                      const SizedBox(height: 16),
-                      const Text("Email", style: TextStyle(color: Colors.white70)),
-                      const SizedBox(height: 8),
-                      CustomTextField(
-                        hintText: 'Enter your email',
-                        keyboardType: TextInputType.emailAddress,
-                        controller: emailController,
-                      ),
-                      const SizedBox(height: 16),
-                      const Text("Password", style: TextStyle(color: Colors.white70)),
-                      const SizedBox(height: 8),
-                      CustomTextField(
-                        hintText: 'Enter your password',
-                        obscureText: true,
-                        controller: passwordController,
-                      ),
-                      const SizedBox(height: 32),
-                      CustomButton(
-                        text: 'Sign Up',
-                        onPressed: () async {
-                          final email = emailController.text.trim();
-                          final name = nameController.text.trim();
-                          final password = passwordController.text.trim();
+    final theme = Theme.of(context);
+    final primaryText = theme.textTheme.bodyMedium?.color ?? Colors.black87;
+    final secondaryText = theme.textTheme.bodySmall?.color ?? Colors.black54;
 
-                          if (email.isEmpty || name.isEmpty || password.isEmpty) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("Please fill all fields"),
-                              ),
-                            );
-                            return;
-                          }
-
-                          try {
-                            final response = await supabase.auth.signUp(
-                              email: email,
-                              password: password,
-                            );
-
-                            final user = response.user;
-                            if (user != null) {
-                              await supabase.from('users').insert({
-                                'id': user.id,
-                                'email': email,
-                                'name': name,
-                                'created_at': DateTime.now().toIso8601String(),
-                              });
-
-                              Get.to(() => VerificationCodeView(email: email));
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("Failed to sign up user"),
-                                ),
-                              );
-                            }
-                          } catch (e) {
-                            print("Sign Up Error: $e");
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text("Sign Up Error: $e")),
-                            );
-                          }
-                        },
-                      ),
-                      const SizedBox(height: 32),
-                      Center(
-                        child: RichText(
-                          textAlign: TextAlign.center,
-                          text: const TextSpan(
-                            style: TextStyle(color: Colors.white70, fontSize: 14),
-                            children: [
-                              TextSpan(text: 'By registering you agree to \n'),
-                              TextSpan(
-                                text: 'Terms & Conditions',
-                                style: TextStyle(
-                                  color: Color(0xFF1565FF),
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              TextSpan(text: ' and '),
-                              TextSpan(
-                                text: 'Privacy Policy',
-                                style: TextStyle(
-                                  color: Color(0xFF1565FF),
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    "Already have an account? ",
-                    style: TextStyle(color: Colors.white70, fontSize: 16),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Get.to(() => SigninView());
-                    },
-                    child: const Text(
-                      "Sign In",
+    return Scaffold(
+      backgroundColor: theme.scaffoldBackgroundColor,
+      resizeToAvoidBottomInset: true,
+      body: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.only(bottom: 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 40),
+                    Text(
+                      'Create Your Account',
                       style: TextStyle(
-                        color: Color(0xFF1565FF),
+                        fontSize: 24,
+                        color: primaryText,
                         fontWeight: FontWeight.bold,
-                        fontSize: 16,
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 70),
+                    Text("Full Name", style: TextStyle(color: secondaryText)),
+                    const SizedBox(height: 8),
+                    CustomTextField(
+                      hintText: 'Enter your name',
+                      keyboardType: TextInputType.name,
+                      controller: nameController,
+                    ),
+                    const SizedBox(height: 16),
+                    Text("Email", style: TextStyle(color: secondaryText)),
+                    const SizedBox(height: 8),
+                    CustomTextField(
+                      hintText: 'Enter your email',
+                      keyboardType: TextInputType.emailAddress,
+                      controller: emailController,
+                    ),
+                    const SizedBox(height: 16),
+                    Text("Password", style: TextStyle(color: secondaryText)),
+                    const SizedBox(height: 8),
+                    CustomTextField(
+                      hintText: 'Enter your password',
+                      obscureText: true,
+                      controller: passwordController,
+                    ),
+                    const SizedBox(height: 32),
+                    CustomButton(
+                      text: 'Sign Up',
+                      onPressed: () async {
+                        final email = emailController.text.trim();
+                        final name = nameController.text.trim();
+                        final password = passwordController.text.trim();
+
+                        if (email.isEmpty || name.isEmpty || password.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Please fill all fields"),
+                            ),
+                          );
+                          return;
+                        }
+
+                        try {
+                          final response = await supabase.auth.signUp(
+                            email: email,
+                            password: password,
+                          );
+
+                          final user = response.user;
+                          if (user != null) {
+                            await supabase.from('users').insert({
+                              'id': user.id,
+                              'email': email,
+                              'name': name,
+                              'created_at': DateTime.now().toIso8601String(),
+                            });
+
+                            Get.to(() => VerificationCodeView(email: email));
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Failed to sign up user"),
+                              ),
+                            );
+                          }
+                        } catch (e) {
+                          print("Sign Up Error: $e");
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text("Sign Up Error: $e")),
+                          );
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 32),
+                    Center(
+                      child: RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                          style: TextStyle(color: secondaryText, fontSize: 14),
+                          children: const [
+                            TextSpan(text: 'By registering you agree to \n'),
+                            TextSpan(
+                              text: 'Terms & Conditions',
+                              style: TextStyle(
+                                color: Color(0xFF1565FF),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            TextSpan(text: ' and '),
+                            TextSpan(
+                              text: 'Privacy Policy',
+                              style: TextStyle(
+                                color: Color(0xFF1565FF),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ],
-          ),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Already have an account? ",
+                  style: TextStyle(color: secondaryText, fontSize: 16),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Get.to(() => const SigninView());
+                  },
+                  child: const Text(
+                    "Sign In",
+                    style: TextStyle(
+                      color: Color(0xFF1565FF),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
