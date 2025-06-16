@@ -21,8 +21,8 @@ class WelcomeView extends StatelessWidget {
           child: Column(
             children: [
               const Spacer(flex: 1),
-              Image.asset('assets/eeve_logo.png', height: 210),
-              const SizedBox(height: 20),
+              Image.asset('assets/logo_trans.png', height: 230),
+              const SizedBox(height: 10),
               Text(
                 'EeVe is ready when you are — join or log in.',
                 textAlign: TextAlign.center,
