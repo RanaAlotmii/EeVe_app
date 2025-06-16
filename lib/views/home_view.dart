@@ -1,13 +1,13 @@
-import 'package:eeve_app/Custom_Widget_/_TrendingEventsList.dart';
-import 'package:eeve_app/controllers/events_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:eeve_app/Custom_Widget_/_PromoCard.dart';
-import 'package:eeve_app/Custom_Widget_/home_header_widget.dart';
-import 'package:eeve_app/Custom_Widget_/CategoryList.dart';
 import 'package:get/get.dart';
+import 'package:eeve_app/controllers/events_controller.dart';
+import 'package:eeve_app/controllers/profile_controller.dart';
+import 'package:eeve_app/Custom_Widget_/home_header_widget.dart';
+import 'package:eeve_app/Custom_Widget_/_PromoCard.dart';
+import 'package:eeve_app/Custom_Widget_/CategoryList.dart';
+import 'package:eeve_app/Custom_Widget_/_TrendingEventsList.dart';
 
 class HomeView extends StatefulWidget {
-
   HomeView({super.key});
 
   @override
@@ -16,6 +16,18 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   final EventsController controller = Get.find<EventsController>();
+  late ProfileController profileController;
+
+  @override
+  void initState() {
+    super.initState();
+    if (Get.isRegistered<ProfileController>()) {
+      profileController = Get.find<ProfileController>();
+    } else {
+      profileController = Get.put(ProfileController());
+      profileController.loadProfileImage(); 
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +44,16 @@ class _HomeViewState extends State<HomeView> {
             children: [
               HomeHeader(),
               const SizedBox(height: 24),
+
+              // Obx(() {
+              //   final profileImage = profileController.profileImage.value;
+              //   return CircleAvatar(
+              //     radius: 30,
+              //     backgroundImage: profileImage.isNotEmpty
+              //         ? NetworkImage(profileImage)
+              //         : const AssetImage('assets/profileImage.png'),
+              //   );
+              // }),
 
               PromoCard(),
               const SizedBox(height: 32),
@@ -57,8 +79,6 @@ class _HomeViewState extends State<HomeView> {
                   fontSize: 18,
                 ),
               ),
-              const SizedBox(height: 16),
-
               const SizedBox(height: 16),
 
               Obx(() {

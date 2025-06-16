@@ -58,4 +58,14 @@ class EventsController extends GetxController {
   List<Map<String, dynamic>> getFilteredEvents() {
     return events.cast<Map<String, dynamic>>();
   }
+
+Future<void> refreshEvents() async {
+  try {
+    await fetchEvents(); 
+    update(); 
+  } catch (e) {
+    print('Error refreshing events: $e');
+  }
+}
+
 }
