@@ -10,7 +10,7 @@ class WelcomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final backgroundColor = isDark ? Colors.black : const Color.fromARGB(255, 226, 226, 226);
+    final backgroundColor = isDark ? Colors.black : const Color.fromARGB(255, 255, 255, 255);
     final textColor = isDark ? Colors.white70 : Colors.grey[700];
 
     return Scaffold(
