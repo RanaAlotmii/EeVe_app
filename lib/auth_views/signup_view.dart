@@ -88,21 +88,22 @@ class _SignupViewState extends State<SignupView> {
                         }
 
                         try {
+                          // ✅ نرسل الاسم ضمن user_metadata
                           final response = await supabase.auth.signUp(
                             email: email,
                             password: password,
+                            data: {
+                              'name': name,
+                            },
                           );
 
-                          // ✅ إضافة بيانات المستخدم إلى جدول users
-                         await supabase.from('users').insert({
-  'email': email,
-  'name': name,
-  'created_at': DateTime.now().toIso8601String(),
-});
-
-
-                          // ✅ الانتقال لصفحة التحقق
-                          Get.to(() => VerificationCodeView(email: email));
+                          final user = response.user;
+                          if (user != null) {
+                            // ✅ ما نحتاج نسوي update نهائيًا
+                            Get.to(() => VerificationCodeView(email: email));
+                          } else {
+                            throw Exception("User is null");
+                          }
                         } catch (e) {
                           print("Sign Up Error: $e");
                           ScaffoldMessenger.of(context).showSnackBar(
