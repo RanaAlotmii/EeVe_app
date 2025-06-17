@@ -84,7 +84,7 @@ class _MainNavShellState extends State<MainNavShell> {
       screens: _buildScreens(),
       items: _navBarsItems(),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      navBarHeight: 60,
+      navBarHeight: 55,
       decoration: NavBarDecoration(
         borderRadius: BorderRadius.circular(12.0),
         colorBehindNavBar: Theme.of(context).scaffoldBackgroundColor,

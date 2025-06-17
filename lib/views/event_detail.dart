@@ -5,6 +5,7 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:eeve_app/managers/favorites_manager.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EventDetail extends StatefulWidget {
   final int eventId;
@@ -39,7 +40,6 @@ class _EventDetailState extends State<EventDetail> {
   final user = Supabase.instance.client.auth.currentUser;
   bool isLoading = false;
   final FavoritesManager _favoritesManager = FavoritesManager();
-
   List<Map<String, dynamic>> moreEvents = [];
 
   @override
@@ -92,12 +92,9 @@ class _EventDetailState extends State<EventDetail> {
 
     try {
       bool success;
-
       if (isFavorite) {
         success = await _favoritesManager.removeFromFavorites(widget.eventId);
-        if (success) {
-          _showMessage('Removed from favorites');
-        }
+        if (success) _showMessage('Removed from favorites');
       } else {
         final eventData = {
           'id': widget.eventId,
@@ -109,27 +106,18 @@ class _EventDetailState extends State<EventDetail> {
           'description': widget.description,
           'event_time': widget.eventTime,
         };
-
         success = await _favoritesManager.addToFavorites(widget.eventId, eventData);
-        if (success) {
-          _showMessage('Added to favorites');
-        }
+        if (success) _showMessage('Added to favorites');
       }
 
-      if (success && mounted) {
+      if (mounted) {
         setState(() {
           isFavorite = !isFavorite;
           isLoading = false;
         });
-        widget.onFavoriteChanged?.call();
-      } else {
-        if (mounted) {
-          setState(() {
-            isLoading = false;
-          });
-          _showMessage('Failed to update favorites', isError: true);
-        }
       }
+
+      widget.onFavoriteChanged?.call();
     } catch (e) {
       print('Error toggling favorite: $e');
       if (mounted) {
@@ -143,7 +131,6 @@ class _EventDetailState extends State<EventDetail> {
 
   void _showMessage(String message, {bool isError = false}) {
     if (!mounted) return;
-
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
@@ -167,7 +154,7 @@ class _EventDetailState extends State<EventDetail> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-        title: Text('Event Details', style: TextStyle(color: primaryTextColor)),
+        title: Text('Event Details', style: TextStyle(color: primaryTextColor, fontSize: 17.sp)),
         actions: [
           Stack(
             alignment: Alignment.center,
@@ -180,10 +167,10 @@ class _EventDetailState extends State<EventDetail> {
                 ),
               ),
               if (isLoading)
-                const SizedBox(
-                  width: 16,
-                  height: 16,
-                  child: CircularProgressIndicator(
+                SizedBox(
+                  width: 16.w,
+                  height: 16.h,
+                  child: const CircularProgressIndicator(
                     strokeWidth: 2,
                     valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                   ),
@@ -197,61 +184,53 @@ class _EventDetailState extends State<EventDetail> {
         ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              widget.title,
-              style: TextStyle(
-                color: primaryTextColor,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8),
+            Text(widget.title,
+                style: TextStyle(color: primaryTextColor, fontSize: 20.sp, fontWeight: FontWeight.bold)),
+            SizedBox(height: 8.h),
             Row(
               children: [
-                Icon(Icons.location_on, color: secondaryTextColor, size: 16),
-                const SizedBox(width: 6),
-                Text(widget.location, style: TextStyle(color: secondaryTextColor, fontSize: 13)),
+                Icon(Icons.location_on, color: secondaryTextColor, size: 16.sp),
+                SizedBox(width: 6.w),
+                Text(widget.location, style: TextStyle(color: secondaryTextColor, fontSize: 13.sp)),
               ],
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8.h),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(Icons.access_time, color: secondaryTextColor, size: 16),
-                const SizedBox(width: 6),
+                Icon(Icons.access_time, color: secondaryTextColor, size: 16.sp),
+                SizedBox(width: 6.w),
                 Expanded(
                   child: Text(
                     widget.eventTime,
-                    style: TextStyle(color: secondaryTextColor, fontSize: 13),
-                    softWrap: true,
-                    overflow: TextOverflow.visible,
+                    style: TextStyle(color: secondaryTextColor, fontSize: 13.sp),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16.h),
             ClipRRect(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(16.r),
               child: Image.network(
                 widget.image,
                 width: double.infinity,
-                height: 200,
+                height: 200.h,
                 fit: BoxFit.cover,
                 loadingBuilder: (context, child, loadingProgress) {
                   if (loadingProgress == null) return child;
                   return Container(
-                    height: 200,
+                    height: 200.h,
                     color: Colors.grey[800],
                     child: const Center(child: CircularProgressIndicator()),
                   );
                 },
                 errorBuilder: (context, error, stackTrace) {
                   return Container(
-                    height: 200,
+                    height: 200.h,
                     color: Colors.grey[800],
                     child: const Center(
                       child: Icon(Icons.broken_image, color: Colors.white30),
@@ -260,43 +239,25 @@ class _EventDetailState extends State<EventDetail> {
                 },
               ),
             ),
-            const SizedBox(height: 24),
-            Text(
-              'About this event',
-              style: TextStyle(
-                color: primaryTextColor,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              widget.description,
-              style: TextStyle(
-                color: secondaryTextColor,
-                fontSize: 14,
-                height: 1.4,
-              ),
-            ),
-            const SizedBox(height: 24),
-            Text(
-              'More events',
-              style: TextStyle(
-                color: primaryTextColor,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 12),
+            SizedBox(height: 24.h),
+            Text('About this event',
+                style: TextStyle(color: primaryTextColor, fontSize: 16.sp, fontWeight: FontWeight.w600)),
+            SizedBox(height: 8.h),
+            Text(widget.description,
+                style: TextStyle(color: secondaryTextColor, fontSize: 14.sp, height: 1.4)),
+            SizedBox(height: 24.h),
+            Text('More events',
+                style: TextStyle(color: primaryTextColor, fontSize: 16.sp, fontWeight: FontWeight.w600)),
+            SizedBox(height: 12.h),
             moreEvents.isEmpty
                 ? const Center(child: CircularProgressIndicator())
                 : TrendingEventsList(events: moreEvents),
-            const SizedBox(height: 100),
+            SizedBox(height: 100.h),
           ],
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 25),
+        padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 25.h),
         child: CustomButton(
           text: 'Buy Ticket',
           onPressed: () {

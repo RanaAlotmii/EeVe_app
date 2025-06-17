@@ -3,6 +3,7 @@ import 'package:eeve_app/custom_Widget_/event_card_small.dart';
 import 'package:eeve_app/views/event_detail.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -13,11 +14,9 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   final TextEditingController _searchController = TextEditingController();
-
   List<Map<String, dynamic>> allEvents = [];
   List<Map<String, dynamic>> filteredEvents = [];
-
-  bool isLoading = true; // ✅ لمعرفة هل الصفحة تحمل البيانات
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -28,23 +27,21 @@ class _SearchPageState extends State<SearchPage> {
 
   Future<void> fetchEvents() async {
     final response = await Supabase.instance.client.from('events').select();
-
     setState(() {
       allEvents = List<Map<String, dynamic>>.from(response);
       filteredEvents = allEvents;
-      isLoading = false; // ✅ الانتهاء من التحميل
+      isLoading = false;
     });
   }
 
   void _filterEvents() {
     final query = _searchController.text.toLowerCase();
     setState(() {
-      filteredEvents =
-          allEvents.where((event) {
-            final title = event['title'].toString().toLowerCase();
-            final location = event['location'].toString().toLowerCase();
-            return title.contains(query) || location.contains(query);
-          }).toList();
+      filteredEvents = allEvents.where((event) {
+        final title = event['title'].toString().toLowerCase();
+        final location = event['location'].toString().toLowerCase();
+        return title.contains(query) || location.contains(query);
+      }).toList();
     });
   }
 
@@ -68,10 +65,7 @@ class _SearchPageState extends State<SearchPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-        title: Text(
-          'Search Events',
-          style: TextStyle(color: textColor),
-        ),
+        title: Text('Search Events', style: TextStyle(color: textColor)),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: textColor),
           onPressed: () {
@@ -82,7 +76,7 @@ class _SearchPageState extends State<SearchPage> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(16.w),
             child: TextField(
               controller: _searchController,
               decoration: InputDecoration(
@@ -92,7 +86,7 @@ class _SearchPageState extends State<SearchPage> {
                 filled: true,
                 fillColor: fieldColor,
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(12.r),
                   borderSide: BorderSide.none,
                 ),
               ),
@@ -100,53 +94,44 @@ class _SearchPageState extends State<SearchPage> {
             ),
           ),
           Expanded(
-            child:
-                isLoading
-                    ? const Center(
-                      child: CircularProgressIndicator(),
-                    ) // ⏳ أثناء التحميل
-                    : filteredEvents.isEmpty
+            child: isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : filteredEvents.isEmpty
                     ? Center(
-                      child: Text(
-                        'No events found.\nPlease try a different search.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: hintColor, fontSize: 16),
-                      ),
-                    ) // ✅ لا يوجد نتائج
+                        child: Text(
+                          'No events found.\nPlease try a different search.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: hintColor, fontSize: 16.sp),
+                        ),
+                      )
                     : ListView.separated(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      itemCount: filteredEvents.length,
-                      separatorBuilder:
-                          (context, index) => const SizedBox(height: 10),
-                      itemBuilder: (context, index) {
-                        final event = filteredEvents[index];
-                        return GestureDetector(
-                          onTap: () {
-                            Get.to(
-                              () => EventDetail(
-                                eventId: event['id'],
-                                title: event['title'] ?? 'Unknown Event',
-                                image: event['image_detail'] ?? '',
-                                imageCover: event['image_cover'] ?? '',
-                                location:
-                                    event['location'] ?? 'Unknown Location',
-                                price: (event['price'] ?? 0).toString(),
-                                description: event['description'] ?? '',
-                                eventTime: event['event_time'] ?? '',
-                              ),
-                            );
-                          },
-                          child: CompactEventCard(
-                            title: event['title'] ?? '',
-                            location: event['location'] ?? '',
-                            imageAsset: event['image_cover'] ?? '',
-                            price:
-                                double.tryParse(event['price'].toString()) ??
-                                0.0,
-                          ),
-                        );
-                      },
-                    ),
+                        padding: EdgeInsets.symmetric(horizontal: 16.w),
+                        itemCount: filteredEvents.length,
+                        separatorBuilder: (context, index) => SizedBox(height: 10.h),
+                        itemBuilder: (context, index) {
+                          final event = filteredEvents[index];
+                          return GestureDetector(
+                            onTap: () {
+                              Get.to(() => EventDetail(
+                                    eventId: event['id'],
+                                    title: event['title'] ?? 'Unknown Event',
+                                    image: event['image_detail'] ?? '',
+                                    imageCover: event['image_cover'] ?? '',
+                                    location: event['location'] ?? 'Unknown Location',
+                                    price: (event['price'] ?? 0).toString(),
+                                    description: event['description'] ?? '',
+                                    eventTime: event['event_time'] ?? '',
+                                  ));
+                            },
+                            child: CompactEventCard(
+                              title: event['title'] ?? '',
+                              location: event['location'] ?? '',
+                              imageAsset: event['image_cover'] ?? '',
+                              price: double.tryParse(event['price'].toString()) ?? 0.0,
+                            ),
+                          );
+                        },
+                      ),
           ),
         ],
       ),

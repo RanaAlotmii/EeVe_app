@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:eeve_app/Custom_Widget_/ticketDetails.dart';
 import 'package:dotted_line/dotted_line.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart'; // ✅ مضاف
 import 'dart:async';
 
 class Myticket extends StatefulWidget {
@@ -160,7 +161,11 @@ class MyticketState extends State<Myticket> with RouteAware {
         appBar: AppBar(
           title: Text(
             'My Ticket',
-            style: TextStyle(color: textColor, fontWeight: FontWeight.w700),
+            style: TextStyle(
+              color: textColor,
+              fontWeight: FontWeight.w700,
+              fontSize: 20.sp,
+            ),
           ),
           centerTitle: true,
           backgroundColor: theme.scaffoldBackgroundColor,
@@ -184,24 +189,27 @@ class MyticketState extends State<Myticket> with RouteAware {
                       children: [
                         Text(
                           'No Tickets',
-                          style: TextStyle(color: textColor, fontSize: 20),
+                          style: TextStyle(color: textColor, fontSize: 20.sp),
                         ),
-                        const SizedBox(height: 10),
+                        SizedBox(height: 10.h),
                         ElevatedButton(
                           onPressed: _refreshTickets,
-                          child: const Text('Refresh'),
+                          child: Text(
+                            'Refresh',
+                            style: TextStyle(fontSize: 14.sp),
+                          ),
                         ),
                       ],
                     ),
                   )
                   : ListView.builder(
-                    padding: const EdgeInsets.all(16),
+                    padding: EdgeInsets.all(16.w),
                     itemCount: tickets.length,
                     itemBuilder: (context, index) {
                       final ticket = tickets[index];
                       final event = ticket['event_id'];
                       return Padding(
-                        padding: const EdgeInsets.only(bottom: 16),
+                        padding: EdgeInsets.only(bottom: 16.h),
                         child: TicketCard(
                           eventName: event['title'] ?? 'No title',
                           time: event['event_time'] ?? '',
@@ -254,11 +262,9 @@ class TicketCard extends StatelessWidget {
           ),
         );
       },
-
-
       child: Container(
-        width: 327,
-        height: 144,
+        width: 327.w,
+        height: 144.h,
         decoration: BoxDecoration(
           gradient:
               isDark
@@ -268,19 +274,17 @@ class TicketCard extends StatelessWidget {
                     end: Alignment.bottomRight,
                   )
                   : const LinearGradient(
-                    // colors: [Color.fromARGB(255, 205, 198, 198), Color.fromARGB(255, 105, 80, 134)],
                     colors: [
                       Color.fromARGB(255, 213, 209, 221),
                       Color.fromARGB(255, 156, 136, 191),
                     ],
-
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(16.r),
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(16.r),
           child: IntrinsicHeight(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -288,7 +292,7 @@ class TicketCard extends StatelessWidget {
                 Expanded(
                   flex: 2,
                   child: Padding(
-                    padding: const EdgeInsets.all(16),
+                    padding: EdgeInsets.all(16.w),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -298,7 +302,7 @@ class TicketCard extends StatelessWidget {
                           style: TextStyle(
                             color:
                                 isDark ? Colors.grey.shade400 : Colors.black54,
-                            fontSize: 12,
+                            fontSize: 12.sp,
                           ),
                         ),
                         Text(
@@ -306,7 +310,7 @@ class TicketCard extends StatelessWidget {
                           style: TextStyle(
                             color: isDark ? Colors.white : Colors.black87,
                             fontWeight: FontWeight.bold,
-                            fontSize: 14,
+                            fontSize: 13.sp,
                           ),
                           maxLines: 4,
                         ),
@@ -318,23 +322,23 @@ class TicketCard extends StatelessWidget {
                   children: <Widget>[
                     Positioned(
                       child: Container(
-                        width: 30,
-                        height: 15,
+                        width: 30.w,
+                        height: 15.h,
                         decoration: BoxDecoration(
                           color: Theme.of(context).scaffoldBackgroundColor,
-                          borderRadius: const BorderRadius.only(
-                            bottomLeft: Radius.circular(20),
-                            bottomRight: Radius.circular(20),
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(20.r),
+                            bottomRight: Radius.circular(20.r),
                           ),
                         ),
                       ),
                     ),
                     Positioned(
-                      left: 13,
-                      top: 15,
-                      bottom: 15,
-                      child: const DottedLine(
-                        lineLength: 100,
+                      left: 13.w,
+                      top: 15.h,
+                      bottom: 15.h,
+                      child: DottedLine(
+                        lineLength: 100.h,
                         dashColor: Colors.white,
                         direction: Axis.vertical,
                       ),
@@ -342,13 +346,13 @@ class TicketCard extends StatelessWidget {
                     Positioned(
                       bottom: 0,
                       child: Container(
-                        width: 30,
-                        height: 15,
+                        width: 30.w,
+                        height: 15.h,
                         decoration: BoxDecoration(
                           color: Theme.of(context).scaffoldBackgroundColor,
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(20),
-                            topRight: Radius.circular(20),
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20.r),
+                            topRight: Radius.circular(20.r),
                           ),
                         ),
                       ),
@@ -358,7 +362,7 @@ class TicketCard extends StatelessWidget {
                 Expanded(
                   flex: 3,
                   child: Padding(
-                    padding: const EdgeInsets.all(16),
+                    padding: EdgeInsets.all(16.w),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -368,11 +372,11 @@ class TicketCard extends StatelessWidget {
                           style: TextStyle(
                             color: isDark ? Colors.white : Colors.black87,
                             fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                            fontSize: 15.sp,
                           ),
                           maxLines: 3,
                         ),
-                        const SizedBox(height: 16),
+                        SizedBox(height: 16.h),
                         Align(
                           alignment: Alignment.bottomRight,
                           child: Row(
@@ -383,7 +387,7 @@ class TicketCard extends StatelessWidget {
                                 style: TextStyle(
                                   color:
                                       isDark ? Colors.white70 : Colors.black54,
-                                  fontSize: 16,
+                                  fontSize: 14.sp,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -392,7 +396,7 @@ class TicketCard extends StatelessWidget {
                                 style: TextStyle(
                                   color:
                                       isDark ? Colors.white70 : Colors.black54,
-                                  fontSize: 16,
+                                  fontSize: 14.sp,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),

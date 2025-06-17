@@ -11,10 +11,11 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:get/route_manager.dart';
 import 'package:provider/provider.dart' as app_provider;
 import 'package:eeve_app/managers/theme_service.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
-  
+
   @override
   State<ProfileView> createState() => _ProfileViewState();
 }
@@ -53,10 +54,7 @@ class _ProfileViewState extends State<ProfileView> with WidgetsBindingObserver {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _themeService = app_provider.Provider.of<ThemeService>(
-      context,
-      listen: false,
-    );
+    _themeService = app_provider.Provider.of<ThemeService>(context, listen: false);
     isDarkMode = _themeService.themeMode == ThemeMode.dark;
   }
 
@@ -101,7 +99,10 @@ class _ProfileViewState extends State<ProfileView> with WidgetsBindingObserver {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Account'),
+        title: const Text(
+          'My Account',
+          style: TextStyle(fontWeight: FontWeight.w700),
+        ),
         centerTitle: true,
         actions: [
           IconButton(
@@ -115,18 +116,18 @@ class _ProfileViewState extends State<ProfileView> with WidgetsBindingObserver {
         child: SafeArea(
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.all(24.0),
+            padding: EdgeInsets.all(24.w),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
                     CircleAvatar(
-                      radius: 30,
+                      radius: 30.r,
                       backgroundImage: profileImageWidget,
                       key: ValueKey(profileImage),
                     ),
-                    const SizedBox(width: 16),
+                    SizedBox(width: 16.w),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -136,12 +137,12 @@ class _ProfileViewState extends State<ProfileView> with WidgetsBindingObserver {
                     ),
                   ],
                 ),
-                const SizedBox(height: 32),
+                SizedBox(height: 32.h),
                 Text(
                   'Personal Info',
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: 16.h),
                 ListTile(
                   leading: const Icon(Icons.person_outline),
                   title: const Text('Edit Profile'),
@@ -166,9 +167,9 @@ class _ProfileViewState extends State<ProfileView> with WidgetsBindingObserver {
                     MainNavShell.mainTabController.jumpToTab(2);
                   },
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: 24.h),
                 Text('Settings', style: Theme.of(context).textTheme.bodyMedium),
-                const SizedBox(height: 16),
+                SizedBox(height: 16.h),
                 SwitchListTile(
                   value: isDarkMode,
                   onChanged: (val) {

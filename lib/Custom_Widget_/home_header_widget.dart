@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:eeve_app/views/search_page.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:eeve_app/controllers/profile_controller.dart'; 
+import 'package:eeve_app/controllers/profile_controller.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomeHeader extends StatefulWidget {
   const HomeHeader({super.key});
@@ -20,7 +21,7 @@ class _HomeHeaderState extends State<HomeHeader> {
   void initState() {
     super.initState();
     getUserData();
-    profileController = Get.find<ProfileController>(); 
+    profileController = Get.find<ProfileController>();
   }
 
   Future<void> getUserData() async {
@@ -51,13 +52,13 @@ class _HomeHeaderState extends State<HomeHeader> {
         Obx(() {
           final profileImage = profileController.profileImage.value;
           return CircleAvatar(
-            radius: 24,
+            radius: 24.r,
             backgroundImage: profileImage.isNotEmpty
                 ? NetworkImage(profileImage)
                 : const AssetImage('assets/profileImage.png') as ImageProvider,
           );
         }),
-        const SizedBox(width: 12),
+        SizedBox(width: 12.w),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,17 +68,17 @@ class _HomeHeaderState extends State<HomeHeader> {
                 style: TextStyle(
                   color: textColor,
                   fontWeight: FontWeight.w600,
-                  fontSize: 16,
+                  fontSize: 16.sp,
                 ),
               ),
-              const SizedBox(height: 4),
+              SizedBox(height: 4.h),
               Row(
                 children: [
-                  Icon(Icons.location_on, color: subTextColor, size: 16),
-                  const SizedBox(width: 4),
+                  Icon(Icons.location_on, color: subTextColor, size: 16.sp),
+                  SizedBox(width: 4.w),
                   Text(
                     'Riyadh, SA',
-                    style: TextStyle(color: subTextColor, fontSize: 13),
+                    style: TextStyle(color: subTextColor, fontSize: 13.sp),
                   ),
                 ],
               ),
@@ -90,13 +91,13 @@ class _HomeHeaderState extends State<HomeHeader> {
                 fullscreenDialog: true, transition: Transition.cupertino);
           },
           child: Container(
-            height: 38,
-            width: 38,
+            height: 38.h,
+            width: 38.w,
             decoration: BoxDecoration(
               color: isDark ? const Color(0xFF1E1E2C) : Colors.black12,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(12.r),
             ),
-            child: Icon(Icons.search, color: textColor, size: 20),
+            child: Icon(Icons.search, color: textColor, size: 20.sp),
           ),
         ),
       ],
