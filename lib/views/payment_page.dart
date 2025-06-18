@@ -6,7 +6,6 @@ import 'package:eeve_app/custom_Widget_/Custom_button.dart';
 import 'package:eeve_app/views/payment_success_page.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PaymentPage extends StatefulWidget {
   final double totalPrice;
@@ -48,20 +47,16 @@ class _PaymentPageState extends State<PaymentPage> {
         centerTitle: true,
         title: Text(
           'Add Card',
-          style: TextStyle(
-            color: textColor,
-            fontSize: 21.sp,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(color: textColor, fontWeight: FontWeight.bold),
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: textColor, size: 22.sp),
+          icon: Icon(Icons.arrow_back, color: textColor),
           onPressed: () => Navigator.pop(context),
         ),
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(16.w),
+          padding: const EdgeInsets.all(16),
           child: Column(
             children: [
               CreditCardWidget(
@@ -78,16 +73,16 @@ class _PaymentPageState extends State<PaymentPage> {
                   print('Card brand: $brand');
                 },
               ),
-              SizedBox(height: 16.h),
+              const SizedBox(height: 16),
               Theme(
                 data: Theme.of(context).copyWith(
                   textTheme: Theme.of(context).textTheme.apply(
-                        bodyColor: textColor,
-                        displayColor: textColor,
-                      ),
+                    bodyColor: textColor,
+                    displayColor: textColor,
+                  ),
                   inputDecorationTheme: InputDecorationTheme(
-                    labelStyle: TextStyle(color: textColor, fontSize: 14.sp),
-                    hintStyle: TextStyle(color: textColor.withOpacity(0.5), fontSize: 14.sp),
+                    labelStyle: TextStyle(color: textColor),
+                    hintStyle: TextStyle(color: textColor.withOpacity(0.5)),
                   ),
                 ),
                 child: CreditCardForm(
@@ -99,14 +94,14 @@ class _PaymentPageState extends State<PaymentPage> {
                   onCreditCardModelChange: onCreditCardModelChange,
                 ),
               ),
-              SizedBox(height: 30.h),
+              const SizedBox(height: 30),
             ],
           ),
         ),
       ),
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 25.h),
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 25),
           child: CustomButton(
             text: 'Pay ${widget.totalPrice.toStringAsFixed(2)} SR',
             onPressed: handlePayPressed,
@@ -139,7 +134,7 @@ class _PaymentPageState extends State<PaymentPage> {
       return;
     }
 
-    if (!RegExp(r'^[a-zA-Z\s]+\$').hasMatch(cardHolderName.trim())) {
+    if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(cardHolderName.trim())) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please enter a valid Card Holder Name (letters only)'),
@@ -161,7 +156,8 @@ class _PaymentPageState extends State<PaymentPage> {
       final response = await http.post(
         url,
         headers: {
-          'Authorization': 'Basic ${base64Encode(utf8.encode('sk_test_MKvC2oeFkZf8dN2TeS7AQbVYNkBrZekZQrCxfPQU'))}',
+          'Authorization':
+              'Basic ${base64Encode(utf8.encode('sk_test_MKvC2oeFkZf8dN2TeS7AQbVYNkBrZekZQrCxfPQU'))}',
           'Content-Type': 'application/json',
         },
         body: jsonEncode({
@@ -198,9 +194,9 @@ class _PaymentPageState extends State<PaymentPage> {
         );
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error: $e')));
     } finally {
       setState(() {
         isPaying = false;
