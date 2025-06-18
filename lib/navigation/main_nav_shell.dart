@@ -27,7 +27,7 @@ class _MainNavShellState extends State<MainNavShell> {
 
   List<Widget> _buildScreens() {
     return [
-      HomeView(),
+      HomeView(key: UniqueKey()),
       FavoritesView(key: UniqueKey()),
       Myticket(),
       const AiGetStartedView(),

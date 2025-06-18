@@ -36,6 +36,8 @@ class _HomeHeaderState extends State<HomeHeader> {
         userData = response;
       });
       profileController.updateProfileImage(userData?['profile_image'] ?? '');
+      //  profileController.updateProfileImage(userData?['name'] ?? '');
+
     } catch (e) {
       print('Error fetching user data: $e');
     }
@@ -51,6 +53,7 @@ class _HomeHeaderState extends State<HomeHeader> {
     return Row(
       children: [
         Obx(() {
+          
           final profileImage = profileController.profileImage.value;
           return CircleAvatar(
             radius: 24.r,

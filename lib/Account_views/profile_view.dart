@@ -106,12 +106,6 @@ class _ProfileViewState extends State<ProfileView> with WidgetsBindingObserver {
         
        
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: _refreshProfile,
-          ),
-        ],
       ),
       body: RefreshIndicator(
         onRefresh: _refreshProfile,

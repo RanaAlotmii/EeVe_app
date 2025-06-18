@@ -168,13 +168,6 @@ class MyticketState extends State<Myticket> with RouteAware {
           ),
           centerTitle: true,
           backgroundColor: theme.scaffoldBackgroundColor,
-          iconTheme: IconThemeData(color: textColor),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.refresh, color: textColor),
-              onPressed: _refreshTickets,
-            ),
-          ],
         ),
         body: RefreshIndicator(
           onRefresh: _refreshTickets,

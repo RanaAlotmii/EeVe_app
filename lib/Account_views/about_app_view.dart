@@ -20,7 +20,7 @@ class AboutAppView extends StatelessWidget {
         centerTitle: true,
         leading: IconButton(
           icon: Icon(
-            Icons.arrow_back_ios,
+            Icons.arrow_back,
             size: 20.sp,
             color: isDark ? Colors.white : Colors.black87,
           ),
@@ -66,7 +66,7 @@ class AboutAppView extends StatelessWidget {
             ),
             SizedBox(height: 24.h),
             Text(
-              'Developed with passion by\nNaba OuladYaich, Rana Al-Otami, Ruba, Ammar, and Lama 💜',
+              'Developed with passion by\nNaba OuladYaich, Rana Al-Otami, Ruba Almalki, Ammar Aloufy, and Lama Alsaedi  💜',
               style: textTheme.bodyMedium?.copyWith(
                 color: const Color(0xFFB388FF),
                 fontWeight: FontWeight.w500,

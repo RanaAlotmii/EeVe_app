@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProfileController extends GetxController {
-  var profileImage = ''.obs;
+  var profileImage = ''.obs;   //image 1
 
   final _supabase = Supabase.instance.client;
 
@@ -20,7 +20,9 @@ class ProfileController extends GetxController {
     }
   }
 
-  void updateProfileImage(String newImageUrl) {
+  String updateProfileImage(String newImageUrl) {
     profileImage.value = newImageUrl;
+
+    return profileImage.value;
   }
 }

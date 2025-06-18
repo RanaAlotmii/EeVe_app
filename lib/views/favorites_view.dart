@@ -58,13 +58,7 @@ class _FavoritesViewState extends State<FavoritesView> {
           style: TextStyle(color: textColor, fontSize: 21.sp, fontWeight: FontWeight.bold,),
         ),
         iconTheme: IconThemeData(color: textColor),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.refresh, color: textColor),
-            onPressed: _initializeFavorites,
-            tooltip: 'Refresh favorites',
-          ),
-        ],
+       
       ),
       body: StreamBuilder<List<Map<String, dynamic>>>(
         stream: _favoritesManager.favoritesStream,
