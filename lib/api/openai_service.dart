@@ -2,18 +2,16 @@ import 'package:dart_openai/dart_openai.dart';
 import 'package:eeve_app/controllers/events_controller.dart';
 import 'package:get/get.dart';
 
+/// Free-form user input (chat)
 Future<String> getEventSuggestionsFromAI(String userInput) async {
   try {
-    // 1. Access events from Supabase
     final controller = Get.find<EventsController>();
     final events = controller.getFilteredEvents();
 
-    // 2. Format events into a readable list for the AI
     final formattedEvents = events.map((event) {
       return '${event["title"]} in ${event["location"]} - ${event["price"]} SR';
     }).join('\n');
 
-    // 3. Compose the prompt to get multiple suggestions
     final prompt = '''
 User is looking for this: "$userInput"
 
@@ -25,7 +23,6 @@ Pick the top 4 or 5 events that match the user’s vibe and ONLY reply with thei
 Example format: Title 1 | Title 2 | Title 3 | Title 4 | Title 5
 ''';
 
-    // 4. Request OpenAI
     final chat = await OpenAI.instance.chat.create(
       model: "gpt-3.5-turbo",
       messages: [
@@ -40,10 +37,51 @@ Example format: Title 1 | Title 2 | Title 3 | Title 4 | Title 5
       temperature: 0.75,
     );
 
-    // 5. Return response text
     final reply = chat.choices.first.message.content?.first.text;
     return reply ?? "Sorry, I couldn't find any matches.";
   } catch (e) {
     return "Something went wrong: $e";
+  }
+}
+
+/// Tag-based suggestions (for SuggestionView)
+Future<String> getEventsByTagFromAI(String tagKeyword) async {
+  try {
+    final controller = Get.find<EventsController>();
+    final events = controller.getFilteredEvents();
+
+    final formattedEvents = events.map((event) {
+      return '${event["title"]} in ${event["location"]} - ${event["price"]} SR';
+    }).join('\n');
+
+    final prompt = '''
+User is asking for: "$tagKeyword"
+
+Here’s a list of available real events:
+$formattedEvents
+
+Based on the keyword, select the best 4 or 5 matching events and ONLY return their titles separated by |.
+
+Example: Event A | Event B | Event C | Event D | Event E
+''';
+
+    final chat = await OpenAI.instance.chat.create(
+      model: "gpt-3.5-turbo",
+      messages: [
+        OpenAIChatCompletionChoiceMessageModel(
+          role: OpenAIChatMessageRole.user,
+          content: [
+            OpenAIChatCompletionChoiceMessageContentItemModel.text(prompt),
+          ],
+        ),
+      ],
+      maxTokens: 150,
+      temperature: 0.7,
+    );
+
+    final reply = chat.choices.first.message.content?.first.text;
+    return reply ?? "Sorry, couldn’t get suggestions.";
+  } catch (e) {
+    return "Error: $e";
   }
 }

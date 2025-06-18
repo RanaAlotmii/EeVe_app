@@ -1,72 +1,152 @@
 import 'package:flutter/material.dart';
-import 'package:eeve_app/Custom_Widget_/Custom_button.dart';
+import 'dart:math';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:eeve_app/Ai_views/Ai_onboarding_view.dart';
 
-
-class AiGetStartedView extends StatelessWidget {
+class AiGetStartedView extends StatefulWidget {
   const AiGetStartedView({super.key});
 
   @override
+  State<AiGetStartedView> createState() => _AiGetStartedViewState();
+}
+
+class _AiGetStartedViewState extends State<AiGetStartedView>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    )..repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final backgroundColor = isDark ? const Color(0xFF121212) : Colors.white;
+    final textColor = isDark ? Colors.white : Colors.black87;
+
+    final screenHeight = 1.sh;
+    final screenWidth = 1.sw;
+
     return Scaffold(
-      backgroundColor: Colors.black,
-      body: SafeArea(
-        child: Stack(
-          children: [
-            // Robot background
-            Positioned.fill(
-              child: Image.asset(
-                'assets/AI.png',
-                fit: BoxFit.cover,
-              ),
-            ),
-
-            // Content layered over robot
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
-                children: [
-                  const SizedBox(height: 120),
-                  const Text(
-                    'Your Personal AI Event Assistant',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+      backgroundColor: backgroundColor,
+      body: Stack(
+        alignment: Alignment.center,
+        children: [
+          // الخلفية بتدرج علوي + لون ثابت
+          Positioned.fill(
+            child: Column(
+              children: [
+                Container(
+                  height: 380.h,
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Color(0xFF8A2BE2),
+                        Colors.transparent,
+                      ],
+                      stops: [0.0, 1.0],
                     ),
                   ),
-                  const Spacer(),
-                  const Text(
-                    'Let EeVe understand your vibe, budget, interests — and recommend the best events just for you.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 16,
-                    ),
-                  ),
-                  const SizedBox(height: 40),
-                ],
+                ),
+                Expanded(
+                  child: Container(color: backgroundColor),
+                ),
+              ],
+            ),
+          ),
+
+          // صورة الروبوت
+          Positioned(
+            top: screenHeight * 0.20,
+            child: Image.asset(
+              'assets/AI206.png',
+              width: 420.w,
+              height: 520.h,
+              fit: BoxFit.contain,
+            ),
+          ),
+
+          // العنوان فوق الروبوت
+          Positioned(
+            top: screenHeight * 0.15,
+            left: 24.w,
+            right: 24.w,
+            child: Text(
+              "Ready to unlock unforgettable experiences with EeVe AI?",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 21.sp,
+                color: textColor,
+                fontWeight: FontWeight.w800,
               ),
             ),
-          ],
-        ),
-      ),
+          ),
 
-      // ✅ Bottom button — same as all pages:
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 25),
-        child: CustomButton(
-          text: 'GET STARTED',
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const AiOnboardingView(),
+          // الزر النصي تحت الروبوت - نازل شوي
+          Positioned(
+            top: screenHeight * 0.80,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AiOnboardingView(),
+                  ),
+                );
+              },
+              child: AnimatedBuilder(
+                animation: _controller,
+                builder: (context, child) {
+                  return ShaderMask(
+                    shaderCallback: (bounds) {
+                      return RadialGradient(
+                        center: Alignment.center,
+                        radius: 1.0,
+                        colors: [
+                          const Color.fromARGB(255, 116, 69, 191),
+                          Colors.white.withOpacity(
+                            0.4 + 0.6 * _controller.value,
+                          ),
+                          const Color(0xFFB657F5),
+                        ],
+                        stops: const [0.3, 0.6, 1.0],
+                      ).createShader(bounds);
+                    },
+                    child: Text(
+                      'Let’s Dive In',
+                      style: TextStyle(
+                        fontSize: 24.sp,
+                        fontWeight: FontWeight.bold,
+                        color: textColor,
+                        shadows: [
+                          Shadow(
+                            color: Colors.purple.withOpacity(
+                              0.5 + 0.5 * sin(_controller.value * pi),
+                            ),
+                            blurRadius: 20,
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
               ),
-            );
-          },
-        ),
+            ),
+          ),
+        ],
       ),
     );
   }

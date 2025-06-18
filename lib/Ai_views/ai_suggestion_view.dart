@@ -37,25 +37,25 @@ class AiSuggestionView extends StatelessWidget {
                       title: "Weekend Picks",
                       subtitle: "What's happening this weekend?",
                       iconPath: "assets/weekend.png",
-                      onPressed: () {},
+                      onTap: () {},
                     ),
                     SuggestionCard(
                       title: "Budget-Friendly",
                       subtitle: "Find events that won’t break the bank",
                       iconPath: "assets/budgeticon.png",
-                      onPressed: () {},
+                      onTap: () {},
                     ),
                     SuggestionCard(
                       title: "Smart Random Pick",
                       subtitle: "Let EeVe find something fun for you",
                       iconPath: "assets/randomicon.png",
-                      onPressed: () {},
+                      onTap: () {},
                     ),
                     SuggestionCard(
                       title: "Trending Now",
                       subtitle: "What's popular today?",
                       iconPath: "assets/trendingicon.png",
-                      onPressed: () {},
+                      onTap: () {},
                     ),
                   ],
                 ),
@@ -66,7 +66,8 @@ class AiSuggestionView extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const AiChatView()),
+                      MaterialPageRoute(
+                          builder: (context) => const AiChatView()),
                     );
                   },
                   style: ElevatedButton.styleFrom(

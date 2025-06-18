@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:eeve_app/Custom_Widget_/CustomTextField.dart';
 import 'package:eeve_app/Custom_Widget_/Custom_button.dart';
 import 'package:eeve_app/views/detail_order_page.dart';
@@ -24,27 +25,34 @@ class BookingFormPage extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-        title: Text('Booking', style: TextStyle(color: textColor)),
+        title: Text(
+          'Booking',
+          style: TextStyle(
+            color: textColor,
+            fontSize: 21.sp,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: textColor),
+          icon: Icon(Icons.arrow_back, color: textColor, size: 22.sp),
           onPressed: () => Navigator.pop(context),
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 25),
+        padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 25.h),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
             Text(
               'How many tickets would you like to book?',
               style: TextStyle(
                 color: textColor,
-                fontSize: 16,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12.h),
             CustomTextField(
               hintText: 'Enter number of tickets',
               controller: amountController,

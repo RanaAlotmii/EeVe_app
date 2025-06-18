@@ -6,6 +6,7 @@ import 'package:eeve_app/custom_Widget_/Custom_button.dart';
 import 'package:eeve_app/views/payment_success_page.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PaymentPage extends StatefulWidget {
   final double totalPrice;
@@ -45,15 +46,22 @@ class _PaymentPageState extends State<PaymentPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-        title: Text('Add Card', style: TextStyle(color: textColor)),
+        title: Text(
+          'Add Card',
+          style: TextStyle(
+            color: textColor,
+            fontSize: 21.sp,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: textColor),
+          icon: Icon(Icons.arrow_back, color: textColor, size: 22.sp),
           onPressed: () => Navigator.pop(context),
         ),
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(16.w),
           child: Column(
             children: [
               CreditCardWidget(
@@ -70,7 +78,7 @@ class _PaymentPageState extends State<PaymentPage> {
                   print('Card brand: $brand');
                 },
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
               Theme(
                 data: Theme.of(context).copyWith(
                   textTheme: Theme.of(context).textTheme.apply(
@@ -78,8 +86,8 @@ class _PaymentPageState extends State<PaymentPage> {
                         displayColor: textColor,
                       ),
                   inputDecorationTheme: InputDecorationTheme(
-                    labelStyle: TextStyle(color: textColor),
-                    hintStyle: TextStyle(color: textColor.withOpacity(0.5)),
+                    labelStyle: TextStyle(color: textColor, fontSize: 14.sp),
+                    hintStyle: TextStyle(color: textColor.withOpacity(0.5), fontSize: 14.sp),
                   ),
                 ),
                 child: CreditCardForm(
@@ -91,14 +99,14 @@ class _PaymentPageState extends State<PaymentPage> {
                   onCreditCardModelChange: onCreditCardModelChange,
                 ),
               ),
-              const SizedBox(height: 30),
+              SizedBox(height: 30.h),
             ],
           ),
         ),
       ),
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 0, 16, 25),
+          padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 25.h),
           child: CustomButton(
             text: 'Pay ${widget.totalPrice.toStringAsFixed(2)} SR',
             onPressed: handlePayPressed,
@@ -131,7 +139,7 @@ class _PaymentPageState extends State<PaymentPage> {
       return;
     }
 
-    if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(cardHolderName.trim())) {
+    if (!RegExp(r'^[a-zA-Z\s]+\$').hasMatch(cardHolderName.trim())) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please enter a valid Card Holder Name (letters only)'),
