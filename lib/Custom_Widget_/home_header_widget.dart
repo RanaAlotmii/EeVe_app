@@ -35,6 +35,7 @@ class _HomeHeaderState extends State<HomeHeader> {
       setState(() {
         userData = response;
       });
+      profileController.updateProfileImage(userData?['profile_image'] ?? '');
     } catch (e) {
       print('Error fetching user data: $e');
     }
