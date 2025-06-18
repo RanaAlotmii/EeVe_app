@@ -58,11 +58,10 @@ class _EventDetailState extends State<EventDetail> {
           .neq('id', widget.eventId)
           .limit(5);
 
-      if (mounted) {
-        setState(() {
-          moreEvents = List<Map<String, dynamic>>.from(response);
-        });
-      }
+      if (!mounted) return;
+      setState(() {
+        moreEvents = List<Map<String, dynamic>>.from(response);
+      });
     } catch (e) {
       print('Error fetching more events: $e');
     }
@@ -70,11 +69,10 @@ class _EventDetailState extends State<EventDetail> {
 
   Future<void> _checkIfFavorite() async {
     final result = await _favoritesManager.isFavorite(widget.eventId);
-    if (mounted) {
-      setState(() {
-        isFavorite = result;
-      });
-    }
+    if (!mounted) return;
+    setState(() {
+      isFavorite = result;
+    });
   }
 
   Future<void> _toggleFavorite() async {
@@ -94,6 +92,7 @@ class _EventDetailState extends State<EventDetail> {
       bool success;
       if (isFavorite) {
         success = await _favoritesManager.removeFromFavorites(widget.eventId);
+        if (!mounted) return;
         if (success) _showMessage('Removed from favorites');
       } else {
         final eventData = {
@@ -107,25 +106,24 @@ class _EventDetailState extends State<EventDetail> {
           'event_time': widget.eventTime,
         };
         success = await _favoritesManager.addToFavorites(widget.eventId, eventData);
+        if (!mounted) return;
         if (success) _showMessage('Added to favorites');
       }
 
-      if (mounted) {
-        setState(() {
-          isFavorite = !isFavorite;
-          isLoading = false;
-        });
-      }
+      if (!mounted) return;
+      setState(() {
+        isFavorite = !isFavorite;
+        isLoading = false;
+      });
 
       widget.onFavoriteChanged?.call();
     } catch (e) {
       print('Error toggling favorite: $e');
-      if (mounted) {
-        setState(() {
-          isLoading = false;
-        });
-        _showMessage('Failed to update favorites', isError: true);
-      }
+      if (!mounted) return;
+      setState(() {
+        isLoading = false;
+      });
+      _showMessage('Failed to update favorites', isError: true);
     }
   }
 
@@ -154,7 +152,7 @@ class _EventDetailState extends State<EventDetail> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-        title: Text('Event Details', style: TextStyle(color: primaryTextColor, fontSize: 17.sp)),
+        title: Text('Event Details', style: TextStyle(color: primaryTextColor, fontSize: 21.sp, fontWeight: FontWeight.bold,)),
         actions: [
           Stack(
             alignment: Alignment.center,

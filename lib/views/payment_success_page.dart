@@ -1,5 +1,6 @@
 import 'package:eeve_app/navigation/main_nav_shell.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:eeve_app/custom_Widget_/Custom_button.dart';
 
 class PaymentSuccessPage extends StatelessWidget {
@@ -15,30 +16,31 @@ class PaymentSuccessPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: bgColor,
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
+        padding: EdgeInsets.symmetric(horizontal: 24.w),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            SizedBox(height: 100.h),
             Image.asset(
               isDark ? 'assets/image2.png' : 'assets/image3.png',
-              height: 220,
+              height: 220.h,
             ),
-            const SizedBox(height: 32),
+            SizedBox(height: 60.h),
             Text(
               'Payment Completed!',
               style: TextStyle(
-                fontSize: 22,
+                fontSize: 22.sp,
                 fontWeight: FontWeight.bold,
                 color: textColor,
               ),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12.h),
             Text(
               'Your ticket has been confirmed. You can now enjoy the event and explore more!',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: subTextColor,
-                fontSize: 14,
+                fontSize: 14.sp,
                 height: 1.6,
               ),
             ),
@@ -46,7 +48,7 @@ class PaymentSuccessPage extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 25),
+        padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 25.h),
         child: CustomButton(
           text: 'Explore more events',
           onPressed: () {

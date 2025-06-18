@@ -99,10 +99,12 @@ class _ProfileViewState extends State<ProfileView> with WidgetsBindingObserver {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title:  Text(
           'My Account',
-          style: TextStyle(fontWeight: FontWeight.w700),
+          style: TextStyle( fontSize: 21.sp,fontWeight: FontWeight.bold,),
         ),
+        
+       
         centerTitle: true,
         actions: [
           IconButton(

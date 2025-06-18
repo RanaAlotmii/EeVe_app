@@ -37,11 +37,12 @@ class _SearchPageState extends State<SearchPage> {
   void _filterEvents() {
     final query = _searchController.text.toLowerCase();
     setState(() {
-      filteredEvents = allEvents.where((event) {
-        final title = event['title'].toString().toLowerCase();
-        final location = event['location'].toString().toLowerCase();
-        return title.contains(query) || location.contains(query);
-      }).toList();
+      filteredEvents =
+          allEvents.where((event) {
+            final title = event['title'].toString().toLowerCase();
+            final location = event['location'].toString().toLowerCase();
+            return title.contains(query) || location.contains(query);
+          }).toList();
     });
   }
 
@@ -65,7 +66,8 @@ class _SearchPageState extends State<SearchPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-        title: Text('Search Events', style: TextStyle(color: textColor)),
+        title: Text('Search Events', style: TextStyle( fontSize: 21.sp, fontWeight: FontWeight.bold,)),
+     
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: textColor),
           onPressed: () {
@@ -85,6 +87,10 @@ class _SearchPageState extends State<SearchPage> {
                 prefixIcon: Icon(Icons.search, color: hintColor),
                 filled: true,
                 fillColor: fieldColor,
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 12.h,
+                  horizontal: 16.w,
+                ), // قللت الارتفاع
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12.r),
                   borderSide: BorderSide.none,
@@ -93,45 +99,53 @@ class _SearchPageState extends State<SearchPage> {
               style: TextStyle(color: textColor),
             ),
           ),
+
           Expanded(
-            child: isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : filteredEvents.isEmpty
+            child:
+                isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : filteredEvents.isEmpty
                     ? Center(
-                        child: Text(
-                          'No events found.\nPlease try a different search.',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: hintColor, fontSize: 16.sp),
-                        ),
-                      )
-                    : ListView.separated(
-                        padding: EdgeInsets.symmetric(horizontal: 16.w),
-                        itemCount: filteredEvents.length,
-                        separatorBuilder: (context, index) => SizedBox(height: 10.h),
-                        itemBuilder: (context, index) {
-                          final event = filteredEvents[index];
-                          return GestureDetector(
-                            onTap: () {
-                              Get.to(() => EventDetail(
-                                    eventId: event['id'],
-                                    title: event['title'] ?? 'Unknown Event',
-                                    image: event['image_detail'] ?? '',
-                                    imageCover: event['image_cover'] ?? '',
-                                    location: event['location'] ?? 'Unknown Location',
-                                    price: (event['price'] ?? 0).toString(),
-                                    description: event['description'] ?? '',
-                                    eventTime: event['event_time'] ?? '',
-                                  ));
-                            },
-                            child: CompactEventCard(
-                              title: event['title'] ?? '',
-                              location: event['location'] ?? '',
-                              imageAsset: event['image_cover'] ?? '',
-                              price: double.tryParse(event['price'].toString()) ?? 0.0,
-                            ),
-                          );
-                        },
+                      child: Text(
+                        'No events found.\nPlease try a different search.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: hintColor, fontSize: 16.sp),
                       ),
+                    )
+                    : ListView.separated(
+                      padding: EdgeInsets.symmetric(horizontal: 16.w),
+                      itemCount: filteredEvents.length,
+                      separatorBuilder:
+                          (context, index) => SizedBox(height: 10.h),
+                      itemBuilder: (context, index) {
+                        final event = filteredEvents[index];
+                        return GestureDetector(
+                          onTap: () {
+                            Get.to(
+                              () => EventDetail(
+                                eventId: event['id'],
+                                title: event['title'] ?? 'Unknown Event',
+                                image: event['image_detail'] ?? '',
+                                imageCover: event['image_cover'] ?? '',
+                                location:
+                                    event['location'] ?? 'Unknown Location',
+                                price: (event['price'] ?? 0).toString(),
+                                description: event['description'] ?? '',
+                                eventTime: event['event_time'] ?? '',
+                              ),
+                            );
+                          },
+                          child: CompactEventCard(
+                            title: event['title'] ?? '',
+                            location: event['location'] ?? '',
+                            imageAsset: event['image_cover'] ?? '',
+                            price:
+                                double.tryParse(event['price'].toString()) ??
+                                0.0,
+                          ),
+                        );
+                      },
+                    ),
           ),
         ],
       ),

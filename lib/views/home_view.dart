@@ -41,13 +41,13 @@ class _HomeViewState extends State<HomeView> {
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 1.h),
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 3.h),
               child: const HomeHeader(),
             ),
 
             Expanded(
               child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 18.h),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

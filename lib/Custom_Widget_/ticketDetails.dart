@@ -79,7 +79,14 @@ class Ticketdetails extends StatelessWidget {
             ),
           ),
         ],
-        title: Text('Ticket Detail', style: theme.textTheme.titleMedium),
+        title: Text(
+  'Ticket Detail',
+  style: theme.textTheme.titleMedium?.copyWith(
+    fontSize: 21.sp,
+    fontWeight: FontWeight.bold,
+  ),
+),
+
         centerTitle: true,
         backgroundColor: theme.scaffoldBackgroundColor,
       ),

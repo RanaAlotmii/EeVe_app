@@ -163,8 +163,7 @@ class MyticketState extends State<Myticket> with RouteAware {
             'My Ticket',
             style: TextStyle(
               color: textColor,
-              fontWeight: FontWeight.w700,
-              fontSize: 20.sp,
+              fontSize: 21.sp, fontWeight: FontWeight.bold,
             ),
           ),
           centerTitle: true,

@@ -15,7 +15,7 @@ class AboutAppView extends StatelessWidget {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         title: Text(
           'About App',
-          style: textTheme.titleMedium?.copyWith(fontSize: 16.sp),
+          style: textTheme.titleMedium?.copyWith(fontSize: 22.sp),
         ),
         centerTitle: true,
         leading: IconButton(
@@ -32,7 +32,7 @@ class AboutAppView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 20.h),
+            SizedBox(height: 5.h),
             Text(
               'EeVe App',
               style: textTheme.headlineSmall?.copyWith(
