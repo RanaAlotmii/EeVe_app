@@ -1,13 +1,16 @@
 import 'package:eeve_app/custom_Widget_/event_card_small.dart';
 import 'package:eeve_app/views/payment_page.dart';
+import 'package:eeve_app/views/saved_cards_page.dart';
 import 'package:flutter/material.dart';
 import 'package:eeve_app/custom_Widget_/Custom_button.dart';
 
-class DetailOrderPage extends StatelessWidget {
+enum PaymentOption { newCard, savedCard }
+
+class DetailOrderPage extends StatefulWidget {
   final Map<String, dynamic> eventData;
   final int ticketAmount;
   final int eventId;
-
+  
   const DetailOrderPage({
     super.key,
     required this.eventData,
@@ -16,19 +19,26 @@ class DetailOrderPage extends StatelessWidget {
   });
 
   @override
+  State<DetailOrderPage> createState() => _DetailOrderPageState();
+}
+
+class _DetailOrderPageState extends State<DetailOrderPage> {
+  PaymentOption selectedPaymentOption = PaymentOption.newCard;
+
+  @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final bgColor = Theme.of(context).scaffoldBackgroundColor;
     final primaryTextColor = isDark ? Colors.white : Colors.black87;
     final secondaryTextColor = isDark ? Colors.white70 : Colors.black54;
-    final cardColor = isDark ? const Color(0xFF1C1C1E) :  Color(0xFFE0E0E0);
-
-    final String title = eventData['title'] ?? '';
-    final String location = eventData['location'] ?? '';
-    final String imageCover = eventData['image_cover'] ?? '';
-    final double ticketPrice = double.tryParse(eventData['price'].toString()) ?? 0.0;
-    final String eventDate = eventData['event_date'] ?? '';
-    final double totalPrice = ticketAmount * ticketPrice;
+    final cardColor = isDark ? const Color(0xFF1C1C1E) : const Color(0xFFE0E0E0);
+    
+    final String title = widget.eventData['title'] ?? '';
+    final String location = widget.eventData['location'] ?? '';
+    final String imageCover = widget.eventData['image_cover'] ?? '';
+    final double ticketPrice = double.tryParse(widget.eventData['price'].toString()) ?? 0.0;
+    final String eventDate = widget.eventData['event_date'] ?? '';
+    final double totalPrice = widget.ticketAmount * ticketPrice;
 
     return Scaffold(
       backgroundColor: bgColor,
@@ -95,7 +105,7 @@ class DetailOrderPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('Ticket', style: TextStyle(color: secondaryTextColor)),
-                      Text('$ticketAmount ticket', style: TextStyle(color: primaryTextColor)),
+                      Text('${widget.ticketAmount} ticket', style: TextStyle(color: primaryTextColor)),
                     ],
                   ),
                   const SizedBox(height: 8),
@@ -126,7 +136,7 @@ class DetailOrderPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('Price', style: TextStyle(color: secondaryTextColor)),
-                      Text('$ticketAmount x ${ticketPrice.toStringAsFixed(2)} SR',
+                      Text('${widget.ticketAmount} x ${ticketPrice.toStringAsFixed(2)} SR',
                           style: TextStyle(color: primaryTextColor)),
                     ],
                   ),
@@ -152,35 +162,27 @@ class DetailOrderPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 12),
-            Container(
-              padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(
-                color: cardColor,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    width: 32,
-                    height: 32,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: Image.asset(
-                        'assets/visa.png',
-                        width: 20,
-                        height: 20,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Text('Card', style: TextStyle(color: primaryTextColor, fontSize: 14)),
-                ],
-              ),
+            
+            _buildPaymentOption(
+              PaymentOption.savedCard,
+              'Use Saved Card',
+              'Choose from your saved cards',
+              Icons.credit_card,
+              cardColor,
+              primaryTextColor,
+              secondaryTextColor,
             ),
+            const SizedBox(height: 12),
+            _buildPaymentOption(
+              PaymentOption.newCard,
+              'Add New Card',
+              'Enter new card details',
+              Icons.add_card,
+              cardColor,
+              primaryTextColor,
+              secondaryTextColor,
+            ),
+            
             const SizedBox(height: 80),
           ],
         ),
@@ -188,21 +190,129 @@ class DetailOrderPage extends StatelessWidget {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 25),
         child: CustomButton(
-          text: 'Pay Now',
+          text: 'Continue',
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => PaymentPage(
-                  totalPrice: totalPrice,
-                  eventId: eventId,
-                  ticketAmount: ticketAmount,
-                ),
-              ),
-            );
+            _handlePaymentNavigation(context, totalPrice);
           },
         ),
       ),
     );
+  }
+
+  Widget _buildPaymentOption(
+    PaymentOption option,
+    String title,
+    String subtitle,
+    IconData icon,
+    Color cardColor,
+    Color primaryTextColor,
+    Color secondaryTextColor,
+  ) {
+    final isSelected = selectedPaymentOption == option;
+    
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          selectedPaymentOption = option;
+        });
+      },
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: cardColor,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isSelected ? const Color(0xFF7A4EB0) : Colors.transparent,
+            width: 2,
+          ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: isSelected 
+                    ? const Color(0xFF7A4EB0).withOpacity(0.1)
+                    : Colors.grey.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(
+                icon,
+                color: isSelected ? const Color(0xFF7A4EB0) : Colors.grey,
+                size: 20,
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(
+                      color: primaryTextColor,
+                      fontSize: 16,
+                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      color: secondaryTextColor,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (isSelected)
+              Container(
+                width: 20,
+                height: 20,
+                decoration: const BoxDecoration(
+                  color: Color(0xFF7A4EB0),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.check,
+                  color: Colors.white,
+                  size: 14,
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _handlePaymentNavigation(BuildContext context, double totalPrice) {
+    switch (selectedPaymentOption) {
+      case PaymentOption.newCard:
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => PaymentPage(
+              totalPrice: totalPrice,
+              eventId: widget.eventId,
+              ticketAmount: widget.ticketAmount,
+            ),
+          ),
+        );
+        break;
+      case PaymentOption.savedCard:
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => SavedCardsPage(
+              totalPrice: totalPrice,
+              eventId: widget.eventId,
+              ticketAmount: widget.ticketAmount,
+            ),
+          ),
+        );
+        break;
+    }
   }
 }

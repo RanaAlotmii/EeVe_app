@@ -2,8 +2,20 @@ import 'package:flutter/material.dart';
 
 class CustomCreditCard extends StatelessWidget {
   final Color backgroundColor;
+  final String card_name;
+  final String card_number;
+  final String expiry_date;
 
-  const CustomCreditCard({super.key, required this.backgroundColor});
+  const CustomCreditCard({super.key, required this.backgroundColor, required this.card_name, required this.card_number, required this.expiry_date});
+
+    String formatExpiryDate(String raw) {
+      if (raw.length == 4) {
+        return '${raw.substring(0, 2)}/${raw.substring(2)}';
+      }
+      return raw;
+    }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +25,7 @@ class CustomCreditCard extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: backgroundColor,
@@ -49,7 +61,8 @@ class CustomCreditCard extends StatelessWidget {
 
           // Card Number
           Text(
-            '**** **** **** 7421',
+            // '**** **** **** 7421',
+            "**** **** **** ${card_number.toString().substring(12)}",
             style: TextStyle(
               color: contentColor,
               fontSize: 22,
@@ -71,7 +84,8 @@ class CustomCreditCard extends StatelessWidget {
                     style: TextStyle(color: labelColor, fontSize: 12),
                   ),
                   Text(
-                    'Naba AlHarbi',
+                    // 'Naba AlHarbi',
+                    card_name,
                     style: TextStyle(
                       color: contentColor,
                       fontWeight: FontWeight.w600,
@@ -88,7 +102,7 @@ class CustomCreditCard extends StatelessWidget {
                     style: TextStyle(color: labelColor, fontSize: 12),
                   ),
                   Text(
-                    '12/26',
+                    formatExpiryDate(expiry_date), 
                     style: TextStyle(
                       color: contentColor,
                       fontWeight: FontWeight.w600,

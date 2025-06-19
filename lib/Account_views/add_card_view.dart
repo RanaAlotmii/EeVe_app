@@ -1,8 +1,120 @@
 import 'package:flutter/material.dart';
-import '../Custom_Widget_/Custom_button.dart'; // ✅ Import your custom button
+import 'package:flutter/services.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import '../Custom_Widget_/Custom_button.dart';
 
-class AddCardView extends StatelessWidget {
+class AddCardView extends StatefulWidget {
   const AddCardView({super.key});
+
+  @override
+  State<AddCardView> createState() => _AddCardViewState();
+}
+
+class _AddCardViewState extends State<AddCardView> {
+  final cardNameController = TextEditingController();
+  final cardNumberController = TextEditingController();
+  final expiryDateController = TextEditingController();
+  final cvvController = TextEditingController();
+
+  @override
+  void dispose() {
+    cardNameController.dispose();
+    cardNumberController.dispose();
+    expiryDateController.dispose();
+    cvvController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _addCard() async {
+    final user = Supabase.instance.client.auth.currentUser;
+    if (user == null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('You must be logged in')));
+      return;
+    }
+
+    final cardName = cardNameController.text.trim();
+    final cardNumber = cardNumberController.text.trim();
+    final expiry = expiryDateController.text.trim();
+    final cvv = cvvController.text.trim();
+
+    if (cardName == "" || cardNumber == "" || expiry == "" || cvv == "") {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('All fields must be completed')),
+      );
+      return;
+    }
+
+    if (RegExp(r'^\d+$').hasMatch(cardName)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Card name cannot be only numbers')),
+      );
+      return;
+    }
+
+    if (cardNumber.length > 16) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Card number must be 16 digits or less')),
+      );
+      return;
+    }
+
+
+    if (expiry.length > 5) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Expiry date must be in MM/YY format')),
+      );
+      // print("🔴 $expiry and len 🔴 ${expiry.length}");
+
+      return;
+    }
+
+    if (cvv.length > 3) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('CVV must be 4 digits or 3')),
+      );
+      return;
+    }
+
+    final month = int.parse(expiry.substring(0, 2));
+    final year = int.parse('20${expiry.substring(3)}');
+    final final_expiry = "${expiry.substring(0,2)}${expiry.substring(3)}";
+
+    // print("🔴 ${cvv.length} 🔴");
+
+    if (month < 1 || month > 12) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Invalid expiry month')));
+      return;
+    }
+
+    final now = DateTime.now();
+    final expiryDate = DateTime(year, month + 1, 0);
+    if (expiryDate.isBefore(now)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Expiry date is in the past')),
+      );
+      return;
+    }
+
+    try {
+      await Supabase.instance.client.from('user_card').insert({
+        'card_name': cardName,
+        'card_number': int.tryParse(cardNumber) ?? 0,
+        'expiry_date': int.tryParse(final_expiry) ?? 0,
+        'cvv': int.tryParse(cvv) ?? 0,
+        'user_id': user.id,
+      });
+
+      Navigator.pop(context);
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error: $e')));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,10 +126,7 @@ class AddCardView extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         centerTitle: true,
-        title: Text(
-          'Add Card',
-          style: TextStyle(color: textColor),
-        ),
+        title: Text('Add Card', style: TextStyle(color: textColor)),
         iconTheme: IconThemeData(color: textColor),
       ),
       body: Padding(
@@ -25,6 +134,7 @@ class AddCardView extends StatelessWidget {
         child: Column(
           children: [
             TextField(
+              controller: cardNameController,
               style: TextStyle(color: textColor),
               decoration: InputDecoration(
                 labelText: 'Card Name',
@@ -35,57 +145,83 @@ class AddCardView extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             TextField(
-              style: TextStyle(color: textColor),
+              controller: cardNumberController,
               keyboardType: TextInputType.number,
+              style: TextStyle(color: textColor),
               decoration: InputDecoration(
                 labelText: 'Card Number',
                 labelStyle: TextStyle(color: textColor),
                 filled: true,
                 fillColor: isDark ? Colors.white12 : Colors.black12,
+                counterText: "",
               ),
+              maxLength: 16,
             ),
             const SizedBox(height: 16),
             Row(
               children: [
                 Expanded(
                   child: TextField(
+                    controller: expiryDateController,
+                    keyboardType: TextInputType.number,
                     style: TextStyle(color: textColor),
-                    keyboardType: TextInputType.datetime,
+                    inputFormatters: [ExpiryDateInputFormatter()],
                     decoration: InputDecoration(
-                      labelText: 'Expiry Date',
-                      labelStyle: TextStyle(color: textColor),
+                      labelText: 'Expiry Date (MMYY)',
+                      labelStyle: TextStyle(color: Colors.white),
                       filled: true,
-                      fillColor: isDark ? Colors.white12 : Colors.black12,
+                      fillColor: Colors.white12,
+                      counterText: '',
                     ),
+                    maxLength: 5,
                   ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
                   child: TextField(
-                    style: TextStyle(color: textColor),
+                    controller: cvvController,
                     keyboardType: TextInputType.number,
+                    style: TextStyle(color: textColor),
                     decoration: InputDecoration(
                       labelText: 'CVC / CVV',
                       labelStyle: TextStyle(color: textColor),
                       filled: true,
                       fillColor: isDark ? Colors.white12 : Colors.black12,
+                      counterText: '',
                     ),
+                    maxLength: 4,
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 32),
-
-            /// ✅ Use your custom button here
-            CustomButton(
-              text: 'Add Card',
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
+            CustomButton(text: 'Add Card', onPressed: _addCard),
           ],
         ),
       ),
+    );
+  }
+}
+
+class ExpiryDateInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    if (newValue.text.isEmpty) {
+      return newValue;
+    }
+
+    String newText = newValue.text.replaceAll(RegExp(r'[^\d]'), '');
+
+    if (newText.length >= 2) {
+      newText = '${newText.substring(0, 2)}/${newText.substring(2)}';
+    }
+
+    return TextEditingValue(
+      text: newText,
+      selection: TextSelection.collapsed(offset: newText.length),
     );
   }
 }
