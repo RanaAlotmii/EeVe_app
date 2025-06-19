@@ -15,7 +15,9 @@ class AboutAppView extends StatelessWidget {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         title: Text(
           'About App',
-          style: textTheme.titleMedium?.copyWith(fontSize: 22.sp),
+          style: textTheme.titleMedium?.copyWith(fontSize: 20.sp,fontWeight: FontWeight.bold,),
+          
+
         ),
         centerTitle: true,
         leading: IconButton(
