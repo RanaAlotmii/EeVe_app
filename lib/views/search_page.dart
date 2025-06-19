@@ -3,6 +3,7 @@ import 'package:eeve_app/custom_Widget_/event_card_small.dart';
 import 'package:eeve_app/views/event_detail.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -13,11 +14,9 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   final TextEditingController _searchController = TextEditingController();
-
   List<Map<String, dynamic>> allEvents = [];
   List<Map<String, dynamic>> filteredEvents = [];
-
-  bool isLoading = true; // ✅ لمعرفة هل الصفحة تحمل البيانات
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -28,11 +27,10 @@ class _SearchPageState extends State<SearchPage> {
 
   Future<void> fetchEvents() async {
     final response = await Supabase.instance.client.from('events').select();
-
     setState(() {
       allEvents = List<Map<String, dynamic>>.from(response);
       filteredEvents = allEvents;
-      isLoading = false; // ✅ الانتهاء من التحميل
+      isLoading = false;
     });
   }
 
@@ -68,10 +66,8 @@ class _SearchPageState extends State<SearchPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-        title: Text(
-          'Search Events',
-          style: TextStyle(color: textColor),
-        ),
+        title: Text('Search Events', style: TextStyle( fontSize: 21.sp, fontWeight: FontWeight.bold,)),
+     
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: textColor),
           onPressed: () {
@@ -82,7 +78,7 @@ class _SearchPageState extends State<SearchPage> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(16.w),
             child: TextField(
               controller: _searchController,
               decoration: InputDecoration(
@@ -91,33 +87,36 @@ class _SearchPageState extends State<SearchPage> {
                 prefixIcon: Icon(Icons.search, color: hintColor),
                 filled: true,
                 fillColor: fieldColor,
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 12.h,
+                  horizontal: 16.w,
+                ), // قللت الارتفاع
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(12.r),
                   borderSide: BorderSide.none,
                 ),
               ),
               style: TextStyle(color: textColor),
             ),
           ),
+
           Expanded(
             child:
                 isLoading
-                    ? const Center(
-                      child: CircularProgressIndicator(),
-                    ) // ⏳ أثناء التحميل
+                    ? const Center(child: CircularProgressIndicator())
                     : filteredEvents.isEmpty
                     ? Center(
                       child: Text(
                         'No events found.\nPlease try a different search.',
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: hintColor, fontSize: 16),
+                        style: TextStyle(color: hintColor, fontSize: 16.sp),
                       ),
-                    ) // ✅ لا يوجد نتائج
+                    )
                     : ListView.separated(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      padding: EdgeInsets.symmetric(horizontal: 16.w),
                       itemCount: filteredEvents.length,
                       separatorBuilder:
-                          (context, index) => const SizedBox(height: 10),
+                          (context, index) => SizedBox(height: 10.h),
                       itemBuilder: (context, index) {
                         final event = filteredEvents[index];
                         return GestureDetector(

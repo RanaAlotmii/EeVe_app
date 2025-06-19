@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:eeve_app/Ai_views/ai_suggestion_view.dart';
-import 'package:eeve_app/controllers/ai_onboarding_controller.dart';
-
-final AiOnboardingController aiController = Get.put(AiOnboardingController());
+import 'package:eeve_app/Ai_views/ai_assitant_view.dart';
 
 class AiOnboardingView extends StatefulWidget {
   const AiOnboardingView({super.key});
@@ -17,170 +13,105 @@ class _AiOnboardingViewState extends State<AiOnboardingView> {
   final PageController _controller = PageController();
   int _currentIndex = 0;
 
-  final interests = [
-    {"label": "Music", "icon": "assets/songicon.png"},
-    {"label": "Food", "icon": "assets/foodicon.png"},
-    {"label": "Culture", "icon": "assets/cultureicon.png"},
-    {"label": "Games", "icon": "assets/gamesicon.png"},
-  ];
-
-  final vibes = [
-    {"label": "Chill", "icon": "assets/chillicon.png"},
-    {"label": "Romantic", "icon": "assets/romaticicon.png"},
-    {"label": "Family", "icon": "assets/familyicon.png"},
-    {"label": "Solo", "icon": "assets/soloicon.png"},
-  ];
-
-  final times = [
-    {"label": "Tonight", "icon": "assets/tonighticon.png"},
-    {"label": "Weekend", "icon": "assets/weekendicon.png"},
-    {"label": "Plan Ahead", "icon": "assets/plan.png"},
-    {"label": "Surprise Me", "icon": "assets/suprise.png"},
+  final List<Map<String, String>> onboardingData = [
+    {
+      'image': "assets/AI13.png",
+      'title': 'What can EeVe AI do?',
+      'desc': 'Effortless picks. Just tell EeVe your mood',
+    },
+    {
+      'image': 'assets/AI9.png',
+      'title': 'Powered by GPT-3.5 Magic',
+      'desc': 'EeVe turns your vibe into real plans — no stress, just spark-powered suggestions',
+    },
   ];
 
   void nextPage() {
-    if (_currentIndex < 2) {
-      _controller.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
-    } else {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const AiSuggestionView(),
-        ),
+    if (_currentIndex < onboardingData.length - 1) {
+      _controller.nextPage(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
       );
-
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const AiAssistantView()),
+      );
     }
-  }
-
-  Widget buildStepPage({
-    required String title,
-    required List<Map<String, String>> options,
-    required dynamic selected,
-    required void Function(String) onSelect,
-    bool allowMultiple = false,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 80, 24, 24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(title,
-              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white)),
-          const SizedBox(height: 24),
-          Expanded(
-            child: GridView.count(
-              crossAxisCount: 2,
-              crossAxisSpacing: 20,
-              mainAxisSpacing: 20,
-              childAspectRatio: 1.2,
-              children: options.map((item) {
-                final label = item['label']!;
-                final iconPath = item['icon']!;
-                final isSelected = allowMultiple
-                    ? aiController.selectedInterests.contains(label)
-                    : selected == label;
-
-                return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      if (allowMultiple) {
-                        isSelected
-                            ? aiController.selectedInterests.remove(label)
-                            : aiController.selectedInterests.add(label);
-                      } else {
-                        onSelect(label);
-                      }
-                    });
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: isSelected ? Colors.white : Colors.white24,
-                        width: 1.5,
-                      ),
-                      gradient: isSelected
-                          ? const LinearGradient(
-                        colors: [Color(0xFF905FDD), Color(0xFF1B1B2F)],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      )
-                          : LinearGradient(colors: [
-                        Colors.white.withOpacity(0.05),
-                        Colors.white.withOpacity(0.02)
-                      ]),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(iconPath, width: 32, height: 32),
-                        const SizedBox(height: 10),
-                        Text(
-                          label,
-                          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              }).toList(),
-            ),
-          )
-        ],
-      ),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF0E0B1F),
-      body: SafeArea(
-        child: Stack(
-          children: [
-            PageView(
-              controller: _controller,
-              onPageChanged: (index) => setState(() => _currentIndex = index),
-              children: [
-                buildStepPage(
-                  title: "What are you into lately?",
-                  options: interests,
-                  selected: aiController.selectedInterests,
-                  allowMultiple: true,
-                  onSelect: (_) {},
-                ),
-                buildStepPage(
-                  title: "What's your vibe today?",
-                  options: vibes,
-                  selected: aiController.selectedVibe.value,
-                  onSelect: (item) => aiController.selectedVibe.value = item,
-                ),
-                buildStepPage(
-                  title: "When do you wanna go out?",
-                  options: times,
-                  selected: aiController.selectedTime.value,
-                  onSelect: (item) => aiController.selectedTime.value = item,
-                ),
-              ],
-            ),
+      body: Stack(
+        children: [
+          PageView.builder(
+            controller: _controller,
+            itemCount: onboardingData.length,
+            onPageChanged: (index) {
+              setState(() {
+                _currentIndex = index;
+              });
+            },
+            itemBuilder: (context, index) {
+              final data = onboardingData[index];
+              return Stack(
+                fit: StackFit.expand,
+                children: [
+                  Image.asset(
+                    data['image']!,
+                    fit: BoxFit.cover,
+                  ),
+                  Positioned(
+                    bottom: 130, // give space between text & indicator
+                    left: 24,
+                    right: 24,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          data['title']!,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          data['desc']!,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.white70,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
 
-            // Bottom Controls
-            Positioned(
-              bottom: 30,
-              left: 24,
-              right: 24,
+          // Bottom controls
+          Positioned(
+            bottom: 30,
+            left: 0,
+            right: 0,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => const AiSuggestionView(),
-                        ),
+                        MaterialPageRoute(builder: (context) => const AiAssistantView()),
                       );
-
                     },
                     child: const Text(
                       'Skip',
@@ -193,9 +124,9 @@ class _AiOnboardingViewState extends State<AiOnboardingView> {
                   ),
                   SmoothPageIndicator(
                     controller: _controller,
-                    count: 3,
+                    count: onboardingData.length,
                     effect: const WormEffect(
-                      dotColor: Colors.white30,
+                      dotColor: Colors.white54,
                       activeDotColor: Colors.white,
                       dotHeight: 8,
                       dotWidth: 8,
@@ -204,19 +135,19 @@ class _AiOnboardingViewState extends State<AiOnboardingView> {
                   GestureDetector(
                     onTap: nextPage,
                     child: Text(
-                      _currentIndex == 2 ? "Start" : "Next",
+                      _currentIndex == onboardingData.length - 1 ? "Let’s Go" : "Next",
                       style: const TextStyle(
-                        color: Colors.purpleAccent,
+                        color: Colors.purple,
                         fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

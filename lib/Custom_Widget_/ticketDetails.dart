@@ -1,8 +1,8 @@
 import 'package:dotted_line/dotted_line.dart';
 import 'package:eeve_app/main.dart';
 import 'package:eeve_app/navigation/main_nav_shell.dart';
-import 'package:eeve_app/views/my_ticket_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Ticketdetails extends StatelessWidget {
   final String name;
@@ -39,10 +39,10 @@ class Ticketdetails extends StatelessWidget {
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 16.0),
+            padding: EdgeInsets.only(right: 16.w),
             child: PopupMenuButton<String>(
               icon: Icon(Icons.more_vert, color: theme.iconTheme.color),
-              offset: const Offset(-17, 40),
+              offset: Offset(-17.w, 40.h),
               onSelected: (value) {
                 if (value == 'delete') {
                   showDialog(
@@ -63,10 +63,7 @@ class Ticketdetails extends StatelessWidget {
                               PageRouteBuilder(pageBuilder: (context, _, __) => const MainNavShell()),
                             );
                           },
-                          child: const Text(
-                            'Delete',
-                            style: TextStyle(color: Colors.red),
-                          ),
+                          child: const Text('Delete', style: TextStyle(color: Colors.red)),
                         ),
                       ],
                     ),
@@ -82,17 +79,24 @@ class Ticketdetails extends StatelessWidget {
             ),
           ),
         ],
-        title: Text('Ticket Detail', style: theme.textTheme.titleMedium),
+        title: Text(
+  'Ticket Detail',
+  style: theme.textTheme.titleMedium?.copyWith(
+    fontSize: 21.sp,
+    fontWeight: FontWeight.bold,
+  ),
+),
+
         centerTitle: true,
         backgroundColor: theme.scaffoldBackgroundColor,
       ),
       body: Center(
         child: Column(
           children: [
-            const SizedBox(height: 30),
+            SizedBox(height: 30.h),
             Container(
-              height: 566,
-              width: 340,
+              height: 566.h,
+              width: 340.w,
               decoration: BoxDecoration(
                 gradient: isDark
                     ? const LinearGradient(
@@ -102,22 +106,21 @@ class Ticketdetails extends StatelessWidget {
                       )
                     : const LinearGradient(
                         colors: [Color.fromARGB(255, 196, 191, 209), Color.fromARGB(255, 122, 109, 143)],
-                        //   colors: [Color.fromARGB(255, 165, 159, 182),  Color.fromARGB(255, 110, 81, 159)],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(16.r),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 17),
+                  SizedBox(height: 17.h),
                   Center(
                     child: Container(
-                      width: 279,
-                      height: 152,
+                      width: 279.w,
+                      height: 152.h,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(12.r),
                         image: DecorationImage(
                           image: NetworkImage(image_url),
                           fit: BoxFit.cover,
@@ -125,21 +128,21 @@ class Ticketdetails extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12.h),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 31.0),
+                    padding: EdgeInsets.symmetric(horizontal: 31.w),
                     child: Text(
                       name,
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 14.sp,
                         fontWeight: FontWeight.w600,
                         color: primaryTextColor,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20.h),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 31.0),
+                    padding: EdgeInsets.symmetric(horizontal: 31.w),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -147,7 +150,7 @@ class Ticketdetails extends StatelessWidget {
                           'Time',
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
-                            fontSize: 12,
+                            fontSize: 12.sp,
                             color: secondaryTextColor,
                           ),
                         ),
@@ -155,16 +158,16 @@ class Ticketdetails extends StatelessWidget {
                           time,
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
-                            fontSize: 14,
+                            fontSize: 14.sp,
                             color: primaryTextColor,
                           ),
                         ),
-                        const SizedBox(height: 10),
+                        SizedBox(height: 10.h),
                         Text(
                           'Quantity:',
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
-                            fontSize: 12,
+                            fontSize: 12.sp,
                             color: secondaryTextColor,
                           ),
                         ),
@@ -172,7 +175,7 @@ class Ticketdetails extends StatelessWidget {
                           quantity,
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
-                            fontSize: 14,
+                            fontSize: 14.sp,
                             color: primaryTextColor,
                           ),
                         ),
@@ -183,41 +186,41 @@ class Ticketdetails extends StatelessWidget {
                     child: Stack(
                       children: <Widget>[
                         Positioned(
-                          top: 85,
-                          left: 20,
-                          right: 15,
+                          top: 85.h,
+                          left: 20.w,
+                          right: 15.w,
                           child: DottedLine(
-                            lineLength: 300,
-                            dashLength: 6,
+                            lineLength: 300.w,
+                            dashLength: 6.w,
                             dashColor: secondaryTextColor,
                           ),
                         ),
                         Positioned(
                           left: 0,
-                          top: 70,
+                          top: 70.h,
                           child: Container(
-                            width: 15,
-                            height: 30,
+                            width: 15.w,
+                            height: 30.h,
                             decoration: BoxDecoration(
                               color: theme.scaffoldBackgroundColor,
-                              borderRadius: const BorderRadius.only(
-                                bottomRight: Radius.circular(20),
-                                topRight: Radius.circular(20),
+                              borderRadius: BorderRadius.only(
+                                bottomRight: Radius.circular(20.r),
+                                topRight: Radius.circular(20.r),
                               ),
                             ),
                           ),
                         ),
                         Positioned(
-                          top: 70,
+                          top: 70.h,
                           right: 0,
                           child: Container(
-                            width: 15,
-                            height: 30,
+                            width: 15.w,
+                            height: 30.h,
                             decoration: BoxDecoration(
                               color: theme.scaffoldBackgroundColor,
-                              borderRadius: const BorderRadius.only(
-                                bottomLeft: Radius.circular(20),
-                                topLeft: Radius.circular(20),
+                              borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(20.r),
+                                topLeft: Radius.circular(20.r),
                               ),
                             ),
                           ),
@@ -229,17 +232,17 @@ class Ticketdetails extends StatelessWidget {
                     child: Text(
                       '#$id',
                       style: TextStyle(
-                        fontSize: 43,
+                        fontSize: 43.sp,
                         fontWeight: FontWeight.w700,
                         color: primaryTextColor,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 40),
+                  SizedBox(height: 40.h),
                 ],
               ),
             ),
-            const SizedBox(height: 49),
+            SizedBox(height: 49.h),
           ],
         ),
       ),

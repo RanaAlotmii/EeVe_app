@@ -1,18 +1,12 @@
-import 'package:eeve_app/Account_views/profile_view.dart';
-import 'package:eeve_app/auth_views/welcome_view.dart';
-import 'package:eeve_app/navigation/main_nav_shell.dart';
-import 'package:eeve_app/views/home_view.dart';
 import 'package:eeve_app/views/splash_view.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart'; // ✅ إضافة
-import 'package:eeve_app/managers/theme_service.dart'; // ✅ إضافة
-
+import 'package:provider/provider.dart';
+import 'package:eeve_app/managers/theme_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:eeve_app/Ai_views/Ai_getstarted.dart';
 // import 'package:eeve_app/api/openai_config.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,6 +20,7 @@ void main() async {
 
   final prefs = await SharedPreferences.getInstance();
   final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+
   runApp(
     ChangeNotifierProvider(
       create: (_) => ThemeService(),
@@ -45,51 +40,59 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<ThemeService>(
       builder: (context, themeService, _) {
-        return GetMaterialApp(
-          title: 'EEVE',
-          debugShowCheckedModeBanner: false,
-
-          // ✅ Light Theme
-          theme: ThemeData(
-            fontFamily: 'PlusJakartaSans',
-            brightness: Brightness.light,
-            scaffoldBackgroundColor: Colors.white,
-            appBarTheme: const AppBarTheme(
-              backgroundColor: Colors.white,
-              elevation: 0,
-              iconTheme: IconThemeData(color: Colors.black),
-              titleTextStyle: TextStyle(color: Colors.black, fontSize: 20),
-            ),
-            bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-              backgroundColor: Colors.white,
-              selectedItemColor: Color(0xFF8B57E6),
-              unselectedItemColor: Colors.black45,
-            ),
-          ),
-
-          // ✅ Dark Theme
-          darkTheme: ThemeData(
-            fontFamily: 'PlusJakartaSans',
-            brightness: Brightness.dark,
-            scaffoldBackgroundColor: Color(0xFF121212),
-            appBarTheme: const AppBarTheme(
-              backgroundColor: Color(0xFF121212),
-              elevation: 0,
-              iconTheme: IconThemeData(color: Colors.white),
-              titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
-            ),
-            bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-              backgroundColor: Color(0xFF121212),
-              selectedItemColor: Color(0xFF8B57E6),
-              unselectedItemColor: Colors.white54,
-            ),
-          ),
-
-          themeMode: themeService.themeMode, // ✅ استخدام الوضع حسب المستخدم
-          home: WelcomeView(),
+        return ScreenUtilInit(
+          designSize: const Size(375, 812),
+          minTextAdapt: true,
+          splitScreenMode: true,
+          builder: (context, child) {
+            return GetMaterialApp(
+              title: 'EEVE',
+              debugShowCheckedModeBanner: false,
+              builder: (context, child) {
+                final mediaQuery = MediaQuery.of(context);
+                return MediaQuery(
+                  data: mediaQuery.copyWith(textScaleFactor: 1.0),
+                  child: child!,
+                );
+              },
+              theme: ThemeData(
+                fontFamily: 'PlusJakartaSans',
+                brightness: Brightness.light,
+                scaffoldBackgroundColor: Colors.white,
+                appBarTheme: const AppBarTheme(
+                  backgroundColor: Colors.white,
+                  elevation: 0,
+                  iconTheme: IconThemeData(color: Colors.black),
+                  titleTextStyle: TextStyle(color: Colors.black, fontSize: 20),
+                ),
+                bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+                  backgroundColor: Colors.white,
+                  selectedItemColor: Color(0xFF8B57E6),
+                  unselectedItemColor: Colors.black45,
+                ),
+              ),
+              darkTheme: ThemeData(
+                fontFamily: 'PlusJakartaSans',
+                brightness: Brightness.dark,
+                scaffoldBackgroundColor: Color(0xFF121212),
+                appBarTheme: const AppBarTheme(
+                  backgroundColor: Color(0xFF121212),
+                  elevation: 0,
+                  iconTheme: IconThemeData(color: Colors.white),
+                  titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
+                ),
+                bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+                  backgroundColor: Color(0xFF121212),
+                  selectedItemColor: Color(0xFF8B57E6),
+                  unselectedItemColor: Colors.white54,
+                ),
+              ),
+              themeMode: themeService.themeMode,
+              home: SplashView(),
+            );
+          },
         );
       },
     );
   }
 }
-    

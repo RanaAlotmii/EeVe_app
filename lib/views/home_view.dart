@@ -6,6 +6,7 @@ import 'package:eeve_app/Custom_Widget_/home_header_widget.dart';
 import 'package:eeve_app/Custom_Widget_/_PromoCard.dart';
 import 'package:eeve_app/Custom_Widget_/CategoryList.dart';
 import 'package:eeve_app/Custom_Widget_/_TrendingEventsList.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomeView extends StatefulWidget {
   HomeView({super.key});
@@ -25,7 +26,7 @@ class _HomeViewState extends State<HomeView> {
       profileController = Get.find<ProfileController>();
     } else {
       profileController = Get.put(ProfileController());
-      profileController.loadProfileImage(); 
+      profileController.loadProfileImage();
     }
   }
 
@@ -37,61 +38,59 @@ class _HomeViewState extends State<HomeView> {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              HomeHeader(),
-              const SizedBox(height: 24),
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 3.h),
+              child: const HomeHeader(),
+            ),
 
-              // Obx(() {
-              //   final profileImage = profileController.profileImage.value;
-              //   return CircleAvatar(
-              //     radius: 30,
-              //     backgroundImage: profileImage.isNotEmpty
-              //         ? NetworkImage(profileImage)
-              //         : const AssetImage('assets/profileImage.png'),
-              //   );
-              // }),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 18.h),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const PromoCard(),
+                    SizedBox(height: 32.h),
 
-              PromoCard(),
-              const SizedBox(height: 32),
+                    Text(
+                      "Trending Categories",
+                      style: TextStyle(
+                        color: textColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18.sp,
+                      ),
+                    ),
+                    SizedBox(height: 16.h),
 
-              Text(
-                "Trending Categories",
-                style: TextStyle(
-                  color: textColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
+                     CategoryList(),
+                    SizedBox(height: 20.h),
+
+                    Text(
+                      "Trending in Riyadh",
+                      style: TextStyle(
+                        color: textColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18.sp,
+                      ),
+                    ),
+                    SizedBox(height: 16.h),
+
+                    Obx(() {
+                      final filteredEvents = controller.getFilteredEvents();
+
+                      if (controller.events.isEmpty) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+
+                      return TrendingEventsList(events: filteredEvents);
+                    }),
+                  ],
                 ),
               ),
-              const SizedBox(height: 16),
-
-              CategoryList(),
-              const SizedBox(height: 40),
-
-              Text(
-                "Trending in Riyadh",
-                style: TextStyle(
-                  color: textColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              Obx(() {
-                final filteredEvents = controller.getFilteredEvents();
-
-                if (controller.events.isEmpty) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-
-                return TrendingEventsList(events: filteredEvents);
-              }),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

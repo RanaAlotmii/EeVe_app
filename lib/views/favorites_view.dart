@@ -1,5 +1,6 @@
 import 'package:eeve_app/custom_Widget_/event_card_small.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:eeve_app/views/event_detail.dart';
@@ -40,7 +41,7 @@ class _FavoritesViewState extends State<FavoritesView> {
         body: Center(
           child: Text(
             'Please log in to view your favorites.',
-            style: TextStyle(color: textColor),
+            style: TextStyle(color: textColor, fontSize: 14.sp),
           ),
         ),
       );
@@ -54,16 +55,10 @@ class _FavoritesViewState extends State<FavoritesView> {
         centerTitle: true,
         title: Text(
           'My Favorites',
-          style: TextStyle(color: textColor),
+          style: TextStyle(color: textColor, fontSize: 21.sp, fontWeight: FontWeight.bold,),
         ),
         iconTheme: IconThemeData(color: textColor),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.refresh, color: textColor),
-            onPressed: _initializeFavorites,
-            tooltip: 'Refresh favorites',
-          ),
-        ],
+       
       ),
       body: StreamBuilder<List<Map<String, dynamic>>>(
         stream: _favoritesManager.favoritesStream,
@@ -77,14 +72,12 @@ class _FavoritesViewState extends State<FavoritesView> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    'Error loading favorites',
-                    style: TextStyle(color: textColor),
-                  ),
-                  const SizedBox(height: 16),
+                  Text('Error loading favorites',
+                      style: TextStyle(color: textColor, fontSize: 14.sp)),
+                  SizedBox(height: 16.h),
                   ElevatedButton(
                     onPressed: _initializeFavorites,
-                    child: const Text('Retry'),
+                    child: Text('Retry', style: TextStyle(fontSize: 12.sp)),
                   ),
                 ],
               ),
@@ -98,20 +91,20 @@ class _FavoritesViewState extends State<FavoritesView> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.favorite_border, size: 64, color: Colors.grey),
-                  const SizedBox(height: 16),
+                  Icon(Icons.favorite_border, size: 64.sp, color: Colors.grey),
+                  SizedBox(height: 16.h),
                   Text(
                     'No favorites yet!',
                     style: TextStyle(
                       color: textColor,
-                      fontSize: 18,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  const Text(
+                  SizedBox(height: 8.h),
+                  Text(
                     'Start adding events to your favorites',
-                    style: TextStyle(color: Colors.grey, fontSize: 14),
+                    style: TextStyle(color: Colors.grey, fontSize: 13.sp),
                   ),
                 ],
               ),
@@ -127,7 +120,7 @@ class _FavoritesViewState extends State<FavoritesView> {
                 final event = favorites[index];
 
                 return Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(8.0.r),
                   child: Stack(
                     children: [
                       CompactEventCard(
@@ -151,10 +144,10 @@ class _FavoritesViewState extends State<FavoritesView> {
                         },
                       ),
                       Positioned(
-                        top: 55,
-                        right: 8,
+                        top: 55.h,
+                        right: 8.w,
                         child: IconButton(
-                          icon: const Icon(Icons.delete, color: Colors.red),
+                          icon: Icon(Icons.delete, color: Colors.red, size: 22.sp),
                           onPressed: () => _showDeleteConfirmation(event),
                         ),
                       ),
@@ -180,23 +173,23 @@ class _FavoritesViewState extends State<FavoritesView> {
           backgroundColor: bgColor,
           title: Text(
             'Remove from Favorites',
-            style: TextStyle(color: textColor),
+            style: TextStyle(color: textColor, fontSize: 16.sp),
           ),
           content: Text(
             'Are you sure you want to remove "${event['title']}" from your favorites?',
-            style: TextStyle(color: textColor?.withOpacity(0.8)),
+            style: TextStyle(color: textColor?.withOpacity(0.8), fontSize: 14.sp),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cancel'),
+              child: Text('Cancel', style: TextStyle(fontSize: 12.sp)),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
                 _removeFromFavorites(event['id']);
               },
-              child: const Text('Remove', style: TextStyle(color: Colors.red)),
+              child: Text('Remove', style: TextStyle(color: Colors.red, fontSize: 12.sp)),
             ),
           ],
         );
@@ -210,8 +203,8 @@ class _FavoritesViewState extends State<FavoritesView> {
 
       if (success && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Removed from favorites'),
+          SnackBar(
+            content: Text('Removed from favorites', style: TextStyle(fontSize: 12.sp)),
             backgroundColor: Colors.green,
             duration: Duration(milliseconds: 1100),
             behavior: SnackBarBehavior.floating,
@@ -219,8 +212,8 @@ class _FavoritesViewState extends State<FavoritesView> {
         );
       } else if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Failed to remove from favorites'),
+          SnackBar(
+            content: Text('Failed to remove from favorites', style: TextStyle(fontSize: 12.sp)),
             backgroundColor: Colors.red,
             duration: Duration(milliseconds: 1100),
             behavior: SnackBarBehavior.floating,
@@ -231,8 +224,8 @@ class _FavoritesViewState extends State<FavoritesView> {
       print('Error removing from favorites: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Failed to remove from favorites'),
+          SnackBar(
+            content: Text('Failed to remove from favorites', style: TextStyle(fontSize: 12.sp)),
             backgroundColor: Colors.red,
             duration: Duration(milliseconds: 1100),
             behavior: SnackBarBehavior.floating,
