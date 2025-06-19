@@ -1,6 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:eeve_app/Ai_views/ai_assitant_view.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:eeve_app/navigation/main_nav_shell.dart';
 
 class AiOnboardingView extends StatefulWidget {
   const AiOnboardingView({super.key});
@@ -33,121 +35,124 @@ class _AiOnboardingViewState extends State<AiOnboardingView> {
         curve: Curves.easeInOut,
       );
     } else {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const AiAssistantView()),
-      );
+      _finishOnboarding();
     }
+  }
+
+  void _finishOnboarding() {
+    MainNavShell.mainTabController.index = 3;
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const AiAssistantView()),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF0E0B1F),
-      body: Stack(
-        children: [
-          PageView.builder(
-            controller: _controller,
-            itemCount: onboardingData.length,
-            onPageChanged: (index) {
-              setState(() {
-                _currentIndex = index;
-              });
-            },
-            itemBuilder: (context, index) {
-              final data = onboardingData[index];
-              return Stack(
-                fit: StackFit.expand,
-                children: [
-                  Image.asset(
-                    data['image']!,
-                    fit: BoxFit.cover,
-                  ),
-                  Positioned(
-                    bottom: 130, // give space between text & indicator
-                    left: 24,
-                    right: 24,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          data['title']!,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          data['desc']!,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: Colors.white70,
-                          ),
-                        ),
-                      ],
+      body: ScreenUtilInit(
+        designSize: const Size(375, 812),
+        builder: (context, child) => Stack(
+          children: [
+            PageView.builder(
+              controller: _controller,
+              itemCount: onboardingData.length,
+              onPageChanged: (index) {
+                setState(() {
+                  _currentIndex = index;
+                });
+              },
+              itemBuilder: (context, index) {
+                final data = onboardingData[index];
+                return Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    Image.asset(
+                      data['image']!,
+                      fit: BoxFit.cover,
                     ),
-                  ),
-                ],
-              );
-            },
-          ),
-
-          // Bottom controls
-          Positioned(
-            bottom: 30,
-            left: 0,
-            right: 0,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => const AiAssistantView()),
-                      );
-                    },
-                    child: const Text(
-                      'Skip',
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
+                    Positioned(
+                      bottom: 100.h,
+                      left: 24.w,
+                      right: 24.w,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            data['title']!,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 24.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          SizedBox(height: 12.h),
+                          Text(
+                            data['desc']!,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              color: Colors.white70,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                  SmoothPageIndicator(
-                    controller: _controller,
-                    count: onboardingData.length,
-                    effect: const WormEffect(
-                      dotColor: Colors.white54,
-                      activeDotColor: Colors.white,
-                      dotHeight: 8,
-                      dotWidth: 8,
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: nextPage,
-                    child: Text(
-                      _currentIndex == onboardingData.length - 1 ? "Let’s Go" : "Next",
-                      style: const TextStyle(
-                        color: Colors.purple,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
+                  ],
+                );
+              },
+            ),
+            Positioned(
+              bottom: 30.h,
+              left: 0,
+              right: 0,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24.w),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      onTap: _finishOnboarding,
+                      child: Text(
+                        'Skip',
+                        style: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                    SmoothPageIndicator(
+                      controller: _controller,
+                      count: onboardingData.length,
+                      effect: WormEffect(
+                        dotColor: Colors.white54,
+                        activeDotColor: Colors.white,
+                        dotHeight: 8.h,
+                        dotWidth: 8.w,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: nextPage,
+                      child: Text(
+                        _currentIndex == onboardingData.length - 1
+                            ? "Let’s Go"
+                            : "Next",
+                        style: TextStyle(
+                          color: Colors.purple,
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

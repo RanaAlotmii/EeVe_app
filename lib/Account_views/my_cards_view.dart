@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:eeve_app/Custom_Widget_/credit_card_widget.dart';
 import '../Custom_Widget_/Custom_button.dart';
 import 'add_card_view.dart';
@@ -39,13 +40,13 @@ class _MyCardsViewState extends State<MyCardsView> {
 
   Future<void> deleteCard(int cardId) async {
     try {
-      final response = await Supabase.instance.client
+      await Supabase.instance.client
           .from('user_card')
           .delete()
           .eq('id', cardId);
 
       fetchCards();
-      
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -66,8 +67,6 @@ class _MyCardsViewState extends State<MyCardsView> {
     }
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -76,28 +75,27 @@ class _MyCardsViewState extends State<MyCardsView> {
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         centerTitle: true,
-        title: Text('My Cards', style: TextStyle(color: textColor)),
+        title: Text('My Cards',
+            style: TextStyle(color: textColor, fontSize: 21.sp, fontWeight: FontWeight.bold,)),
         iconTheme: IconThemeData(color: textColor),
       ),
-
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 24, 16, 0),
+        padding: EdgeInsets.fromLTRB(16.w, 24.h, 16.w, 0),
         child: isLoading
             ? const Center(child: CircularProgressIndicator())
             : cards.isEmpty
                 ? Center(
                     child: Text(
                       'No cards added yet.',
-                      style: TextStyle(color: textColor),
+                      style: TextStyle(color: textColor, fontSize: 16.sp),
                     ),
                   )
                 : ListView.separated(
                     itemCount: cards.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 0),
+                    separatorBuilder: (_, __) => SizedBox(height: 10.h),
                     itemBuilder: (context, index) {
                       final card = cards[index];
                       return Dismissible(
@@ -105,12 +103,12 @@ class _MyCardsViewState extends State<MyCardsView> {
                         direction: DismissDirection.endToStart,
                         background: Container(
                           alignment: Alignment.centerRight,
-                          padding: const EdgeInsets.only(right: 20),
+                          padding: EdgeInsets.only(right: 20.w),
                           color: Colors.red,
-                          child: const Icon(
+                          child: Icon(
                             Icons.delete,
                             color: Colors.white,
-                            size: 30,
+                            size: 30.sp,
                           ),
                         ),
                         confirmDismiss: (direction) async {
@@ -118,25 +116,26 @@ class _MyCardsViewState extends State<MyCardsView> {
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(
-                                backgroundColor: isDark ? Colors.grey[800] : Colors.white,
+                                backgroundColor:
+                                    isDark ? Colors.grey[800] : Colors.white,
                                 title: Text(
                                   'Delete card',
                                   style: TextStyle(
-                                    color: isDark ? Colors.white : Colors.black87,
-                                  ),
+                                      color: textColor, fontSize: 16.sp),
                                 ),
                                 content: Text(
                                   'Are you sure you want to delete the card ${card['card_name'] ?? 'null'}?',
                                   style: TextStyle(
-                                    color: isDark ? Colors.white70 : Colors.black54,
-                                  ),
+                                      color: textColor.withOpacity(0.7),
+                                      fontSize: 14.sp),
                                 ),
                                 actions: [
                                   TextButton(
                                     child: Text(
                                       'cancel',
                                       style: TextStyle(
-                                        color: isDark ? Colors.white70 : Colors.black54,
+                                        color: textColor.withOpacity(0.6),
+                                        fontSize: 14.sp,
                                       ),
                                     ),
                                     onPressed: () {
@@ -144,9 +143,10 @@ class _MyCardsViewState extends State<MyCardsView> {
                                     },
                                   ),
                                   TextButton(
-                                    child: const Text(
+                                    child: Text(
                                       'Delete',
-                                      style: TextStyle(color: Colors.red),
+                                      style: TextStyle(
+                                          color: Colors.red, fontSize: 14.sp),
                                     ),
                                     onPressed: () {
                                       Navigator.of(context).pop(true);
@@ -163,16 +163,18 @@ class _MyCardsViewState extends State<MyCardsView> {
                         child: CustomCreditCard(
                           backgroundColor: cardBackground,
                           card_name: card['card_name'] ?? '',
-                          card_number: card['card_number']?.toString().padLeft(16, '*') ?? '',
+                          card_number: card['card_number']
+                                  ?.toString()
+                                  .padLeft(16, '*') ??
+                              '',
                           expiry_date: card['expiry_date']?.toString() ?? '',
                         ),
                       );
                     },
                   ),
       ),
-
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 10, 16, 25),
+        padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w, 25.h),
         child: CustomButton(
           text: "Add New Card",
           onPressed: () async {
@@ -180,7 +182,7 @@ class _MyCardsViewState extends State<MyCardsView> {
               context,
               MaterialPageRoute(builder: (context) => const AddCardView()),
             );
-            fetchCards(); 
+            fetchCards();
           },
         ),
       ),

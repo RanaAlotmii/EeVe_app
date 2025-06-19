@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:eeve_app/Ai_views/Ai_onboarding_view.dart';
+import 'package:get/get.dart';
 
 class AiGetStartedView extends StatefulWidget {
   const AiGetStartedView({super.key});
@@ -23,6 +24,10 @@ class _AiGetStartedViewState extends State<AiGetStartedView>
     )..repeat(reverse: true);
   }
 
+  void _navigateToOnboarding() {
+    Get.to(() => const AiOnboardingView());
+  }
+
   @override
   void dispose() {
     _controller.dispose();
@@ -36,14 +41,12 @@ class _AiGetStartedViewState extends State<AiGetStartedView>
     final textColor = isDark ? Colors.white : Colors.black87;
 
     final screenHeight = 1.sh;
-    final screenWidth = 1.sw;
 
     return Scaffold(
       backgroundColor: backgroundColor,
       body: Stack(
         alignment: Alignment.center,
         children: [
-          // الخلفية بتدرج علوي + لون ثابت
           Positioned.fill(
             child: Column(
               children: [
@@ -67,8 +70,6 @@ class _AiGetStartedViewState extends State<AiGetStartedView>
               ],
             ),
           ),
-
-          // صورة الروبوت
           Positioned(
             top: screenHeight * 0.20,
             child: Image.asset(
@@ -78,8 +79,6 @@ class _AiGetStartedViewState extends State<AiGetStartedView>
               fit: BoxFit.contain,
             ),
           ),
-
-          // العنوان فوق الروبوت
           Positioned(
             top: screenHeight * 0.15,
             left: 24.w,
@@ -94,19 +93,10 @@ class _AiGetStartedViewState extends State<AiGetStartedView>
               ),
             ),
           ),
-
-          // الزر النصي تحت الروبوت - نازل شوي
           Positioned(
             top: screenHeight * 0.80,
             child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const AiOnboardingView(),
-                  ),
-                );
-              },
+              onTap: _navigateToOnboarding,
               child: AnimatedBuilder(
                 animation: _controller,
                 builder: (context, child) {

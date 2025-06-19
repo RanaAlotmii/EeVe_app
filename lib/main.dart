@@ -30,9 +30,11 @@ void main() async {
 }
 
 final supabase = Supabase.instance.client;
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class MyApp extends StatelessWidget {
   final bool isLoggedIn;
+  //'
 
   const MyApp({super.key, required this.isLoggedIn});
 
@@ -46,6 +48,7 @@ class MyApp extends StatelessWidget {
           splitScreenMode: true,
           builder: (context, child) {
             return GetMaterialApp(
+              navigatorKey: navigatorKey,
               title: 'EEVE',
               debugShowCheckedModeBanner: false,
               builder: (context, child) {

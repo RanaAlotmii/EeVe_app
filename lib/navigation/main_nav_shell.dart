@@ -1,4 +1,6 @@
+// ✅ main_nav_shell.dart
 import 'package:eeve_app/Account_views/profile_view.dart';
+import 'package:eeve_app/Ai_views/ai_assitant_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
@@ -7,6 +9,9 @@ import 'package:eeve_app/views/my_ticket_view.dart';
 import '../views/home_view.dart';
 import '../views/favorites_view.dart';
 import '../Ai_views/Ai_getstarted.dart';
+// import '../Ai_views/ai_assistant_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:eeve_app/main.dart';
 
 class MainNavShell extends StatefulWidget {
   const MainNavShell({super.key});
@@ -19,20 +24,18 @@ class MainNavShell extends StatefulWidget {
 }
 
 class _MainNavShellState extends State<MainNavShell> {
+  final List<Widget> _screens = [
+    HomeView(key: UniqueKey()),
+    FavoritesView(key: UniqueKey()),
+    Myticket(),
+    const AiGetStartedView(),
+    const ProfileView(),
+  ];
+
   @override
   void initState() {
     super.initState();
     Get.put(EventsController());
-  }
-
-  List<Widget> _buildScreens() {
-    return [
-      HomeView(key: UniqueKey()),
-      FavoritesView(key: UniqueKey()),
-      Myticket(),
-      const AiGetStartedView(),
-      const ProfileView(),
-    ];
   }
 
   List<PersistentBottomNavBarItem> _navBarsItems() {
@@ -52,20 +55,32 @@ class _MainNavShellState extends State<MainNavShell> {
         inactiveColorPrimary: isDark ? Colors.white70 : Colors.black45,
       ),
       PersistentBottomNavBarItem(
-        icon: const Icon(
-          Icons.confirmation_number,
-          color: Colors.white, 
-        ),
+        icon: const Icon(Icons.confirmation_number, color: Colors.white),
         title: ("My Ticket"),
         activeColorPrimary: const Color(0xFF8B57E6),
-        inactiveColorPrimary: Colors.white70, 
+        inactiveColorPrimary: isDark ? Colors.white70 : Colors.black45,
       ),
-
       PersistentBottomNavBarItem(
         icon: const Icon(Icons.auto_awesome),
         title: ("EveAI"),
         activeColorPrimary: const Color(0xFF8B57E6),
         inactiveColorPrimary: isDark ? Colors.white70 : Colors.black45,
+        onPressed: (context) async {
+          final prefs = await SharedPreferences.getInstance();
+          final getStartedSeen = prefs.getBool('ai_get_started_seen') ?? false;
+          final onboardingSeen = prefs.getBool('ai_onboarding_seen') ?? false;
+          final navContext = navigatorKey.currentContext!;
+
+          if (!getStartedSeen) {
+            Navigator.of(navContext).push(
+              MaterialPageRoute(builder: (_) => const AiGetStartedView()),
+            );
+          } else if (!onboardingSeen) {
+            Navigator.of(navContext).pushNamed('/ai_onboarding');
+          } else {
+            MainNavShell.mainTabController.index = 3;
+          }
+        },
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(Icons.person_outline),
@@ -81,7 +96,7 @@ class _MainNavShellState extends State<MainNavShell> {
     return PersistentTabView(
       context,
       controller: MainNavShell.mainTabController,
-      screens: _buildScreens(),
+      screens: _screens,
       items: _navBarsItems(),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       navBarHeight: 55,

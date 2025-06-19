@@ -22,7 +22,7 @@ class PaymentSuccessPage extends StatelessWidget {
           children: [
             SizedBox(height: 100.h),
             Image.asset(
-              isDark ? 'assets/image2.png' : 'assets/image3.png',
+              isDark ? 'assets/image6.png' : 'assets/image4.png',
               height: 220.h,
             ),
             SizedBox(height: 60.h),

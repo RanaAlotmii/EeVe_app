@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../Custom_Widget_/Custom_button.dart';
 
 class AddCardView extends StatefulWidget {
@@ -28,9 +29,9 @@ class _AddCardViewState extends State<AddCardView> {
   Future<void> _addCard() async {
     final user = Supabase.instance.client.auth.currentUser;
     if (user == null) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('You must be logged in')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('You must be logged in')),
+      );
       return;
     }
 
@@ -60,17 +61,14 @@ class _AddCardViewState extends State<AddCardView> {
       return;
     }
 
-
     if (expiry.length > 5) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Expiry date must be in MM/YY format')),
       );
-      // print("🔴 $expiry and len 🔴 ${expiry.length}");
-
       return;
     }
 
-    if (cvv.length > 3) {
+    if (cvv.length > 4) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('CVV must be 4 digits or 3')),
       );
@@ -79,14 +77,12 @@ class _AddCardViewState extends State<AddCardView> {
 
     final month = int.parse(expiry.substring(0, 2));
     final year = int.parse('20${expiry.substring(3)}');
-    final final_expiry = "${expiry.substring(0,2)}${expiry.substring(3)}";
-
-    // print("🔴 ${cvv.length} 🔴");
+    final final_expiry = "${expiry.substring(0, 2)}${expiry.substring(3)}";
 
     if (month < 1 || month > 12) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Invalid expiry month')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Invalid expiry month')),
+      );
       return;
     }
 
@@ -110,9 +106,9 @@ class _AddCardViewState extends State<AddCardView> {
 
       Navigator.pop(context);
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Error: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e')),
+      );
     }
   }
 
@@ -126,16 +122,23 @@ class _AddCardViewState extends State<AddCardView> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         centerTitle: true,
-        title: Text('Add Card', style: TextStyle(color: textColor)),
+        title: Text(
+          'Add Card',
+          style: TextStyle(
+            color: textColor,
+            fontSize: 21.sp,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         iconTheme: IconThemeData(color: textColor),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.w),
         child: Column(
           children: [
             TextField(
               controller: cardNameController,
-              style: TextStyle(color: textColor),
+              style: TextStyle(color: textColor, fontSize: 15.sp),
               decoration: InputDecoration(
                 labelText: 'Card Name',
                 labelStyle: TextStyle(color: textColor),
@@ -143,11 +146,11 @@ class _AddCardViewState extends State<AddCardView> {
                 fillColor: isDark ? Colors.white12 : Colors.black12,
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16.h),
             TextField(
               controller: cardNumberController,
               keyboardType: TextInputType.number,
-              style: TextStyle(color: textColor),
+              style: TextStyle(color: textColor, fontSize: 15.sp),
               decoration: InputDecoration(
                 labelText: 'Card Number',
                 labelStyle: TextStyle(color: textColor),
@@ -157,31 +160,31 @@ class _AddCardViewState extends State<AddCardView> {
               ),
               maxLength: 16,
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16.h),
             Row(
               children: [
                 Expanded(
                   child: TextField(
                     controller: expiryDateController,
                     keyboardType: TextInputType.number,
-                    style: TextStyle(color: textColor),
+                    style: TextStyle(color: textColor, fontSize: 15.sp),
                     inputFormatters: [ExpiryDateInputFormatter()],
                     decoration: InputDecoration(
-                      labelText: 'Expiry Date (MMYY)',
-                      labelStyle: TextStyle(color: Colors.white),
+                      labelText: 'Expiry Date (MM/YY)',
+                      labelStyle: TextStyle(color: textColor),
                       filled: true,
-                      fillColor: Colors.white12,
+                      fillColor: isDark ? Colors.white12 : Colors.black12,
                       counterText: '',
                     ),
                     maxLength: 5,
                   ),
                 ),
-                const SizedBox(width: 16),
+                SizedBox(width: 16.w),
                 Expanded(
                   child: TextField(
                     controller: cvvController,
                     keyboardType: TextInputType.number,
-                    style: TextStyle(color: textColor),
+                    style: TextStyle(color: textColor, fontSize: 15.sp),
                     decoration: InputDecoration(
                       labelText: 'CVC / CVV',
                       labelStyle: TextStyle(color: textColor),
@@ -194,7 +197,7 @@ class _AddCardViewState extends State<AddCardView> {
                 ),
               ],
             ),
-            const SizedBox(height: 32),
+            SizedBox(height: 32.h),
             CustomButton(text: 'Add Card', onPressed: _addCard),
           ],
         ),

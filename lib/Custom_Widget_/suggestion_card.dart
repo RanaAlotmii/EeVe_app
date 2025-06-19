@@ -16,13 +16,22 @@ class SuggestionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final cardColor = isDark ? const Color(0xFF171531) : const Color(0xFFF2F2F5);
+    final titleColor = isDark ? Colors.white : Colors.black87;
+    final subtitleColor = isDark ? Colors.white70 : Colors.black54;
+    final iconBgColor = isDark ? Colors.white.withOpacity(0.05) : Colors.black.withOpacity(0.05);
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         height: 120,
+        width: 170,
         padding: const EdgeInsets.all(12),
+        margin: const EdgeInsets.only(right: 12),
         decoration: BoxDecoration(
-          color: const Color(0xFF171531), // Behance-style dark navy
+          color: cardColor,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Column(
@@ -33,7 +42,7 @@ class SuggestionCard extends StatelessWidget {
               height: 36,
               width: 36,
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.05),
+                color: iconBgColor,
                 shape: BoxShape.circle,
               ),
               child: Center(
@@ -47,18 +56,18 @@ class SuggestionCard extends StatelessWidget {
             const SizedBox(height: 12),
             Text(
               title,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 13.5,
                 fontWeight: FontWeight.w600,
-                color: Colors.white,
+                color: titleColor,
               ),
             ),
             const SizedBox(height: 4),
             Text(
               subtitle,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 12,
-                color: Colors.white70,
+                color: subtitleColor,
               ),
             ),
           ],
