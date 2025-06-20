@@ -1,8 +1,10 @@
 import 'package:eeve_app/Ai_views/ai_assitant_view.dart';
+import 'package:eeve_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:eeve_app/navigation/main_nav_shell.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AiOnboardingView extends StatefulWidget {
   const AiOnboardingView({super.key});
@@ -39,12 +41,18 @@ class _AiOnboardingViewState extends State<AiOnboardingView> {
     }
   }
 
-  void _finishOnboarding() {
+  Future<void> _finishOnboarding() async {
     MainNavShell.mainTabController.index = 3;
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => const AiAssistantView()),
     );
+
+    final user = supabase.auth.currentUser;
+    if (user != null) {
+    await Supabase.instance.client.from("users").update({"ai_get_started_seen": true}).eq("id", user.id);
+    }
+
   }
 
   @override

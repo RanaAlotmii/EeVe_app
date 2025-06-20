@@ -12,6 +12,7 @@ import '../Ai_views/Ai_getstarted.dart';
 // import '../Ai_views/ai_assistant_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:eeve_app/main.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class MainNavShell extends StatefulWidget {
   const MainNavShell({super.key});
@@ -66,20 +67,53 @@ class _MainNavShellState extends State<MainNavShell> {
         activeColorPrimary: const Color(0xFF8B57E6),
         inactiveColorPrimary: isDark ? Colors.white70 : Colors.black45,
         onPressed: (context) async {
-          final prefs = await SharedPreferences.getInstance();
-          final getStartedSeen = prefs.getBool('ai_get_started_seen') ?? false;
-          final onboardingSeen = prefs.getBool('ai_onboarding_seen') ?? false;
+          try{
+          final user = supabase.auth.currentUser;
           final navContext = navigatorKey.currentContext!;
+          
+          if (user != null) {
+          final response = await Supabase.instance.client.from("users").select("ai_get_started_seen").eq("id",user.id);
+          
+          final data = response;
+          final seen = data.isNotEmpty ? data.first['ai_get_started_seen'] as bool : false;
 
-          if (!getStartedSeen) {
+          // print("🔴 $seen 🔴");
+
+          if (seen == false) {
             Navigator.of(navContext).push(
               MaterialPageRoute(builder: (_) => const AiGetStartedView()),
             );
-          } else if (!onboardingSeen) {
-            Navigator.of(navContext).pushNamed('/ai_onboarding');
           } else {
-            MainNavShell.mainTabController.index = 3;
+          Navigator.push(
+            navContext,
+            MaterialPageRoute(builder: (context) => const AiAssistantView()),
+          );
           }
+
+          } else {
+            Navigator.of(navContext).push(
+              MaterialPageRoute(builder: (_) => const AiGetStartedView()),
+            );
+          }
+
+          } catch(e) {
+          print("🟡 $e 🟡");
+
+          }
+
+          // final prefs = await SharedPreferences.getInstance();
+          // final getStartedSeen = prefs.getBool('ai_get_started_seen') ?? false;
+          // final onboardingSeen = prefs.getBool('ai_onboarding_seen') ?? false;
+          // final navContext = navigatorKey.currentContext!;
+          // if (!getStartedSeen) {
+          //   Navigator.of(navContext).push(
+          //     MaterialPageRoute(builder: (_) => const AiGetStartedView()),
+          //   );
+          // } else if (!onboardingSeen) {
+          //   Navigator.of(navContext).pushNamed('/ai_onboarding');
+          // } else {
+          //   MainNavShell.mainTabController.index = 3;
+          // }
         },
       ),
       PersistentBottomNavBarItem(
