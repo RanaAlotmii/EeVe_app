@@ -25,18 +25,49 @@ class MainNavShell extends StatefulWidget {
 }
 
 class _MainNavShellState extends State<MainNavShell> {
-  final List<Widget> _screens = [
-    HomeView(key: UniqueKey()),
-    FavoritesView(key: UniqueKey()),
-    Myticket(),
-    const AiGetStartedView(),
-    const ProfileView(),
+  bool isSeen = false;
+  // final List<Widget> _screens = [
+    
+  //   HomeView(key: UniqueKey()),
+  //   FavoritesView(key: UniqueKey()),
+  //   Myticket(),
+  //   (isSeen == true) ? AiAssistantView(): AiGetStartedView(),
+  //   const ProfileView(),
+  // ];
+
+  List<Widget> get _screens => [
+  HomeView(key: UniqueKey()),
+  FavoritesView(key: UniqueKey()),
+  Myticket(),
+  (isSeen == true) ? AiAssistantView() : AiGetStartedView(),
+  const ProfileView(),
   ];
+
+
+  Future<void> _checkIfSeen() async {
+    final user = supabase.auth.currentUser;
+    final navContext = navigatorKey.currentContext!;
+
+    if (user != null) {
+      final response = await Supabase.instance.client
+          .from("users")
+          .select("ai_get_started_seen")
+          .eq("id", user.id);
+
+      final data = response;
+      final _seen = data.isNotEmpty ? data.first['ai_get_started_seen'] as bool : false;
+
+      setState(() {
+        isSeen = _seen;
+      });
+    }
+  }
 
   @override
   void initState() {
     super.initState();
     Get.put(EventsController());
+    _checkIfSeen();
   }
 
   List<PersistentBottomNavBarItem> _navBarsItems() {
@@ -66,55 +97,56 @@ class _MainNavShellState extends State<MainNavShell> {
         title: ("EveAI"),
         activeColorPrimary: const Color(0xFF8B57E6),
         inactiveColorPrimary: isDark ? Colors.white70 : Colors.black45,
-        onPressed: (context) async {
-          try{
-          final user = supabase.auth.currentUser;
-          final navContext = navigatorKey.currentContext!;
-          
-          if (user != null) {
-          final response = await Supabase.instance.client.from("users").select("ai_get_started_seen").eq("id",user.id);
-          
-          final data = response;
-          final seen = data.isNotEmpty ? data.first['ai_get_started_seen'] as bool : false;
+        // onPressed: (context) async {
+        //   try{
+        //   final user = supabase.auth.currentUser;
+        //   final navContext = navigatorKey.currentContext!;
 
-          // print("🔴 $seen 🔴");
+        //   if (user != null) {
+        //   final response = await Supabase.instance.client.from("users").select("ai_get_started_seen").eq("id",user.id);
 
-          if (seen == false) {
-            Navigator.of(navContext).push(
-              MaterialPageRoute(builder: (_) => const AiGetStartedView()),
-            );
-          } else {
-          Navigator.push(
-            navContext,
-            MaterialPageRoute(builder: (context) => const AiAssistantView()),
-          );
-          }
+        //   final data = response;
+        //   final seen = data.isNotEmpty ? data.first['ai_get_started_seen'] as bool : false;
 
-          } else {
-            Navigator.of(navContext).push(
-              MaterialPageRoute(builder: (_) => const AiGetStartedView()),
-            );
-          }
+        //   // print("🔴 $seen 🔴");
 
-          } catch(e) {
-          print("🟡 $e 🟡");
+        //   if (seen == false) {
+        //     Navigator.of(navContext).push(
+        //       MaterialPageRoute(builder: (_) => const AiGetStartedView()),
+        //     );
+        //   } else {
+        //   Navigator.push(
+        //     navContext,
+        //     MaterialPageRoute(builder: (context) => const AiAssistantView()),
+        //   );
+        //   }
 
-          }
+        //   } else {
+        //     Navigator.of(navContext).push(
+        //       MaterialPageRoute(builder: (_) => const AiGetStartedView()),
+        //     );
+        //   }
 
-          // final prefs = await SharedPreferences.getInstance();
-          // final getStartedSeen = prefs.getBool('ai_get_started_seen') ?? false;
-          // final onboardingSeen = prefs.getBool('ai_onboarding_seen') ?? false;
-          // final navContext = navigatorKey.currentContext!;
-          // if (!getStartedSeen) {
-          //   Navigator.of(navContext).push(
-          //     MaterialPageRoute(builder: (_) => const AiGetStartedView()),
-          //   );
-          // } else if (!onboardingSeen) {
-          //   Navigator.of(navContext).pushNamed('/ai_onboarding');
-          // } else {
-          //   MainNavShell.mainTabController.index = 3;
-          // }
-        },
+        //   } catch(e) {
+        //   print("🟡 $e 🟡");
+
+        //   }
+
+        //   // final prefs = await SharedPreferences.getInstance();
+        //   // final getStartedSeen = prefs.getBool('ai_get_started_seen') ?? false;
+        //   // final onboardingSeen = prefs.getBool('ai_onboarding_seen') ?? false;
+        //   // final navContext = navigatorKey.currentContext!;
+        //   // if (!getStartedSeen) {
+        //   //   Navigator.of(navContext).push(
+        //   //     MaterialPageRoute(builder: (_) => const AiGetStartedView()),
+        //   //   );
+        //   // } else if (!onboardingSeen) {
+        //   //   Navigator.of(navContext).pushNamed('/ai_onboarding');
+        //   // } else {
+        //   //   MainNavShell.mainTabController.index = 3;
+        //   // }
+
+        // },
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(Icons.person_outline),

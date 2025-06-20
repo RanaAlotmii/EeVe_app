@@ -48,7 +48,7 @@ class _DetailOrderPageState extends State<DetailOrderPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-        title: Text('Detail Order', style: TextStyle(color: primaryTextColor, fontSize: 21.sp, fontWeight: FontWeight.bold,)),
+        title: Text('Order Detail', style: TextStyle(color: primaryTextColor, fontSize: 21.sp, fontWeight: FontWeight.bold,)),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: primaryTextColor, size: 22.sp),
           onPressed: () => Navigator.pop(context),

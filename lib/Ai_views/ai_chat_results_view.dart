@@ -37,118 +37,86 @@ class AiChatResultsView extends StatelessWidget {
         backgroundColor: backgroundColor,
         body: matchedEvents.isEmpty
             ? Center(
-                child: Text(
-                  "No matching events found!",
-                  style: TextStyle(color: primaryTextColor, fontSize: 18.sp),
-                  textAlign: TextAlign.center,
-                ),
-              )
+          child: Text(
+            "No matching events found!",
+            style: TextStyle(color: primaryTextColor, fontSize: 18.sp),
+            textAlign: TextAlign.center,
+          ),
+        )
             : Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 32.h),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Center(child: Image.asset('assets/logo_trans.png', height: 100.h)),
-                    SizedBox(height: 20.h),
-                    Center(
-                      child: Text(
-                        "These events fit your vibe!",
-                        style: TextStyle(
-                          color: primaryTextColor,
-                          fontSize: 21.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 20.h),
-                    Expanded(
-                      child: ListView.separated(
-                        itemCount: matchedEvents.length,
-                        separatorBuilder: (_, __) => SizedBox(height: 16.h),
-                        itemBuilder: (context, index) {
-                          final event = matchedEvents[index];
-                          return CompactEventCard(
-                            title: event['title'],
-                            location: event['location'],
-                            imageAsset: event['image_cover'],
-                            price: double.tryParse(event['price'].toString()) ?? 0.0,
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => EventDetail(
-                                    eventId: event['id'] ?? 0,
-                                    title: event['title']?.toString() ?? '',
-                                    image: event['image_detail']?.toString() ?? '',
-                                    imageCover: event['image_cover']?.toString() ?? '',
-                                    location: event['location']?.toString() ?? '',
-                                    price: event['price']?.toString() ?? '',
-                                    description: event['description']?.toString() ?? '',
-                                    eventTime: event['time']?.toString() ?? '',
-                                  ),
-                                ),
-                              );
-                            },
-                          );
-                        },
-                      ),
-                    ),
-                    SizedBox(height: 30.h),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => const AiAssistantView(),
-                              ),
-                            );
-                          },
-                          icon: const Icon(Icons.chat_bubble_outline),
-                          label: const Text("Chat Again"),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.deepPurpleAccent,
-                            foregroundColor: Colors.white,
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 18.w,
-                              vertical: 12.h,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20.r),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 5),
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => const AiAssistantView(),
-                              ),
-                            );
-                          },
-                          icon: const Icon(Icons.arrow_back),
-                          label: const Text("Back to Suggestions"),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white10,
-                            foregroundColor: Colors.white70,
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 18.w,
-                              vertical: 12.h,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20.r),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 32.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(child: Image.asset('assets/logo_trans.png', height: 100.h)),
+              SizedBox(height: 20.h),
+              Center(
+                child: Text(
+                  "These events fit your vibe!",
+                  style: TextStyle(
+                    color: primaryTextColor,
+                    fontSize: 21.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
+              SizedBox(height: 20.h),
+              Expanded(
+                child: ListView.separated(
+                  itemCount: matchedEvents.length,
+                  separatorBuilder: (_, __) => SizedBox(height: 16.h),
+                  itemBuilder: (context, index) {
+                    final event = matchedEvents[index];
+                    return CompactEventCard(
+                      title: event['title'],
+                      location: event['location'],
+                      imageAsset: event['image_cover'],
+                      price: double.tryParse(event['price'].toString()) ?? 0.0,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => EventDetail(
+                              eventId: event['id'] ?? 0,
+                              title: event['title']?.toString() ?? '',
+                              image: event['image_detail']?.toString() ?? '',
+                              imageCover: event['image_cover']?.toString() ?? '',
+                              location: event['location']?.toString() ?? '',
+                              price: event['price']?.toString() ?? '',
+                              description: event['description']?.toString() ?? '',
+                              eventTime: event['time']?.toString() ?? '',
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
+              SizedBox(height: 30.h),
+              Center(
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(Icons.arrow_back),
+                  label: const Text("Back to Chat"),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.deepPurpleAccent,
+                    foregroundColor: Colors.white,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 24.w,
+                      vertical: 14.h,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.r),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
