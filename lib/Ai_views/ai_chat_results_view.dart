@@ -4,8 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:eeve_app/controllers/events_controller.dart';
 import 'package:eeve_app/Custom_Widget_/event_card_small.dart';
 import 'package:eeve_app/views/event_detail.dart';
-import 'package:eeve_app/Ai_views/ai_chat_view.dart';
-import 'package:eeve_app/Ai_views/ai_suggestion_view.dart';
 import 'package:eeve_app/Ai_views/ai_assitant_view.dart';
 
 class AiChatResultsView extends StatelessWidget {
