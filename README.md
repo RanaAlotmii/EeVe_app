@@ -49,11 +49,13 @@ So we decided to build something better:
 
 
 ---
+
+## Demo
+---
 <p style="text-align: center;">
   <img src="assets/eeve_demo2.gif" width="45%" />
   <img src="assets/eeve_demo.gif" width="45%" />
 </p>
-
 ---
 
 ##  Tech & Tools We Used
