@@ -5,13 +5,12 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:eeve_app/managers/theme_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-// import 'package:eeve_app/api/openai_config.dart';
+//import 'package:eeve_app/api/openai_config.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // initializeOpenAI();
+  //initializeOpenAI();
 
   await Supabase.initialize(
     url: 'https://bzlbrgttqaoeqdvotjmy.supabase.co',
