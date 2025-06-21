@@ -11,7 +11,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   //initializeOpenAI();
-
   await Supabase.initialize(
     url: 'https://bzlbrgttqaoeqdvotjmy.supabase.co',
     anonKey:
