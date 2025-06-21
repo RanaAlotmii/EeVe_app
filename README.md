@@ -40,7 +40,7 @@ So we decided to build something better:
 ---
 ## 📸 Screenshots
 
-| Home                                         | Event                                                | My Tickets  Detail                                                  |
+| Home                                         | Event Detail                                             | My Tickets                                                  |
 |----------------------------------------------|--------------------------------------------------------|---------------------------------------------------------------|
 | ![Home](ScreenShots/Dark%20mode/Home.jpg)     | ![Event Detail](ScreenShots/Dark%20mode/details.png)      | ![My Ticket](ScreenShots/Dark%20mode/My%20Ticket.jpg) |
 
