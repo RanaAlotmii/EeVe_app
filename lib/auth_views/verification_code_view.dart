@@ -5,6 +5,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:eeve_app/Custom_Widget_/Custom_button.dart';
 import 'package:eeve_app/auth_views/signin_view.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart'; 
 
 class VerificationCodeView extends StatefulWidget {
   final String email;
@@ -76,27 +77,27 @@ class _VerificationCodeViewState extends State<VerificationCodeView> {
           return Dialog(
             backgroundColor: Theme.of(context).dialogBackgroundColor,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(12.r),
             ),
             child: SizedBox(
-              width: 400,
-              height: 409,
+              width: 400.w,
+              height: 409.h,
               child: Padding(
-                padding: const EdgeInsets.all(24),
+                padding: EdgeInsets.all(24.w),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset('assets/check.png', height: 120, width: 120),
-                    const SizedBox(height: 30),
+                    Image.asset('assets/check.png', height: 120.h, width: 120.w),
+                    SizedBox(height: 30.h),
                     Text(
                       'Email Confirmed',
                       style: TextStyle(
                         color: Theme.of(context).textTheme.bodyLarge?.color,
-                        fontSize: 20,
+                        fontSize: 20.sp,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12.h),
                     Text(
                       'You now have valid access to your account',
                       textAlign: TextAlign.center,
@@ -104,10 +105,10 @@ class _VerificationCodeViewState extends State<VerificationCodeView> {
                         color: Theme.of(
                           context,
                         ).textTheme.bodySmall?.color?.withOpacity(0.6),
-                        fontSize: 14,
+                        fontSize: 14.sp,
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24.h),
                     SizedBox(
                       width: double.infinity,
                       child: CustomButton(
@@ -117,7 +118,7 @@ class _VerificationCodeViewState extends State<VerificationCodeView> {
                         },
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
                   ],
                 ),
               ),
@@ -135,7 +136,8 @@ class _VerificationCodeViewState extends State<VerificationCodeView> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final bgColor = Theme.of(context).scaffoldBackgroundColor;
+final bgColor = isDark ? const Color.fromARGB(255, 0, 0, 0) : Colors.white;
+
     final primaryTextColor = isDark ? Colors.white : Colors.black87;
     final secondaryTextColor = isDark ? Colors.white54 : Colors.black54;
     final fillColor = isDark ? const Color(0xFF1C1C1E) : Colors.grey.shade200;
@@ -144,20 +146,20 @@ class _VerificationCodeViewState extends State<VerificationCodeView> {
       backgroundColor: bgColor,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
+          padding: EdgeInsets.all(24.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 80),
+              SizedBox(height: 80.h),
               Text(
                 'Enter Verification Code',
                 style: TextStyle(
                   color: primaryTextColor,
-                  fontSize: 24,
+                  fontSize: 24.sp,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 60),
+              SizedBox(height: 60.h),
               PinCodeTextField(
                 appContext: context,
                 length: 6,
@@ -166,9 +168,9 @@ class _VerificationCodeViewState extends State<VerificationCodeView> {
                 },
                 pinTheme: PinTheme(
                   shape: PinCodeFieldShape.box,
-                  borderRadius: BorderRadius.circular(10),
-                  fieldHeight: 48,
-                  fieldWidth: 48,
+                  borderRadius: BorderRadius.circular(10.r),
+                  fieldHeight: 48.h,
+                  fieldWidth: 48.w,
                   activeColor: const Color(0xFF1565FF),
                   selectedColor: const Color(0xFF1565FF),
                   inactiveColor: fillColor,
@@ -180,38 +182,37 @@ class _VerificationCodeViewState extends State<VerificationCodeView> {
                 textStyle: TextStyle(color: primaryTextColor),
                 enableActiveFill: true,
               ),
-              const SizedBox(height: 32),
+              SizedBox(height: 32.h),
               Text.rich(
                 TextSpan(
                   children: [
                     TextSpan(
                       text: 'You can resend the code in ',
-                      style: TextStyle(color: secondaryTextColor, fontSize: 16),
+                      style: TextStyle(color: secondaryTextColor, fontSize: 16.sp),
                     ),
                     TextSpan(
                       text: '$_secondsRemaining',
-                      style: const TextStyle(
-                        color: Color(0xFF1565FF),
-                        fontSize: 16,
+                      style: TextStyle(
+                        color: const Color(0xFF1565FF),
+                        fontSize: 16.sp,
                       ),
                     ),
                     TextSpan(
                       text: ' seconds',
-                      style: TextStyle(color: secondaryTextColor, fontSize: 16),
+                      style: TextStyle(color: secondaryTextColor, fontSize: 16.sp),
                     ),
                   ],
                 ),
               ),
-
-              const SizedBox(height: 8),
+              SizedBox(height: 8.h),
               TextButton(
                 onPressed: _resendCode,
-                child: const Text(
+                child: Text(
                   'Resend Code',
-                  style: TextStyle(color: Color(0xFF1565FF), fontSize: 16),
+                  style: TextStyle(color: const Color(0xFF1565FF), fontSize: 16.sp),
                 ),
               ),
-              const SizedBox(height: 32),
+              SizedBox(height: 32.h),
               CustomButton(
                 text: "Sign Up",
                 onPressed: () {

@@ -5,6 +5,7 @@ import 'package:eeve_app/Custom_Widget_/Custom_button.dart';
 import 'package:eeve_app/auth_views/signin_view.dart';
 import 'package:eeve_app/auth_views/verification_code_view.dart';
 import 'package:eeve_app/main.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SignupView extends StatefulWidget {
   const SignupView({super.key});
@@ -21,11 +22,13 @@ class _SignupViewState extends State<SignupView> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final primaryText = theme.textTheme.bodyMedium?.color ?? Colors.black87;
-    final secondaryText = theme.textTheme.bodySmall?.color ?? Colors.black54;
+    final secondaryText = isDark ? Colors.white70 : Colors.black54;
+    final bgColor = isDark ? const Color(0xFF000000) : Colors.white;
 
     return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
+      backgroundColor: bgColor,
       resizeToAvoidBottomInset: true,
       body: Padding(
         padding: const EdgeInsets.all(24.0),
@@ -46,7 +49,7 @@ class _SignupViewState extends State<SignupView> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 70),
+                    const SizedBox(height: 40),
                     Text("Full Name", style: TextStyle(color: secondaryText)),
                     const SizedBox(height: 8),
                     CustomTextField(
@@ -88,18 +91,14 @@ class _SignupViewState extends State<SignupView> {
                         }
 
                         try {
-                          // ✅ نرسل الاسم ضمن user_metadata
                           final response = await supabase.auth.signUp(
                             email: email,
                             password: password,
-                            data: {
-                              'name': name,
-                            },
+                            data: {'name': name},
                           );
 
                           final user = response.user;
                           if (user != null) {
-                            // ✅ ما نحتاج نسوي update نهائيًا
                             Get.to(() => VerificationCodeView(email: email));
                           } else {
                             throw Exception("User is null");
@@ -143,28 +142,31 @@ class _SignupViewState extends State<SignupView> {
                 ),
               ),
             ),
-            const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Already have an account? ",
-                  style: TextStyle(color: secondaryText, fontSize: 16),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Get.to(() => const SigninView());
-                  },
-                  child: const Text(
-                    "Sign In",
-                    style: TextStyle(
-                      color: Color(0xFF1565FF),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
+            const SizedBox(height: 24), 
+            Padding(
+              padding: const EdgeInsets.only(bottom: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Already have an account? ",
+                    style: TextStyle(color: secondaryText, fontSize: 16),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(() => const SigninView());
+                    },
+                    child: const Text(
+                      "Sign In",
+                      style: TextStyle(
+                        color: Color(0xFF1565FF),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),
