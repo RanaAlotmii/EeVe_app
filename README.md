@@ -65,7 +65,7 @@ So we decided to build something better:
 - Supabase – Event data and user authentication
 - OpenAI GPT-3.5 – AI assistant responses
 - Prompt Engineering – To shape AI behavior and tone
-- Figma – UI/UX design and prototyping
+- Figma – UI/UX design and prototyping ([View Design](https://www.figma.com/your-figma-link-here))
 - Dart – Programming language
 
 ##  Packages We Used
