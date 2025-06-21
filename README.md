@@ -49,10 +49,10 @@ So we decided to build something better:
 
 
 ---
-
-## Demo
-
-![EeVe Demo](assets/eeve_demo.gif)
+<p style="text-align: center;">
+  <img src="assets/eeve_demo2.gif" width="45%" />
+  <img src="assets/eeve_demo.gif" width="45%" />
+</p>
 
 ---
 
