@@ -67,8 +67,8 @@ class _MainNavShellState extends State<MainNavShell> {
   @override
   void initState() {
     super.initState();
-    Get.put(EventsController());
     _checkIfSeen();
+    Get.put(EventsController());
   }
 
   List<PersistentBottomNavBarItem> _navBarsItems() {
