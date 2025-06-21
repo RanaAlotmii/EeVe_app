@@ -31,49 +31,49 @@ class _SignupViewState extends State<SignupView> {
       backgroundColor: bgColor,
       resizeToAvoidBottomInset: true,
       body: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: EdgeInsets.all(24.w),
         child: Column(
           children: [
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.only(bottom: 24),
+                padding: EdgeInsets.only(bottom: 24.h),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 40),
+                    SizedBox(height: 70.h),
                     Text(
                       'Create Your Account',
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 24.sp,
                         color: primaryText,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 40),
-                    Text("Full Name", style: TextStyle(color: secondaryText)),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 40.h),
+                    Text("Full Name", style: TextStyle(color: secondaryText, fontSize: 14.sp)),
+                    SizedBox(height: 8.h),
                     CustomTextField(
                       hintText: 'Enter your name',
                       keyboardType: TextInputType.name,
                       controller: nameController,
                     ),
-                    const SizedBox(height: 16),
-                    Text("Email", style: TextStyle(color: secondaryText)),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 16.h),
+                    Text("Email", style: TextStyle(color: secondaryText, fontSize: 14.sp)),
+                    SizedBox(height: 8.h),
                     CustomTextField(
                       hintText: 'Enter your email',
                       keyboardType: TextInputType.emailAddress,
                       controller: emailController,
                     ),
-                    const SizedBox(height: 16),
-                    Text("Password", style: TextStyle(color: secondaryText)),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 16.h),
+                    Text("Password", style: TextStyle(color: secondaryText, fontSize: 14.sp)),
+                    SizedBox(height: 8.h),
                     CustomTextField(
                       hintText: 'Enter your password',
                       obscureText: true,
                       controller: passwordController,
                     ),
-                    const SizedBox(height: 32),
+                    SizedBox(height: 32.h),
                     CustomButton(
                       text: 'Sign Up',
                       onPressed: () async {
@@ -83,9 +83,7 @@ class _SignupViewState extends State<SignupView> {
 
                         if (email.isEmpty || name.isEmpty || password.isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("Please fill all fields"),
-                            ),
+                            const SnackBar(content: Text("Please fill all fields")),
                           );
                           return;
                         }
@@ -111,12 +109,12 @@ class _SignupViewState extends State<SignupView> {
                         }
                       },
                     ),
-                    const SizedBox(height: 32),
+                    SizedBox(height: 32.h),
                     Center(
                       child: RichText(
                         textAlign: TextAlign.center,
                         text: TextSpan(
-                          style: TextStyle(color: secondaryText, fontSize: 14),
+                          style: TextStyle(color: secondaryText, fontSize: 14.sp),
                           children: const [
                             TextSpan(text: 'By registering you agree to \n'),
                             TextSpan(
@@ -142,26 +140,26 @@ class _SignupViewState extends State<SignupView> {
                 ),
               ),
             ),
-            const SizedBox(height: 24), 
+            SizedBox(height: 24.h),
             Padding(
-              padding: const EdgeInsets.only(bottom: 5),
+              padding: EdgeInsets.only(bottom: 10.h),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     "Already have an account? ",
-                    style: TextStyle(color: secondaryText, fontSize: 16),
+                    style: TextStyle(color: secondaryText, fontSize: 16.sp),
                   ),
                   GestureDetector(
                     onTap: () {
                       Get.to(() => const SigninView());
                     },
-                    child: const Text(
+                    child: Text(
                       "Sign In",
                       style: TextStyle(
-                        color: Color(0xFF1565FF),
+                        color: const Color(0xFF1565FF),
                         fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                        fontSize: 16.sp,
                       ),
                     ),
                   ),

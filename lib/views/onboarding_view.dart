@@ -17,9 +17,9 @@ class _OnboardingViewState extends State<OnboardingView> {
   final List<Map<String, String>> onboardingData = [
     {
       'image': 'assets/onb4.png',
-      'title': 'Discover Events Nearby',
+      'title': 'Step Into the Scene',
       'desc':
-      'Explore concerts, shows, and experiences around you. EeVe brings the world of events to your fingertips.'
+      "From trending concerts to hidden  gems — explore what’s happening and never miss a moment that fits your vibe."
     },
     {
       'image': 'assets/page2.png',
