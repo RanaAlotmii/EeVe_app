@@ -1,4 +1,3 @@
-// ✅ main_nav_shell.dart
 import 'package:eeve_app/Account_views/profile_view.dart';
 import 'package:eeve_app/Ai_views/ai_assitant_view.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +8,6 @@ import 'package:eeve_app/views/my_ticket_view.dart';
 import '../views/home_view.dart';
 import '../views/favorites_view.dart';
 import '../Ai_views/Ai_getstarted.dart';
-// import '../Ai_views/ai_assistant_view.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:eeve_app/main.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -27,22 +24,16 @@ class MainNavShell extends StatefulWidget {
 class _MainNavShellState extends State<MainNavShell> {
   bool isSeen = false;
   bool isloading = true;
-  // final List<Widget> _screens = [
-  //   HomeView(key: UniqueKey()),
-  //   FavoritesView(key: UniqueKey()),
-  //   Myticket(),
-  //   (isSeen == true) ? AiAssistantView(): AiGetStartedView(),
-  //   const ProfileView(),
-  // ];
 
   List<Widget> get _screens => [
-  HomeView(key: UniqueKey()),
-  FavoritesView(key: UniqueKey()),
-  Myticket(),
-  (isloading ? Center(child: CircularProgressIndicator()): ((isSeen == true) ? AiAssistantView() : AiGetStartedView())),
-  const ProfileView(),
+    HomeView(key: UniqueKey()),
+    FavoritesView(key: UniqueKey()),
+    Myticket(),
+    (isloading
+        ? Center(child: CircularProgressIndicator())
+        : ((isSeen == true) ? AiAssistantView() : AiGetStartedView())),
+    const ProfileView(),
   ];
-
 
   Future<void> _checkIfSeen() async {
     final user = supabase.auth.currentUser;
@@ -55,7 +46,8 @@ class _MainNavShellState extends State<MainNavShell> {
           .eq("id", user.id);
 
       final data = response;
-      final _seen = data.isNotEmpty ? data.first['ai_get_started_seen'] as bool : false;
+      final _seen =
+          data.isNotEmpty ? data.first['ai_get_started_seen'] as bool : false;
 
       setState(() {
         isSeen = _seen;

@@ -51,7 +51,10 @@ class _SigninViewState extends State<SigninView> {
                         ),
                       ),
                       SizedBox(height: 45.h),
-                      Text("Email", style: TextStyle(color: subTextColor, fontSize: 14.sp)),
+                      Text(
+                        "Email",
+                        style: TextStyle(color: subTextColor, fontSize: 14.sp),
+                      ),
                       SizedBox(height: 8.h),
                       CustomTextField(
                         hintText: 'Enter your email',
@@ -59,7 +62,10 @@ class _SigninViewState extends State<SigninView> {
                         keyboardType: TextInputType.emailAddress,
                       ),
                       SizedBox(height: 16.h),
-                      Text("Password", style: TextStyle(color: subTextColor, fontSize: 14.sp)),
+                      Text(
+                        "Password",
+                        style: TextStyle(color: subTextColor, fontSize: 14.sp),
+                      ),
                       SizedBox(height: 8.h),
                       CustomTextField(
                         hintText: 'Enter your password',
@@ -71,25 +77,29 @@ class _SigninViewState extends State<SigninView> {
                         text: 'Sign In',
                         onPressed: () async {
                           try {
-                            final AuthResponse response =
-                                await supabase.auth.signInWithPassword(
-                              password: passwordController.text,
-                              email: emailController.text,
-                            );
+                            final AuthResponse response = await supabase.auth
+                                .signInWithPassword(
+                                  password: passwordController.text,
+                                  email: emailController.text,
+                                );
 
                             final user = response.user;
 
                             if (user != null) {
-                              final emailConfirmed = user.emailConfirmedAt != null;
+                              final emailConfirmed =
+                                  user.emailConfirmedAt != null;
 
                               if (emailConfirmed) {
-                                final prefs = await SharedPreferences.getInstance();
+                                final prefs =
+                                    await SharedPreferences.getInstance();
                                 await prefs.setBool('isLoggedIn', true);
                                 Get.offAll(() => const MainNavShell());
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
-                                    content: Text('Please confirm your email before signing in.'),
+                                    content: Text(
+                                      'Please confirm your email before signing in.',
+                                    ),
                                     backgroundColor: Colors.orange,
                                   ),
                                 );
@@ -109,7 +119,9 @@ class _SigninViewState extends State<SigninView> {
                           } catch (e) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                content: Text('Unexpected error occurred. Please try again.'),
+                                content: Text(
+                                  'Unexpected error occurred. Please try again.',
+                                ),
                                 backgroundColor: Colors.red,
                               ),
                             );

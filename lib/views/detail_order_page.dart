@@ -5,9 +5,7 @@ import 'package:eeve_app/custom_Widget_/Custom_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:eeve_app/views/saved_cards_page.dart';
 
-
 enum PaymentOption { newCard, savedCard }
-
 
 class DetailOrderPage extends StatefulWidget {
   final Map<String, dynamic> eventData;
@@ -26,7 +24,6 @@ class DetailOrderPage extends StatefulWidget {
 }
 
 class _DetailOrderPageState extends State<DetailOrderPage> {
-  
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -38,7 +35,8 @@ class _DetailOrderPageState extends State<DetailOrderPage> {
     final String title = widget.eventData['title'] ?? '';
     final String location = widget.eventData['location'] ?? '';
     final String imageCover = widget.eventData['image_cover'] ?? '';
-    final double ticketPrice = double.tryParse(widget.eventData['price'].toString()) ?? 0.0;
+    final double ticketPrice =
+        double.tryParse(widget.eventData['price'].toString()) ?? 0.0;
     final String eventDate = widget.eventData['event_date'] ?? '';
     final double totalPrice = widget.ticketAmount * ticketPrice;
 
@@ -48,7 +46,14 @@ class _DetailOrderPageState extends State<DetailOrderPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-        title: Text('Order Detail', style: TextStyle(color: primaryTextColor, fontSize: 21.sp, fontWeight: FontWeight.bold,)),
+        title: Text(
+          'Order Detail',
+          style: TextStyle(
+            color: primaryTextColor,
+            fontSize: 21.sp,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: primaryTextColor, size: 22.sp),
           onPressed: () => Navigator.pop(context),
@@ -75,12 +80,19 @@ class _DetailOrderPageState extends State<DetailOrderPage> {
               ),
               child: Row(
                 children: [
-                  Icon(Icons.info_outline, color: const Color(0xFF1565FF), size: 18.sp),
+                  Icon(
+                    Icons.info_outline,
+                    color: const Color(0xFF1565FF),
+                    size: 18.sp,
+                  ),
                   SizedBox(width: 8.w),
                   Expanded(
                     child: Text(
                       'Your booking is protected by EeVe.',
-                      style: TextStyle(color: primaryTextColor, fontSize: 14.sp),
+                      style: TextStyle(
+                        color: primaryTextColor,
+                        fontSize: 14.sp,
+                      ),
                     ),
                   ),
                 ],
@@ -97,18 +109,32 @@ class _DetailOrderPageState extends State<DetailOrderPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Your Events',
-                      style: TextStyle(
-                        color: primaryTextColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16.sp,
-                      )),
+                  Text(
+                    'Your Events',
+                    style: TextStyle(
+                      color: primaryTextColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16.sp,
+                    ),
+                  ),
                   SizedBox(height: 12.h),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Ticket', style: TextStyle(color: secondaryTextColor, fontSize: 14.sp)),
-                      Text('${widget.ticketAmount} ticket', style: TextStyle(color: primaryTextColor, fontSize: 14.sp)),
+                      Text(
+                        'Ticket',
+                        style: TextStyle(
+                          color: secondaryTextColor,
+                          fontSize: 14.sp,
+                        ),
+                      ),
+                      Text(
+                        '${widget.ticketAmount} ticket',
+                        style: TextStyle(
+                          color: primaryTextColor,
+                          fontSize: 14.sp,
+                        ),
+                      ),
                     ],
                   ),
                   SizedBox(height: 8.h),
@@ -116,12 +142,21 @@ class _DetailOrderPageState extends State<DetailOrderPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Dates', style: TextStyle(color: secondaryTextColor, fontSize: 14.sp)),
+                      Text(
+                        'Dates',
+                        style: TextStyle(
+                          color: secondaryTextColor,
+                          fontSize: 14.sp,
+                        ),
+                      ),
                       SizedBox(width: 8.w),
                       Expanded(
                         child: Text(
                           eventDate,
-                          style: TextStyle(color: primaryTextColor, fontSize: 14.sp),
+                          style: TextStyle(
+                            color: primaryTextColor,
+                            fontSize: 14.sp,
+                          ),
                           textAlign: TextAlign.right,
                           softWrap: true,
                         ),
@@ -129,28 +164,52 @@ class _DetailOrderPageState extends State<DetailOrderPage> {
                     ],
                   ),
                   SizedBox(height: 16.h),
-                  Text('Price Details',
-                      style: TextStyle(
-                        color: primaryTextColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16.sp,
-                      )),
+                  Text(
+                    'Price Details',
+                    style: TextStyle(
+                      color: primaryTextColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16.sp,
+                    ),
+                  ),
                   SizedBox(height: 12.h),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Price', style: TextStyle(color: secondaryTextColor, fontSize: 14.sp)),
-                      Text('${widget.ticketAmount} x ${ticketPrice.toStringAsFixed(2)} SR',
-                          style: TextStyle(color: primaryTextColor, fontSize: 14.sp)),
+                      Text(
+                        'Price',
+                        style: TextStyle(
+                          color: secondaryTextColor,
+                          fontSize: 14.sp,
+                        ),
+                      ),
+                      Text(
+                        '${widget.ticketAmount} x ${ticketPrice.toStringAsFixed(2)} SR',
+                        style: TextStyle(
+                          color: primaryTextColor,
+                          fontSize: 14.sp,
+                        ),
+                      ),
                     ],
                   ),
                   SizedBox(height: 8.h),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Total Price', style: TextStyle(color: secondaryTextColor, fontSize: 14.sp)),
-                      Text('${totalPrice.toStringAsFixed(2)} SR',
-                          style: TextStyle(color: primaryTextColor, fontSize: 14.sp)),
+                      Text(
+                        'Total Price',
+                        style: TextStyle(
+                          color: secondaryTextColor,
+                          fontSize: 14.sp,
+                        ),
+                      ),
+                      Text(
+                        '${totalPrice.toStringAsFixed(2)} SR',
+                        style: TextStyle(
+                          color: primaryTextColor,
+                          fontSize: 14.sp,
+                        ),
+                      ),
                     ],
                   ),
                 ],
@@ -166,35 +225,7 @@ class _DetailOrderPageState extends State<DetailOrderPage> {
               ),
             ),
             SizedBox(height: 12.h),
-            // Container(
-            //   padding: EdgeInsets.all(14.w),
-            //   decoration: BoxDecoration(
-            //     color: cardColor,
-            //     borderRadius: BorderRadius.circular(12.r),
-            //   ),
-            //   child: Row(
-            //     children: [
-            //       Container(
-            //         width: 32.w,
-            //         height: 32.w,
-            //         decoration: const BoxDecoration(
-            //           color: Colors.white,
-            //           shape: BoxShape.circle,
-            //         ),
-            //         child: Center(
-            //           child: Image.asset(
-            //             'assets/visa.png',
-            //             width: 20.w,
-            //             height: 20.w,
-            //             fit: BoxFit.contain,
-            //           ),
-            //         ),
-            //       ),
-            //       SizedBox(width: 12.w),
-            //       Text('Card', style: TextStyle(color: primaryTextColor, fontSize: 14.sp)),
-            //     ],
-            //   ),
-            // ),
+
             _buildPaymentOption(
               PaymentOption.savedCard,
               'Use Saved Card',
@@ -215,7 +246,6 @@ class _DetailOrderPageState extends State<DetailOrderPage> {
               secondaryTextColor,
             ),
 
-            
             SizedBox(height: 80.h),
           ],
         ),
@@ -225,22 +255,13 @@ class _DetailOrderPageState extends State<DetailOrderPage> {
         child: CustomButton(
           text: 'Pay Now',
           onPressed: () {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (_) => PaymentPage(
-            //       totalPrice: totalPrice,
-            //       eventId: widget.eventId,
-            //       ticketAmount: widget.ticketAmount,
-            //     ),
-            //   ),
-            // );
             _handlePaymentNavigation(context, totalPrice);
           },
         ),
       ),
     );
   }
+
   PaymentOption selectedPaymentOption = PaymentOption.newCard;
 
   Widget _buildPaymentOption(
@@ -253,7 +274,7 @@ class _DetailOrderPageState extends State<DetailOrderPage> {
     Color secondaryTextColor,
   ) {
     final isSelected = selectedPaymentOption == option;
-    
+
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -276,9 +297,10 @@ class _DetailOrderPageState extends State<DetailOrderPage> {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: isSelected 
-                    ? const Color(0xFF7A4EB0).withOpacity(0.1)
-                    : Colors.grey.withOpacity(0.1),
+                color:
+                    isSelected
+                        ? const Color(0xFF7A4EB0).withOpacity(0.1)
+                        : Colors.grey.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(
@@ -297,16 +319,14 @@ class _DetailOrderPageState extends State<DetailOrderPage> {
                     style: TextStyle(
                       color: primaryTextColor,
                       fontSize: 16,
-                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                      fontWeight:
+                          isSelected ? FontWeight.w600 : FontWeight.w500,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     subtitle,
-                    style: TextStyle(
-                      color: secondaryTextColor,
-                      fontSize: 12,
-                    ),
+                    style: TextStyle(color: secondaryTextColor, fontSize: 12),
                   ),
                 ],
               ),
@@ -319,11 +339,7 @@ class _DetailOrderPageState extends State<DetailOrderPage> {
                   color: Color(0xFF7A4EB0),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(
-                  Icons.check,
-                  color: Colors.white,
-                  size: 14,
-                ),
+                child: const Icon(Icons.check, color: Colors.white, size: 14),
               ),
           ],
         ),
@@ -337,11 +353,12 @@ class _DetailOrderPageState extends State<DetailOrderPage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => PaymentPage(
-              totalPrice: totalPrice,
-              eventId: widget.eventId,
-              ticketAmount: widget.ticketAmount,
-            ),
+            builder:
+                (_) => PaymentPage(
+                  totalPrice: totalPrice,
+                  eventId: widget.eventId,
+                  ticketAmount: widget.ticketAmount,
+                ),
           ),
         );
         break;
@@ -349,17 +366,15 @@ class _DetailOrderPageState extends State<DetailOrderPage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => SavedCardsPage(
-              totalPrice: totalPrice,
-              eventId: widget.eventId,
-              ticketAmount: widget.ticketAmount,
-            ),
+            builder:
+                (_) => SavedCardsPage(
+                  totalPrice: totalPrice,
+                  eventId: widget.eventId,
+                  ticketAmount: widget.ticketAmount,
+                ),
           ),
         );
         break;
     }
   }
-
-
-
 }

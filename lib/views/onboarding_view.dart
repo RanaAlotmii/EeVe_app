@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:eeve_app/auth_views/welcome_view.dart';
 
-
 class OnboardingView extends StatefulWidget {
   const OnboardingView({super.key});
 
@@ -19,19 +18,19 @@ class _OnboardingViewState extends State<OnboardingView> {
       'image': 'assets/onb4.png',
       'title': 'Step Into the Scene',
       'desc':
-      "From trending concerts to hidden  gems — explore what’s happening and never miss a moment that fits your vibe."
+          "From trending concerts to hidden  gems — explore what’s happening and never miss a moment that fits your vibe.",
     },
     {
       'image': 'assets/page2.png',
       'title': 'Make It Yours',
       'desc':
-      'Explore events by your interests, get real-time updates, and personalize your event feed for a tailored experience.'
+          'Explore events by your interests, get real-time updates, and personalize your event feed for a tailored experience.',
     },
     {
       'image': "assets/page3.png",
       'title': 'Discover events that match your vibe – powered by AI! ',
-      'desc': ''
-    }
+      'desc': '',
+    },
   ];
 
   void nextPage() {
@@ -44,9 +43,8 @@ class _OnboardingViewState extends State<OnboardingView> {
       // TODO: Navigate to Home/Login
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) =>WelcomeView()),
+        MaterialPageRoute(builder: (context) => WelcomeView()),
       );
-
     }
   }
 
@@ -63,57 +61,53 @@ class _OnboardingViewState extends State<OnboardingView> {
                 _currentIndex = index;
               });
             },
-              itemBuilder: (context, index) {
-                final data = onboardingData[index];
-                final isLastPage = index == 2;
+            itemBuilder: (context, index) {
+              final data = onboardingData[index];
+              final isLastPage = index == 2;
 
-                return Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    Image.asset(
-                      data['image']!,
-                      fit: BoxFit.cover,
+              return Stack(
+                fit: StackFit.expand,
+                children: [
+                  Image.asset(data['image']!, fit: BoxFit.cover),
+                  Container(
+                    margin: EdgeInsets.only(
+                      top: isLastPage ? 100 : 0,
+                      bottom: isLastPage ? 0 : 120,
                     ),
-                    Container(
-                      margin: EdgeInsets.only(
-                        top: isLastPage ? 100 : 0,  // ⬅️ was 60, now raised more
-                        bottom: isLastPage ? 0 : 120,
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
-                      child: Column(
-                        mainAxisAlignment:
-                        isLastPage ? MainAxisAlignment.start : MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          if (isLastPage) const SizedBox(height: 10),
-                          Text(
-                            data['title']!,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Column(
+                      mainAxisAlignment:
+                          isLastPage
+                              ? MainAxisAlignment.start
+                              : MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        if (isLastPage) const SizedBox(height: 10),
+                        Text(
+                          data['title']!,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
                           ),
-                          const SizedBox(height: 12),
-                          Text(
-                            data['desc']!,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              color: Colors.white,
-                            ),
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          data['desc']!,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
                           ),
-                          if (!isLastPage) const SizedBox(height: 40),
-                        ],
-                      ),
+                        ),
+                        if (!isLastPage) const SizedBox(height: 40),
+                      ],
                     ),
-                  ],
-                );
-              }
-
-
-
+                  ),
+                ],
+              );
+            },
           ),
           Positioned(
             bottom: 30,
@@ -142,7 +136,6 @@ class _OnboardingViewState extends State<OnboardingView> {
                     ),
                   ),
 
-                  // Page Indicator
                   SmoothPageIndicator(
                     controller: _controller,
                     count: onboardingData.length,
@@ -154,11 +147,12 @@ class _OnboardingViewState extends State<OnboardingView> {
                     ),
                   ),
 
-                  // Next / Let's Go
                   GestureDetector(
                     onTap: nextPage,
                     child: Text(
-                      _currentIndex == onboardingData.length - 1 ? "Let’s Go" : "Next",
+                      _currentIndex == onboardingData.length - 1
+                          ? "Let’s Go"
+                          : "Next",
                       style: const TextStyle(
                         color: Colors.purple,
                         fontSize: 16,
@@ -170,7 +164,6 @@ class _OnboardingViewState extends State<OnboardingView> {
               ),
             ),
           ),
-
         ],
       ),
     );

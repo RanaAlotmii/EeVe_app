@@ -5,7 +5,6 @@ import 'package:eeve_app/api/openai_service.dart';
 import 'package:eeve_app/controllers/events_controller.dart';
 import 'package:get/get.dart';
 import 'dart:ui';
-
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class AiAssistantView extends StatefulWidget {
@@ -84,7 +83,8 @@ class _AiAssistantViewState extends State<AiAssistantView>
     setState(() {
       _messages.add({
         'role': 'ai',
-        'content': '${_getTimeBasedGreeting()}\n\nI\'m EeVe, your intelligent event assistant! I can help you find perfect events based on your mood, budget, and preferences. What\'s your vibe today?'
+        'content':
+            '${_getTimeBasedGreeting()}\n\nI\'m EeVe, your intelligent event assistant! I can help you find perfect events based on your mood, budget, and preferences. What\'s your vibe today?',
       });
       _showMoodButtons = true;
     });
@@ -106,7 +106,7 @@ class _AiAssistantViewState extends State<AiAssistantView>
       'afternoon': ['afternoon', 'lunch', 'pm'],
       'evening': ['evening', 'dinner', 'sunset'],
       'night': ['night', 'late', 'midnight'],
-      'weekend': ['weekend', 'friday', 'saturday']
+      'weekend': ['weekend', 'friday', 'saturday'],
     };
 
     timeKeywords.forEach((time, keywords) {
@@ -119,8 +119,10 @@ class _AiAssistantViewState extends State<AiAssistantView>
   Future<void> _handleSend(String inputText, {String? selectedMood}) async {
     if (inputText.trim().isEmpty && selectedMood == null) return;
 
-    final messageText = selectedMood != null ?
-    "I'm feeling ${selectedMood.toLowerCase()}" : inputText.trim();
+    final messageText =
+        selectedMood != null
+            ? "I'm feeling ${selectedMood.toLowerCase()}"
+            : inputText.trim();
 
     setState(() {
       _messages.add({'role': 'user', 'content': messageText});
@@ -159,12 +161,12 @@ class _AiAssistantViewState extends State<AiAssistantView>
         _messages.add({'role': 'ai', 'content': aiReply});
         _isLoading = false;
       });
-
     } catch (e) {
       setState(() {
         _messages.add({
           'role': 'ai',
-          'content': 'Sorry, I encountered an issue. Let me try to help you another way! 😊'
+          'content':
+              'Sorry, I encountered an issue. Let me try to help you another way! 😊',
         });
         _isLoading = false;
       });
@@ -221,9 +223,13 @@ class _AiAssistantViewState extends State<AiAssistantView>
               setState(() => _currentMood = null);
             }),
           if (_budgetPreference != null)
-            _buildContextChip('Budget: $_budgetPreference SR', Colors.green, () {
-              setState(() => _budgetPreference = null);
-            }),
+            _buildContextChip(
+              'Budget: $_budgetPreference SR',
+              Colors.green,
+              () {
+                setState(() => _budgetPreference = null);
+              },
+            ),
           if (_timePreference != null)
             _buildContextChip('Time: $_timePreference', Colors.orange, () {
               setState(() => _timePreference = null);
@@ -246,7 +252,11 @@ class _AiAssistantViewState extends State<AiAssistantView>
         children: [
           Text(
             label,
-            style: TextStyle(color: color, fontSize: 12, fontWeight: FontWeight.w500),
+            style: TextStyle(
+              color: color,
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+            ),
           ),
           const SizedBox(width: 4),
           GestureDetector(
@@ -342,7 +352,8 @@ class _AiAssistantViewState extends State<AiAssistantView>
                               ),
                               const SizedBox(height: 8),
                               Wrap(
-                                children: _moodOptions.map(_buildMoodButton).toList(),
+                                children:
+                                    _moodOptions.map(_buildMoodButton).toList(),
                               ),
                             ],
                           ),
@@ -368,7 +379,9 @@ class _AiAssistantViewState extends State<AiAssistantView>
                               borderRadius: BorderRadius.circular(16),
                               boxShadow: [
                                 BoxShadow(
-                                  color: const Color(0xFF7D39EB).withOpacity(0.3),
+                                  color: const Color(
+                                    0xFF7D39EB,
+                                  ).withOpacity(0.3),
                                   blurRadius: 8,
                                   offset: const Offset(0, 2),
                                 ),
@@ -377,8 +390,8 @@ class _AiAssistantViewState extends State<AiAssistantView>
                             child: Text(
                               content,
                               style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                           ),
@@ -386,7 +399,8 @@ class _AiAssistantViewState extends State<AiAssistantView>
                       } else if (hasMarker) {
                         final parts = content.split('[SHOW_EVENTS]');
                         final replyText = parts[0].trim();
-                        final eventTitles = parts.length > 1 ? parts[1].trim() : '';
+                        final eventTitles =
+                            parts.length > 1 ? parts[1].trim() : '';
 
                         return Align(
                           alignment: Alignment.centerLeft,
@@ -405,27 +419,27 @@ class _AiAssistantViewState extends State<AiAssistantView>
                                 ),
                                 child: Text(
                                   replyText,
-                                  style: TextStyle(color: textColor.withOpacity(0.9)),
+                                  style: TextStyle(
+                                    color: textColor.withOpacity(0.9),
+                                  ),
                                 ),
                               ),
                               if (eventTitles.isNotEmpty)
                                 GestureDetector(
                                   onTap: () async {
                                     // Add to previous events for context
-                                    final events = eventTitles.split('|').map((e) => e.trim()).toList();
+                                    final events =
+                                        eventTitles
+                                            .split('|')
+                                            .map((e) => e.trim())
+                                            .toList();
                                     _previousEvents.addAll(events);
-
-                                    // Navigate with proper route preservation
-                                    // await Navigator.of(context).push(
-                                    //   MaterialPageRoute(
-                                    //     builder: (context) => AiChatResultsView(aiReply: eventTitles),
-                                    //     maintainState: true,
-                                    //   ),
-                                    // );
 
                                     await PersistentNavBarNavigator.pushNewScreen(
                                       context,
-                                      screen: AiChatResultsView(aiReply: eventTitles),
+                                      screen: AiChatResultsView(
+                                        aiReply: eventTitles,
+                                      ),
                                       withNavBar: false,
                                     );
                                     // Ensure we rebuild to maintain state
@@ -434,11 +448,17 @@ class _AiAssistantViewState extends State<AiAssistantView>
                                     }
                                   },
                                   child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                      vertical: 8,
+                                    ),
                                     margin: const EdgeInsets.only(bottom: 8),
                                     decoration: BoxDecoration(
                                       gradient: const LinearGradient(
-                                        colors: [Colors.purpleAccent, Colors.purple],
+                                        colors: [
+                                          Colors.purpleAccent,
+                                          Colors.purple,
+                                        ],
                                       ),
                                       borderRadius: BorderRadius.circular(20),
                                     ),
@@ -471,7 +491,9 @@ class _AiAssistantViewState extends State<AiAssistantView>
                             ),
                             child: Text(
                               content,
-                              style: TextStyle(color: textColor.withOpacity(0.9)),
+                              style: TextStyle(
+                                color: textColor.withOpacity(0.9),
+                              ),
                             ),
                           ),
                         );
@@ -498,7 +520,9 @@ class _AiAssistantViewState extends State<AiAssistantView>
                           decoration: BoxDecoration(
                             color: textColor.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(16),
-                            border: Border.all(color: textColor.withOpacity(0.2)),
+                            border: Border.all(
+                              color: textColor.withOpacity(0.2),
+                            ),
                           ),
                           child: Icon(
                             Icons.mood,
@@ -516,15 +540,22 @@ class _AiAssistantViewState extends State<AiAssistantView>
                               decoration: BoxDecoration(
                                 color: textColor.withOpacity(0.08),
                                 borderRadius: BorderRadius.circular(16),
-                                border: Border.all(color: textColor.withOpacity(0.2)),
+                                border: Border.all(
+                                  color: textColor.withOpacity(0.2),
+                                ),
                               ),
-                              padding: const EdgeInsets.symmetric(horizontal: 16),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                              ),
                               child: TextField(
                                 controller: _controller,
                                 style: TextStyle(color: textColor),
                                 decoration: InputDecoration(
-                                  hintText: 'Tell me your mood or what you want...',
-                                  hintStyle: TextStyle(color: textColor.withOpacity(0.5)),
+                                  hintText:
+                                      'Tell me your mood or what you want...',
+                                  hintStyle: TextStyle(
+                                    color: textColor.withOpacity(0.5),
+                                  ),
                                   border: InputBorder.none,
                                 ),
                                 onSubmitted: (text) => _handleSend(text),
@@ -535,7 +566,10 @@ class _AiAssistantViewState extends State<AiAssistantView>
                       ),
                       const SizedBox(width: 8),
                       GestureDetector(
-                        onTap: _isLoading ? null : () => _handleSend(_controller.text.trim()),
+                        onTap:
+                            _isLoading
+                                ? null
+                                : () => _handleSend(_controller.text.trim()),
                         child: Container(
                           height: 50,
                           width: 50,
@@ -552,18 +586,19 @@ class _AiAssistantViewState extends State<AiAssistantView>
                               ),
                             ],
                           ),
-                          child: _isLoading
-                              ? const Center(
-                            child: SizedBox(
-                              height: 18,
-                              width: 18,
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
-                                strokeWidth: 2,
-                              ),
-                            ),
-                          )
-                              : const Icon(Icons.send, color: Colors.white),
+                          child:
+                              _isLoading
+                                  ? const Center(
+                                    child: SizedBox(
+                                      height: 18,
+                                      width: 18,
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white,
+                                        strokeWidth: 2,
+                                      ),
+                                    ),
+                                  )
+                                  : const Icon(Icons.send, color: Colors.white),
                         ),
                       ),
                     ],

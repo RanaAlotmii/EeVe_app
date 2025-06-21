@@ -56,17 +56,12 @@ class _AiGetStartedViewState extends State<AiGetStartedView>
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      colors: [
-                        Color(0xFF8A2BE2),
-                        Colors.transparent,
-                      ],
+                      colors: [Color(0xFF8A2BE2), Colors.transparent],
                       stops: [0.0, 1.0],
                     ),
                   ),
                 ),
-                Expanded(
-                  child: Container(color: backgroundColor),
-                ),
+                Expanded(child: Container(color: backgroundColor)),
               ],
             ),
           ),

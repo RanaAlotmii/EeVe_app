@@ -2,7 +2,6 @@ import 'package:eeve_app/views/onboarding_view.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:eeve_app/navigation/main_nav_shell.dart';
-import 'package:eeve_app/auth_views/welcome_view.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({super.key});
@@ -30,8 +29,7 @@ class _SplashViewState extends State<SplashView> {
       context,
       MaterialPageRoute(
         builder:
-            (context) =>
-                isLoggedIn ? const MainNavShell() : OnboardingView(),
+            (context) => isLoggedIn ? const MainNavShell() : OnboardingView(),
       ),
     );
   }

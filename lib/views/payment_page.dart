@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_credit_card/flutter_credit_card.dart';
 import 'package:eeve_app/custom_Widget_/Custom_button.dart';
 import 'package:eeve_app/views/payment_success_page.dart';
-import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class PaymentPage extends StatefulWidget {
@@ -206,9 +205,9 @@ class _PaymentPageState extends State<PaymentPage> {
                 ],
               ),
         );
-        
-        final final_expiry_Date = "${expiryDate.substring(0,2)}${expiryDate.substring(3)}";
-        // print("🔴$expiryDate🔴$final_expiry_Date");
+
+        final final_expiry_Date =
+            "${expiryDate.substring(0, 2)}${expiryDate.substring(3)}";
 
         if (saveCard ?? false) {
           await Supabase.instance.client.from('user_card').insert({

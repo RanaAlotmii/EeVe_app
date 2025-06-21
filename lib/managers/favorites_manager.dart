@@ -32,9 +32,10 @@ class FavoritesManager {
           .select('event_id')
           .eq('user_id', currentUser!.id);
 
-      final eventIds = favoritesResponse
-          .map<int>((item) => item['event_id'] as int)
-          .toList();
+      final eventIds =
+          favoritesResponse
+              .map<int>((item) => item['event_id'] as int)
+              .toList();
 
       if (eventIds.isEmpty) {
         _currentFavorites = [];
@@ -63,21 +64,24 @@ class FavoritesManager {
         .stream(primaryKey: ['id'])
         .eq('user_id', currentUser!.id)
         .listen((data) {
-      _loadFavorites();
-    });
+          _loadFavorites();
+        });
   }
 
-  Future<bool> addToFavorites(int eventId, Map<String, dynamic> eventData) async {
+  Future<bool> addToFavorites(
+    int eventId,
+    Map<String, dynamic> eventData,
+  ) async {
     if (currentUser == null) return false;
 
     try {
-      // ✅ تحقق إذا كان موجود مسبقًا لتجنب التكرار
-      final existing = await Supabase.instance.client
-          .from('user_favorites')
-          .select('id')
-          .eq('user_id', currentUser!.id)
-          .eq('event_id', eventId)
-          .maybeSingle();
+      final existing =
+          await Supabase.instance.client
+              .from('user_favorites')
+              .select('id')
+              .eq('user_id', currentUser!.id)
+              .eq('event_id', eventId)
+              .maybeSingle();
 
       if (existing != null) {
         print('Already in favorites');
@@ -104,12 +108,13 @@ class FavoritesManager {
     if (currentUser == null) return false;
 
     try {
-      final response = await Supabase.instance.client
-          .from('user_favorites')
-          .select('id')
-          .eq('user_id', currentUser!.id)
-          .eq('event_id', eventId)
-          .maybeSingle();
+      final response =
+          await Supabase.instance.client
+              .from('user_favorites')
+              .select('id')
+              .eq('user_id', currentUser!.id)
+              .eq('event_id', eventId)
+              .maybeSingle();
 
       if (response != null) {
         await Supabase.instance.client
@@ -133,12 +138,13 @@ class FavoritesManager {
     if (currentUser == null) return false;
 
     try {
-      final response = await Supabase.instance.client
-          .from('user_favorites')
-          .select('id')
-          .eq('user_id', currentUser!.id)
-          .eq('event_id', eventId)
-          .maybeSingle();
+      final response =
+          await Supabase.instance.client
+              .from('user_favorites')
+              .select('id')
+              .eq('user_id', currentUser!.id)
+              .eq('event_id', eventId)
+              .maybeSingle();
 
       return response != null;
     } catch (e) {
@@ -153,4 +159,3 @@ class FavoritesManager {
     _favoritesController.close();
   }
 }
-

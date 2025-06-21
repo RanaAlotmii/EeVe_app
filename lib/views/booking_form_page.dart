@@ -78,17 +78,18 @@ class BookingFormPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => DetailOrderPage(
-                      eventData: {
-                        'title': eventData['title'],
-                        'location': eventData['location'],
-                        'image_cover': eventData['image_cover'],
-                        'price': eventData['price'],
-                        'event_date': eventData['event_date'],
-                      },
-                      ticketAmount: ticketAmount,
-                      eventId: eventId,
-                    ),
+                    builder:
+                        (_) => DetailOrderPage(
+                          eventData: {
+                            'title': eventData['title'],
+                            'location': eventData['location'],
+                            'image_cover': eventData['image_cover'],
+                            'price': eventData['price'],
+                            'event_date': eventData['event_date'],
+                          },
+                          ticketAmount: ticketAmount,
+                          eventId: eventId,
+                        ),
                   ),
                 );
               },

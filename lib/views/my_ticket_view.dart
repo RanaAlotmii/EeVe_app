@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:eeve_app/Custom_Widget_/ticketDetails.dart';
 import 'package:dotted_line/dotted_line.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart'; // ✅ مضاف
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:async';
 
 class Myticket extends StatefulWidget {
@@ -163,7 +163,8 @@ class MyticketState extends State<Myticket> with RouteAware {
             'My Ticket',
             style: TextStyle(
               color: textColor,
-              fontSize: 21.sp, fontWeight: FontWeight.bold,
+              fontSize: 21.sp,
+              fontWeight: FontWeight.bold,
             ),
           ),
           centerTitle: true,

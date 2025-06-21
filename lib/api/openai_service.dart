@@ -3,7 +3,8 @@ import 'package:eeve_app/controllers/events_controller.dart';
 import 'package:get/get.dart';
 
 /// Enhanced AI service for EeVe event recommendations
-Future<String> getEventSuggestionsFromAI(String userInput, {
+Future<String> getEventSuggestionsFromAI(
+  String userInput, {
   String? currentMood,
   String? budget,
   String? location,
@@ -15,8 +16,9 @@ Future<String> getEventSuggestionsFromAI(String userInput, {
     final events = controller.getFilteredEvents();
 
     // Enhanced event formatting with more context
-    final formattedEvents = events.map((event) {
-      return '''
+    final formattedEvents = events
+        .map((event) {
+          return '''
 Event: ${event["title"]}
 Location: ${event["location"]}
 Price: ${event["price"]} SR
@@ -25,14 +27,16 @@ Date: ${event["date"] ?? "TBD"}
 Time: ${event["time"] ?? "TBD"}
 Description: ${event["description"] ?? "No description available"}
 ---''';
-    }).join('\n');
+        })
+        .join('\n');
 
     // Context building
     String contextInfo = "";
     if (currentMood != null) contextInfo += "Current mood: $currentMood\n";
     if (budget != null) contextInfo += "Budget preference: $budget SR\n";
     if (location != null) contextInfo += "Preferred location: $location\n";
-    if (timePreference != null) contextInfo += "Time preference: $timePreference\n";
+    if (timePreference != null)
+      contextInfo += "Time preference: $timePreference\n";
     if (previousEvents != null && previousEvents.isNotEmpty) {
       contextInfo += "Previously attended: ${previousEvents.join(', ')}\n";
     }
@@ -132,7 +136,7 @@ Remember: Be specific, be cultural, be personal, and always match their energy l
           role: OpenAIChatMessageRole.system,
           content: [
             OpenAIChatCompletionChoiceMessageContentItemModel.text(
-                "You are EeVe, an intelligent AI event concierge for Saudi Arabia. You excel at understanding mood, cultural context, and personal preferences to make perfect event recommendations."
+              "You are EeVe, an intelligent AI event concierge for Saudi Arabia. You excel at understanding mood, cultural context, and personal preferences to make perfect event recommendations.",
             ),
           ],
         ),
@@ -143,8 +147,8 @@ Remember: Be specific, be cultural, be personal, and always match their energy l
           ],
         ),
       ],
-      maxTokens: 500, // Increased for more detailed responses
-      temperature: 0.7, // Slightly lower for more consistent quality
+      maxTokens: 500, 
+      temperature: 0.7, 
     );
 
     final reply = chat.choices.first.message.content?.first.text;
@@ -183,11 +187,10 @@ Return ONLY a valid JSON object with these exact keys:
         ),
       ],
       maxTokens: 200,
-      temperature: 0.3, // Lower for more consistent JSON output
+      temperature: 0.3, 
     );
 
     final reply = chat.choices.first.message.content?.first.text ?? "{}";
-    // You'll need to parse this JSON and use it to enhance recommendations
     return {"raw_analysis": reply};
   } catch (e) {
     return {"error": e.toString()};
@@ -196,9 +199,9 @@ Return ONLY a valid JSON object with these exact keys:
 
 /// Smart event filtering based on mood analysis
 List<Map<String, dynamic>> filterEventsByMood(
-    List<Map<String, dynamic>> events,
-    Map<String, dynamic> moodAnalysis,
-    ) {
+  List<Map<String, dynamic>> events,
+  Map<String, dynamic> moodAnalysis,
+) {
   // Implement intelligent filtering logic based on mood analysis
   // This is where you'd apply the mood-to-event category mapping
   return events; // Placeholder - implement your filtering logic

@@ -5,7 +5,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:eeve_app/Custom_Widget_/Custom_button.dart';
 import 'package:eeve_app/auth_views/signin_view.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart'; 
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class VerificationCodeView extends StatefulWidget {
   final String email;
@@ -87,7 +87,11 @@ class _VerificationCodeViewState extends State<VerificationCodeView> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset('assets/check.png', height: 120.h, width: 120.w),
+                    Image.asset(
+                      'assets/check.png',
+                      height: 120.h,
+                      width: 120.w,
+                    ),
                     SizedBox(height: 30.h),
                     Text(
                       'Email Confirmed',
@@ -136,7 +140,7 @@ class _VerificationCodeViewState extends State<VerificationCodeView> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-final bgColor = isDark ? const Color.fromARGB(255, 0, 0, 0) : Colors.white;
+    final bgColor = isDark ? const Color.fromARGB(255, 0, 0, 0) : Colors.white;
 
     final primaryTextColor = isDark ? Colors.white : Colors.black87;
     final secondaryTextColor = isDark ? Colors.white54 : Colors.black54;
@@ -188,7 +192,10 @@ final bgColor = isDark ? const Color.fromARGB(255, 0, 0, 0) : Colors.white;
                   children: [
                     TextSpan(
                       text: 'You can resend the code in ',
-                      style: TextStyle(color: secondaryTextColor, fontSize: 16.sp),
+                      style: TextStyle(
+                        color: secondaryTextColor,
+                        fontSize: 16.sp,
+                      ),
                     ),
                     TextSpan(
                       text: '$_secondsRemaining',
@@ -199,7 +206,10 @@ final bgColor = isDark ? const Color.fromARGB(255, 0, 0, 0) : Colors.white;
                     ),
                     TextSpan(
                       text: ' seconds',
-                      style: TextStyle(color: secondaryTextColor, fontSize: 16.sp),
+                      style: TextStyle(
+                        color: secondaryTextColor,
+                        fontSize: 16.sp,
+                      ),
                     ),
                   ],
                 ),
@@ -209,7 +219,10 @@ final bgColor = isDark ? const Color.fromARGB(255, 0, 0, 0) : Colors.white;
                 onPressed: _resendCode,
                 child: Text(
                   'Resend Code',
-                  style: TextStyle(color: const Color(0xFF1565FF), fontSize: 16.sp),
+                  style: TextStyle(
+                    color: const Color(0xFF1565FF),
+                    fontSize: 16.sp,
+                  ),
                 ),
               ),
               SizedBox(height: 32.h),

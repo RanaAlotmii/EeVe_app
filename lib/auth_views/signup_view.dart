@@ -50,7 +50,10 @@ class _SignupViewState extends State<SignupView> {
                       ),
                     ),
                     SizedBox(height: 40.h),
-                    Text("Full Name", style: TextStyle(color: secondaryText, fontSize: 14.sp)),
+                    Text(
+                      "Full Name",
+                      style: TextStyle(color: secondaryText, fontSize: 14.sp),
+                    ),
                     SizedBox(height: 8.h),
                     CustomTextField(
                       hintText: 'Enter your name',
@@ -58,7 +61,10 @@ class _SignupViewState extends State<SignupView> {
                       controller: nameController,
                     ),
                     SizedBox(height: 16.h),
-                    Text("Email", style: TextStyle(color: secondaryText, fontSize: 14.sp)),
+                    Text(
+                      "Email",
+                      style: TextStyle(color: secondaryText, fontSize: 14.sp),
+                    ),
                     SizedBox(height: 8.h),
                     CustomTextField(
                       hintText: 'Enter your email',
@@ -66,7 +72,10 @@ class _SignupViewState extends State<SignupView> {
                       controller: emailController,
                     ),
                     SizedBox(height: 16.h),
-                    Text("Password", style: TextStyle(color: secondaryText, fontSize: 14.sp)),
+                    Text(
+                      "Password",
+                      style: TextStyle(color: secondaryText, fontSize: 14.sp),
+                    ),
                     SizedBox(height: 8.h),
                     CustomTextField(
                       hintText: 'Enter your password',
@@ -83,7 +92,9 @@ class _SignupViewState extends State<SignupView> {
 
                         if (email.isEmpty || name.isEmpty || password.isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text("Please fill all fields")),
+                            const SnackBar(
+                              content: Text("Please fill all fields"),
+                            ),
                           );
                           return;
                         }
@@ -114,7 +125,10 @@ class _SignupViewState extends State<SignupView> {
                       child: RichText(
                         textAlign: TextAlign.center,
                         text: TextSpan(
-                          style: TextStyle(color: secondaryText, fontSize: 14.sp),
+                          style: TextStyle(
+                            color: secondaryText,
+                            fontSize: 14.sp,
+                          ),
                           children: const [
                             TextSpan(text: 'By registering you agree to \n'),
                             TextSpan(

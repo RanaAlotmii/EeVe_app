@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeService with ChangeNotifier {
-  ThemeMode _themeMode = ThemeMode.dark; // يبدأ الوضع داكن
+  ThemeMode _themeMode = ThemeMode.dark;
 
   ThemeMode get themeMode => _themeMode;
 
@@ -13,7 +13,7 @@ class ThemeService with ChangeNotifier {
   void toggleTheme(bool isDark) {
     _themeMode = isDark ? ThemeMode.dark : ThemeMode.light;
     _saveThemeMode();
-    notifyListeners(); // يحدّث الواجهة
+    notifyListeners();
   }
 
   Future<void> _loadThemeMode() async {
