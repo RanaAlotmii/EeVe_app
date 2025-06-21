@@ -45,7 +45,7 @@ class _AiOnboardingViewState extends State<AiOnboardingView> {
     MainNavShell.mainTabController.index = 3;
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => const AiAssistantView()),
+      MaterialPageRoute(builder: (context) => const MainNavShell()),
     );
 
     final user = supabase.auth.currentUser;
