@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:eeve_app/custom_Widget_/event_card_small.dart';
+import 'package:eeve_app/custom_Widget_/compact_event_card.dart';
 import 'package:eeve_app/views/event_detail_view.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -90,7 +90,7 @@ class _SearchPageState extends State<SearchPage> {
                 contentPadding: EdgeInsets.symmetric(
                   vertical: 12.h,
                   horizontal: 16.w,
-                ), // قللت الارتفاع
+                ), 
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12.r),
                   borderSide: BorderSide.none,

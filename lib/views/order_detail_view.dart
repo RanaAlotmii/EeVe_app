@@ -1,4 +1,4 @@
-import 'package:eeve_app/custom_Widget_/event_card_small.dart';
+import 'package:eeve_app/custom_Widget_/compact_event_card.dart';
 import 'package:eeve_app/views/payment_view.dart';
 import 'package:flutter/material.dart';
 import 'package:eeve_app/custom_Widget_/Custom_button.dart';

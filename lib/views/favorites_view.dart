@@ -1,4 +1,4 @@
-import 'package:eeve_app/custom_Widget_/event_card_small.dart';
+import 'package:eeve_app/custom_Widget_/compact_event_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
