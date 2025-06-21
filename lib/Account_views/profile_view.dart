@@ -1,6 +1,4 @@
 import 'package:eeve_app/navigation/main_nav_shell.dart';
-import 'package:eeve_app/views/home_view.dart';
-import 'package:eeve_app/views/my_ticket_view.dart';
 import 'package:flutter/material.dart';
 import 'package:eeve_app/Account_views/about_app_view.dart';
 import 'package:eeve_app/Account_views/edit_profile_view.dart';
@@ -54,7 +52,10 @@ class _ProfileViewState extends State<ProfileView> with WidgetsBindingObserver {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _themeService = app_provider.Provider.of<ThemeService>(context, listen: false);
+    _themeService = app_provider.Provider.of<ThemeService>(
+      context,
+      listen: false,
+    );
     isDarkMode = _themeService.themeMode == ThemeMode.dark;
   }
 
@@ -63,11 +64,12 @@ class _ProfileViewState extends State<ProfileView> with WidgetsBindingObserver {
       final user = _supabase.auth.currentUser;
       if (user == null) return;
 
-      final response = await _supabase
-          .from('users')
-          .select()
-          .eq('id', user.id)
-          .maybeSingle();
+      final response =
+          await _supabase
+              .from('users')
+              .select()
+              .eq('id', user.id)
+              .maybeSingle();
 
       if (response != null && mounted) {
         setState(() {
@@ -76,7 +78,8 @@ class _ProfileViewState extends State<ProfileView> with WidgetsBindingObserver {
           gender = response['gender'] ?? '-';
           dob = response['date_of_birth'] ?? '';
           final img = response['profile_image'];
-          profileImage = (img != null && img.toString().trim().isNotEmpty) ? img : '';
+          profileImage =
+              (img != null && img.toString().trim().isNotEmpty) ? img : '';
         });
       }
     } catch (e) {
@@ -99,12 +102,11 @@ class _ProfileViewState extends State<ProfileView> with WidgetsBindingObserver {
 
     return Scaffold(
       appBar: AppBar(
-        title:  Text(
+        title: Text(
           'My Account',
-          style: TextStyle( fontSize: 21.sp,fontWeight: FontWeight.bold,),
+          style: TextStyle(fontSize: 21.sp, fontWeight: FontWeight.bold),
         ),
-        
-       
+
         centerTitle: true,
       ),
       body: RefreshIndicator(
@@ -127,8 +129,14 @@ class _ProfileViewState extends State<ProfileView> with WidgetsBindingObserver {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(name, style: Theme.of(context).textTheme.bodyLarge),
-                        Text(email, style: Theme.of(context).textTheme.bodySmall),
+                        Text(
+                          name,
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                        Text(
+                          email,
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
                       ],
                     ),
                   ],

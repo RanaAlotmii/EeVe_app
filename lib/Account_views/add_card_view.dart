@@ -29,9 +29,9 @@ class _AddCardViewState extends State<AddCardView> {
   Future<void> _addCard() async {
     final user = Supabase.instance.client.auth.currentUser;
     if (user == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('You must be logged in')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('You must be logged in')));
       return;
     }
 
@@ -80,9 +80,9 @@ class _AddCardViewState extends State<AddCardView> {
     final final_expiry = "${expiry.substring(0, 2)}${expiry.substring(3)}";
 
     if (month < 1 || month > 12) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Invalid expiry month')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Invalid expiry month')));
       return;
     }
 
@@ -106,9 +106,9 @@ class _AddCardViewState extends State<AddCardView> {
 
       Navigator.pop(context);
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error: $e')));
     }
   }
 

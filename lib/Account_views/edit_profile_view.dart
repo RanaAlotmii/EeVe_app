@@ -1,12 +1,9 @@
 import 'dart:io';
-import 'package:eeve_app/Account_views/profile_view.dart';
 import 'package:eeve_app/navigation/main_nav_shell.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:get/get.dart';
-import 'package:eeve_app/controllers/profile_controller.dart';
-
 class EditProfileView extends StatefulWidget {
   const EditProfileView({super.key});
 
@@ -34,11 +31,8 @@ class _EditProfileViewState extends State<EditProfileView> {
     final user = _supabase.auth.currentUser;
     if (user == null) return;
 
-    final response = await _supabase
-        .from('users')
-        .select()
-        .eq('id', user.id)
-        .maybeSingle();
+    final response =
+        await _supabase.from('users').select().eq('id', user.id).maybeSingle();
 
     if (response != null) {
       setState(() {
@@ -56,8 +50,9 @@ class _EditProfileViewState extends State<EditProfileView> {
     _isPicking = true;
 
     try {
-      final pickedFile =
-          await ImagePicker().pickImage(source: ImageSource.gallery);
+      final pickedFile = await ImagePicker().pickImage(
+        source: ImageSource.gallery,
+      );
       if (pickedFile != null) {
         setState(() {
           _newProfileImageFile = File(pickedFile.path);
@@ -78,7 +73,9 @@ class _EditProfileViewState extends State<EditProfileView> {
     final filePath = 'profile-images/${user.id}.$fileExt';
 
     try {
-      await _supabase.storage.from('profile-images').upload(
+      await _supabase.storage
+          .from('profile-images')
+          .upload(
             filePath,
             imageFile,
             fileOptions: const FileOptions(upsert: true),
@@ -107,8 +104,9 @@ class _EditProfileViewState extends State<EditProfileView> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-              content: Text('Failed to upload image'),
-              backgroundColor: Colors.red),
+            content: Text('Failed to upload image'),
+            backgroundColor: Colors.red,
+          ),
         );
         return;
       }
@@ -127,14 +125,16 @@ class _EditProfileViewState extends State<EditProfileView> {
       await _loadUserData();
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-            content: Text('Changes saved successfully'),
-            backgroundColor: Colors.green),
+          content: Text('Changes saved successfully'),
+          backgroundColor: Colors.green,
+        ),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-            content: Text('Error saving changes: $e'),
-            backgroundColor: Colors.red),
+          content: Text('Error saving changes: $e'),
+          backgroundColor: Colors.red,
+        ),
       );
     }
   }
@@ -167,28 +167,27 @@ class _EditProfileViewState extends State<EditProfileView> {
     }
 
     return Scaffold(
-   appBar: AppBar(
-  leading: IconButton(
-    icon: Icon(Icons.arrow_back, color: textColor),
-   onPressed: () {
-  MainNavShell.mainTabController.jumpToTab(4);
-  Get.off(() => const MainNavShell());
-},
-
-  ),
-  title: Text(
-    'Edit Profile',
-    style: TextStyle(
-      color: textColor,
-      fontWeight: FontWeight.bold,
-      fontSize: 21,
-    ),
-  ),
-  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-  iconTheme: IconThemeData(color: textColor),
-  elevation: 0,
-  centerTitle: true,
-),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: textColor),
+          onPressed: () {
+            MainNavShell.mainTabController.jumpToTab(4);
+            Get.off(() => const MainNavShell());
+          },
+        ),
+        title: Text(
+          'Edit Profile',
+          style: TextStyle(
+            color: textColor,
+            fontWeight: FontWeight.bold,
+            fontSize: 21,
+          ),
+        ),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        iconTheme: IconThemeData(color: textColor),
+        elevation: 0,
+        centerTitle: true,
+      ),
 
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
@@ -197,10 +196,7 @@ class _EditProfileViewState extends State<EditProfileView> {
             const SizedBox(height: 16),
             Stack(
               children: [
-                CircleAvatar(
-                  radius: 50,
-                  backgroundImage: imageWidget,
-                ),
+                CircleAvatar(radius: 50, backgroundImage: imageWidget),
                 Positioned(
                   bottom: -5,
                   right: -5,
@@ -234,8 +230,12 @@ class _EditProfileViewState extends State<EditProfileView> {
               onTap: _selectDate,
               child: AbsorbPointer(
                 child: buildTextField(
-                    'Date of Birth', _dobController, textColor, fieldColor,
-                    icon: Icons.calendar_today),
+                  'Date of Birth',
+                  _dobController,
+                  textColor,
+                  fieldColor,
+                  icon: Icons.calendar_today,
+                ),
               ),
             ),
             const SizedBox(height: 20),
@@ -248,14 +248,18 @@ class _EditProfileViewState extends State<EditProfileView> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF3663FE),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
                 onPressed: _saveChanges,
-                child: const Text('Save Changes',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16)),
+                child: const Text(
+                  'Save Changes',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
               ),
             ),
           ],
@@ -264,9 +268,13 @@ class _EditProfileViewState extends State<EditProfileView> {
     );
   }
 
-  Widget buildTextField(String label, TextEditingController controller,
-      Color textColor, Color? fieldColor,
-      {IconData? icon}) {
+  Widget buildTextField(
+    String label,
+    TextEditingController controller,
+    Color textColor,
+    Color? fieldColor, {
+    IconData? icon,
+  }) {
     return TextField(
       controller: controller,
       style: TextStyle(color: textColor),
@@ -278,11 +286,13 @@ class _EditProfileViewState extends State<EditProfileView> {
         suffixIcon:
             icon != null ? Icon(icon, color: textColor.withOpacity(0.6)) : null,
         enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey),
-            borderRadius: BorderRadius.circular(12)),
+          borderSide: BorderSide(color: Colors.grey),
+          borderRadius: BorderRadius.circular(12),
+        ),
         focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey),
-            borderRadius: BorderRadius.circular(12)),
+          borderSide: BorderSide(color: Colors.grey),
+          borderRadius: BorderRadius.circular(12),
+        ),
       ),
     );
   }
@@ -297,21 +307,26 @@ class _EditProfileViewState extends State<EditProfileView> {
         filled: true,
         fillColor: fieldColor,
         enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey),
-            borderRadius: BorderRadius.circular(12)),
+          borderSide: BorderSide(color: Colors.grey),
+          borderRadius: BorderRadius.circular(12),
+        ),
         focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey),
-            borderRadius: BorderRadius.circular(12)),
+          borderSide: BorderSide(color: Colors.grey),
+          borderRadius: BorderRadius.circular(12),
+        ),
       ),
       icon: Icon(Icons.arrow_drop_down, color: textColor),
       style: TextStyle(color: textColor),
-      items: ['-', 'Male', 'Female'].map((value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value == '-' ? 'Select Gender' : value,
-              style: TextStyle(color: textColor)),
-        );
-      }).toList(),
+      items:
+          ['-', 'Male', 'Female'].map((value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(
+                value == '-' ? 'Select Gender' : value,
+                style: TextStyle(color: textColor),
+              ),
+            );
+          }).toList(),
       onChanged: (value) {
         setState(() {
           _selectedGender = value!;

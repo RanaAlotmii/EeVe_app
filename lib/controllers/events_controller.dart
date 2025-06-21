@@ -18,18 +18,14 @@ class EventsController extends GetxController {
   }
 
   Future<void> fetchCategories() async {
-    final response = await Supabase.instance.client
-        .from('categories')
-        .select();
+    final response = await Supabase.instance.client.from('categories').select();
 
     print('[DEBUG] Categories from Supabase: $response');
     categories.value = response;
   }
 
   Future<void> fetchEvents() async {
-    var query = Supabase.instance.client
-        .from('events')
-        .select();
+    var query = Supabase.instance.client.from('events').select();
 
     if (selectedCategories.isNotEmpty) {
       query = query.in_('category_id', selectedCategories);
@@ -59,13 +55,12 @@ class EventsController extends GetxController {
     return events.cast<Map<String, dynamic>>();
   }
 
-Future<void> refreshEvents() async {
-  try {
-    await fetchEvents(); 
-    update(); 
-  } catch (e) {
-    print('Error refreshing events: $e');
+  Future<void> refreshEvents() async {
+    try {
+      await fetchEvents();
+      update();
+    } catch (e) {
+      print('Error refreshing events: $e');
+    }
   }
-}
-
 }
