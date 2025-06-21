@@ -40,7 +40,7 @@ So we decided to build something better:
 ---
 ## 📸 Screenshots
 
-| Home                                         | AI Chat                                               | Event Detail                                                  |
+| Home                                         | My Tickets                                               | Event Detail                                                  |
 |----------------------------------------------|--------------------------------------------------------|---------------------------------------------------------------|
 | ![Home](ScreenShots/Dark%20mode/Home.jpg)     | ![My Ticket](ScreenShots/Dark%20mode/My%20Ticket.jpg)      | ![Event Detail](ScreenShots/Dark%20mode/Events%20Detail.jpg) |
 
