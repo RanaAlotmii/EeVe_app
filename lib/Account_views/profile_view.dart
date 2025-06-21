@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:get/route_manager.dart';
 import 'package:provider/provider.dart' as app_provider;
-import 'package:eeve_app/managers/theme_service.dart';
+import 'package:eeve_app/services/theme_service.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ProfileView extends StatefulWidget {

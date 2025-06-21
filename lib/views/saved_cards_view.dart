@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:eeve_app/custom_Widget_/Custom_button.dart';
-import 'package:eeve_app/views/payment_page.dart';
-import 'package:eeve_app/views/payment_success_page.dart';
+import 'package:eeve_app/views/payment_view.dart';
+import 'package:eeve_app/views/payment_success_view.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

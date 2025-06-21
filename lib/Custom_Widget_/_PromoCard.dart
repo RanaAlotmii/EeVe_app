@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:eeve_app/views/event_detail.dart';
+import 'package:eeve_app/views/event_detail_view.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

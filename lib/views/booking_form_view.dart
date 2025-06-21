@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:eeve_app/Custom_Widget_/CustomTextField.dart';
 import 'package:eeve_app/Custom_Widget_/Custom_button.dart';
-import 'package:eeve_app/views/detail_order_page.dart';
+import 'package:eeve_app/views/order_detail_view.dart';
 
 class BookingFormPage extends StatelessWidget {
   final Map<String, dynamic> eventData;

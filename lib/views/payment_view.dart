@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_credit_card/flutter_credit_card.dart';
 import 'package:eeve_app/custom_Widget_/Custom_button.dart';
-import 'package:eeve_app/views/payment_success_page.dart';
+import 'package:eeve_app/views/payment_success_view.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class PaymentPage extends StatefulWidget {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:eeve_app/views/search_page.dart';
+import 'package:eeve_app/views/search_view.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:eeve_app/controllers/profile_controller.dart';

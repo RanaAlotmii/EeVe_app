@@ -1,9 +1,9 @@
+import 'package:eeve_app/services/theme_service.dart';
 import 'package:eeve_app/views/splash_view.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:eeve_app/managers/theme_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 //import 'package:eeve_app/api/openai_config.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

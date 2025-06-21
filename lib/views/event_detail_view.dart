@@ -1,6 +1,6 @@
 import 'package:eeve_app/Custom_Widget_/_TrendingEventsList.dart';
 import 'package:eeve_app/custom_Widget_/Custom_button.dart';
-import 'package:eeve_app/views/booking_form_page.dart';
+import 'package:eeve_app/views/booking_form_view.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:eeve_app/managers/favorites_manager.dart';

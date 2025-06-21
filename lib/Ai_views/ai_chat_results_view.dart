@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:eeve_app/controllers/events_controller.dart';
-import 'package:eeve_app/Custom_Widget_/event_card_small.dart';
-import 'package:eeve_app/views/event_detail.dart';
+import 'package:eeve_app/Custom_Widget_/compact_event_card.dart';
+import 'package:eeve_app/views/event_detail_view.dart';
 
 class AiChatResultsView extends StatelessWidget {
   final String aiReply;

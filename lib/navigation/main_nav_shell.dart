@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:eeve_app/controllers/events_controller.dart';
-import 'package:eeve_app/views/my_ticket_view.dart';
+import 'package:eeve_app/views/my_tickets_view.dart';
 import '../views/home_view.dart';
 import '../views/favorites_view.dart';
-import '../Ai_views/Ai_getstarted.dart';
+import '../Ai_views/Ai_getstarted_view.dart';
 import 'package:eeve_app/main.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 

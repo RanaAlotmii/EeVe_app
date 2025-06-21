@@ -1,4 +1,4 @@
-import 'package:eeve_app/views/onboarding_view.dart';
+import 'package:eeve_app/views/onboarding_views.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:eeve_app/navigation/main_nav_shell.dart';

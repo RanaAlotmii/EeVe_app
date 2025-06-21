@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:eeve_app/views/event_detail.dart';
+import 'package:eeve_app/views/event_detail_view.dart';
 
 class TrendingEventsList extends StatelessWidget {
   final List<Map<String, dynamic>> events;
