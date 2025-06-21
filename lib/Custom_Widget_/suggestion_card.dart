@@ -18,10 +18,14 @@ class SuggestionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    final cardColor = isDark ? const Color(0xFF171531) : const Color(0xFFF2F2F5);
+    final cardColor =
+        isDark ? const Color(0xFF171531) : const Color(0xFFF2F2F5);
     final titleColor = isDark ? Colors.white : Colors.black87;
     final subtitleColor = isDark ? Colors.white70 : Colors.black54;
-    final iconBgColor = isDark ? Colors.white.withOpacity(0.05) : Colors.black.withOpacity(0.05);
+    final iconBgColor =
+        isDark
+            ? Colors.white.withOpacity(0.05)
+            : Colors.black.withOpacity(0.05);
 
     return GestureDetector(
       onTap: onTap,
@@ -46,11 +50,7 @@ class SuggestionCard extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               child: Center(
-                child: Image.asset(
-                  iconPath,
-                  height: 18,
-                  width: 18,
-                ),
+                child: Image.asset(iconPath, height: 18, width: 18),
               ),
             ),
             const SizedBox(height: 12),
@@ -65,10 +65,7 @@ class SuggestionCard extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               subtitle,
-              style: TextStyle(
-                fontSize: 12,
-                color: subtitleColor,
-              ),
+              style: TextStyle(fontSize: 12, color: subtitleColor),
             ),
           ],
         ),

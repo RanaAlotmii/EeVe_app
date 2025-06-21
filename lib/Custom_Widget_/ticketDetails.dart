@@ -47,45 +47,59 @@ class Ticketdetails extends StatelessWidget {
                 if (value == 'delete') {
                   showDialog(
                     context: context,
-                    builder: (context) => AlertDialog(
-                      title: Text('Delete Ticket'),
-                      content: const Text('Are you sure you want to delete this ticket?'),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          child: const Text('Cancel'),
+                    builder:
+                        (context) => AlertDialog(
+                          title: Text('Delete Ticket'),
+                          content: const Text(
+                            'Are you sure you want to delete this ticket?',
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              child: const Text('Cancel'),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                await supabase
+                                    .from("tickets")
+                                    .delete()
+                                    .eq('id', id);
+                                Navigator.pushReplacement(
+                                  context,
+                                  PageRouteBuilder(
+                                    pageBuilder:
+                                        (context, _, __) =>
+                                            const MainNavShell(),
+                                  ),
+                                );
+                              },
+                              child: const Text(
+                                'Delete',
+                                style: TextStyle(color: Colors.red),
+                              ),
+                            ),
+                          ],
                         ),
-                        TextButton(
-                          onPressed: () async {
-                            await supabase.from("tickets").delete().eq('id', id);
-                            Navigator.pushReplacement(
-                              context,
-                              PageRouteBuilder(pageBuilder: (context, _, __) => const MainNavShell()),
-                            );
-                          },
-                          child: const Text('Delete', style: TextStyle(color: Colors.red)),
-                        ),
-                      ],
-                    ),
                   );
                 }
               },
-              itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                const PopupMenuItem<String>(
-                  value: 'delete',
-                  child: SizedBox(width: 120, child: Text('Delete')),
-                ),
-              ],
+              itemBuilder:
+                  (BuildContext context) => <PopupMenuEntry<String>>[
+                    const PopupMenuItem<String>(
+                      value: 'delete',
+                      child: SizedBox(width: 120, child: Text('Delete')),
+                    ),
+                  ],
             ),
           ),
         ],
         title: Text(
-  'Ticket Detail',
-  style: theme.textTheme.titleMedium?.copyWith(
-    fontSize: 21.sp,
-    fontWeight: FontWeight.bold,
-  ),
-),
+          'Ticket Detail',
+          style: theme.textTheme.titleMedium?.copyWith(
+            fontSize: 21.sp,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
 
         centerTitle: true,
         backgroundColor: theme.scaffoldBackgroundColor,
@@ -98,17 +112,21 @@ class Ticketdetails extends StatelessWidget {
               height: 566.h,
               width: 340.w,
               decoration: BoxDecoration(
-                gradient: isDark
-                    ? const LinearGradient(
-                        colors: [Color(0xFF2B1B4D), Color(0xFF1A1C33)],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      )
-                    : const LinearGradient(
-                        colors: [Color.fromARGB(255, 196, 191, 209), Color.fromARGB(255, 122, 109, 143)],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
+                gradient:
+                    isDark
+                        ? const LinearGradient(
+                          colors: [Color(0xFF2B1B4D), Color(0xFF1A1C33)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        )
+                        : const LinearGradient(
+                          colors: [
+                            Color.fromARGB(255, 196, 191, 209),
+                            Color.fromARGB(255, 122, 109, 143),
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
                 borderRadius: BorderRadius.circular(16.r),
               ),
               child: Column(

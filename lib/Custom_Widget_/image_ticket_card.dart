@@ -18,4 +18,3 @@ class ImageTicketCard extends StatelessWidget {
     );
   }
 }
-

@@ -6,20 +6,26 @@ class CustomCreditCard extends StatelessWidget {
   final String card_number;
   final String expiry_date;
 
-  const CustomCreditCard({super.key, required this.backgroundColor, required this.card_name, required this.card_number, required this.expiry_date});
+  const CustomCreditCard({
+    super.key,
+    required this.backgroundColor,
+    required this.card_name,
+    required this.card_number,
+    required this.expiry_date,
+  });
 
-    String formatExpiryDate(String raw) {
-      if (raw.length == 4) {
-        return '${raw.substring(0, 2)}/${raw.substring(2)}';
-      }
-      return raw;
+  String formatExpiryDate(String raw) {
+    if (raw.length == 4) {
+      return '${raw.substring(0, 2)}/${raw.substring(2)}';
     }
-
-
+    return raw;
+  }
 
   @override
   Widget build(BuildContext context) {
-    final isDarkCard = ThemeData.estimateBrightnessForColor(backgroundColor) == Brightness.dark;
+    final isDarkCard =
+        ThemeData.estimateBrightnessForColor(backgroundColor) ==
+        Brightness.dark;
     final contentColor = isDarkCard ? Colors.white : Colors.black;
     final labelColor = isDarkCard ? Colors.white70 : Colors.grey[800];
 
@@ -84,7 +90,6 @@ class CustomCreditCard extends StatelessWidget {
                     style: TextStyle(color: labelColor, fontSize: 12),
                   ),
                   Text(
-                    // 'Naba AlHarbi',
                     card_name,
                     style: TextStyle(
                       color: contentColor,
@@ -102,7 +107,7 @@ class CustomCreditCard extends StatelessWidget {
                     style: TextStyle(color: labelColor, fontSize: 12),
                   ),
                   Text(
-                    formatExpiryDate(expiry_date), 
+                    formatExpiryDate(expiry_date),
                     style: TextStyle(
                       color: contentColor,
                       fontWeight: FontWeight.w600,

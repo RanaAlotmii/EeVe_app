@@ -18,9 +18,11 @@ class CategoryList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final Color iconBackground = isDark ? const Color(0xFF1E1E2C) : Colors.grey[200]!;
+    final Color iconBackground =
+        isDark ? const Color(0xFF1E1E2C) : Colors.grey[200]!;
     final Color textColor = isDark ? Colors.white : Colors.black87;
-    final Color selectedTextColor = isDark ? Colors.white : const Color(0xFF8B57E6);
+    final Color selectedTextColor =
+        isDark ? Colors.white : const Color(0xFF8B57E6);
 
     return SizedBox(
       height: 110.h,
@@ -43,7 +45,9 @@ class CategoryList extends StatelessWidget {
             final String iconPath = iconMap[categoryId] ?? 'assets/default.png';
 
             return Obx(() {
-              final isSelected = controller.selectedCategories.contains(categoryId);
+              final isSelected = controller.selectedCategories.contains(
+                categoryId,
+              );
 
               return InkWell(
                 borderRadius: BorderRadius.circular(100.r),
@@ -62,37 +66,54 @@ class CategoryList extends StatelessWidget {
                             height: 68.h,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              gradient: isSelected
-                                  ? const LinearGradient(
-                                      colors: [Color(0xFF8B57E6), Color(0xFFB57CE6)],
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight,
-                                    )
-                                  : LinearGradient(
-                                      colors: isDark
-                                          ? [const Color(0xFF2A2A3A), const Color(0xFF3A3A4A)]
-                                          : [Colors.grey[300]!, Colors.grey[200]!],
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight,
-                                    ),
-                              boxShadow: isSelected
-                                  ? [
-                                      BoxShadow(
-                                        color: const Color(0xFF8B57E6).withOpacity(0.3),
-                                        blurRadius: 8,
-                                        offset: const Offset(0, 4),
+                              gradient:
+                                  isSelected
+                                      ? const LinearGradient(
+                                        colors: [
+                                          Color(0xFF8B57E6),
+                                          Color(0xFFB57CE6),
+                                        ],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                      )
+                                      : LinearGradient(
+                                        colors:
+                                            isDark
+                                                ? [
+                                                  const Color(0xFF2A2A3A),
+                                                  const Color(0xFF3A3A4A),
+                                                ]
+                                                : [
+                                                  Colors.grey[300]!,
+                                                  Colors.grey[200]!,
+                                                ],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
                                       ),
-                                    ]
-                                  : null,
+                              boxShadow:
+                                  isSelected
+                                      ? [
+                                        BoxShadow(
+                                          color: const Color(
+                                            0xFF8B57E6,
+                                          ).withOpacity(0.3),
+                                          blurRadius: 8,
+                                          offset: const Offset(0, 4),
+                                        ),
+                                      ]
+                                      : null,
                             ),
                             child: Padding(
                               padding: EdgeInsets.all(3.w),
                               child: Container(
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: isSelected
-                                      ? (isDark ? const Color(0xff151515) : Colors.white.withOpacity(0.95))
-                                      : iconBackground,
+                                  color:
+                                      isSelected
+                                          ? (isDark
+                                              ? const Color(0xff151515)
+                                              : Colors.white.withOpacity(0.95))
+                                          : iconBackground,
                                 ),
                                 child: Center(
                                   child: Image.asset(
@@ -112,7 +133,8 @@ class CategoryList extends StatelessWidget {
                         style: TextStyle(
                           color: isSelected ? selectedTextColor : textColor,
                           fontSize: 12.5.sp,
-                          fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                          fontWeight:
+                              isSelected ? FontWeight.w600 : FontWeight.w500,
                         ),
                         child: Text(category['name'] ?? ''),
                       ),

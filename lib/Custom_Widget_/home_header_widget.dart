@@ -26,18 +26,17 @@ class _HomeHeaderState extends State<HomeHeader> {
 
   Future<void> getUserData() async {
     try {
-      final response = await Supabase.instance.client
-          .from('users')
-          .select()
-          .eq('id', user?.id)
-          .maybeSingle();
+      final response =
+          await Supabase.instance.client
+              .from('users')
+              .select()
+              .eq('id', user?.id)
+              .maybeSingle();
 
       setState(() {
         userData = response;
       });
       profileController.updateProfileImage(userData?['profile_image'] ?? '');
-      //  profileController.updateProfileImage(userData?['name'] ?? '');
-
     } catch (e) {
       print('Error fetching user data: $e');
     }
@@ -53,13 +52,14 @@ class _HomeHeaderState extends State<HomeHeader> {
     return Row(
       children: [
         Obx(() {
-          
           final profileImage = profileController.profileImage.value;
           return CircleAvatar(
             radius: 24.r,
-            backgroundImage: profileImage.isNotEmpty
-                ? NetworkImage(profileImage)
-                : const AssetImage('assets/profileImage.png') as ImageProvider,
+            backgroundImage:
+                profileImage.isNotEmpty
+                    ? NetworkImage(profileImage)
+                    : const AssetImage('assets/profileImage.png')
+                        as ImageProvider,
           );
         }),
         SizedBox(width: 12.w),
@@ -91,8 +91,11 @@ class _HomeHeaderState extends State<HomeHeader> {
         ),
         GestureDetector(
           onTap: () {
-            Get.to(() => const SearchPage(),
-                fullscreenDialog: true, transition: Transition.cupertino);
+            Get.to(
+              () => const SearchPage(),
+              fullscreenDialog: true,
+              transition: Transition.cupertino,
+            );
           },
           child: Container(
             height: 38.h,

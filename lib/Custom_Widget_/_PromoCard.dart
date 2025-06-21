@@ -38,12 +38,13 @@ class _PromoCardState extends State<PromoCard> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    final List<Color> gradientColors = isDark
-        ? [const Color(0xFF0F0F10), const Color(0xFF8B57E6)]
-        : [
-            const Color.fromARGB(255, 165, 159, 182),
-            const Color.fromARGB(255, 110, 81, 159),
-          ];
+    final List<Color> gradientColors =
+        isDark
+            ? [const Color(0xFF0F0F10), const Color(0xFF8B57E6)]
+            : [
+              const Color.fromARGB(255, 165, 159, 182),
+              const Color.fromARGB(255, 110, 81, 159),
+            ];
 
     final double imageWidth = MediaQuery.of(context).size.width * 0.42;
     final double imageHeight = imageWidth * (160 / 170);
@@ -79,25 +80,27 @@ class _PromoCardState extends State<PromoCard> {
                 ),
                 SizedBox(height: 10.h),
                 ElevatedButton(
-                  onPressed: promoEvent == null
-                      ? null
-                      : () {
-                          Get.to(
-                            () => EventDetail(
-                              eventId: promoEvent!['id'],
-                              title: promoEvent!['title'] ?? '',
-                              image: promoEvent!['image_detail'] ?? '',
-                              imageCover: promoEvent!['image_cover'] ?? '',
-                              location: promoEvent!['location'] ?? '',
-                              price: double.tryParse(
-                                          promoEvent!['price'].toString())
-                                      ?.toStringAsFixed(2) ??
-                                  '0.00',
-                              description: promoEvent!['description'] ?? '',
-                              eventTime: promoEvent!['event_time'] ?? '',
-                            ),
-                          );
-                        },
+                  onPressed:
+                      promoEvent == null
+                          ? null
+                          : () {
+                            Get.to(
+                              () => EventDetail(
+                                eventId: promoEvent!['id'],
+                                title: promoEvent!['title'] ?? '',
+                                image: promoEvent!['image_detail'] ?? '',
+                                imageCover: promoEvent!['image_cover'] ?? '',
+                                location: promoEvent!['location'] ?? '',
+                                price:
+                                    double.tryParse(
+                                      promoEvent!['price'].toString(),
+                                    )?.toStringAsFixed(2) ??
+                                    '0.00',
+                                description: promoEvent!['description'] ?? '',
+                                eventTime: promoEvent!['event_time'] ?? '',
+                              ),
+                            );
+                          },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
                     foregroundColor: Colors.deepPurple,
@@ -123,32 +126,33 @@ class _PromoCardState extends State<PromoCard> {
           SizedBox(width: 12.w),
           ClipRRect(
             borderRadius: BorderRadius.circular(12.r),
-            child: promoEvent == null
-                ? Container(
-                    width: imageWidth,
-                    height: imageHeight,
-                    color: Colors.grey[800],
-                    child: const Center(child: CircularProgressIndicator()),
-                  )
-                : Image.network(
-                    promoEvent!['image_cover'] ?? '',
-                    width: imageWidth,
-                    height: imageHeight,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        width: imageWidth,
-                        height: imageHeight,
-                        color: Colors.grey[800],
-                        child: const Center(
-                          child: Icon(
-                            Icons.broken_image,
-                            color: Colors.white30,
+            child:
+                promoEvent == null
+                    ? Container(
+                      width: imageWidth,
+                      height: imageHeight,
+                      color: Colors.grey[800],
+                      child: const Center(child: CircularProgressIndicator()),
+                    )
+                    : Image.network(
+                      promoEvent!['image_cover'] ?? '',
+                      width: imageWidth,
+                      height: imageHeight,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          width: imageWidth,
+                          height: imageHeight,
+                          color: Colors.grey[800],
+                          child: const Center(
+                            child: Icon(
+                              Icons.broken_image,
+                              color: Colors.white30,
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                  ),
+                        );
+                      },
+                    ),
           ),
         ],
       ),

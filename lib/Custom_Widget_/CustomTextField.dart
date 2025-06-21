@@ -42,9 +42,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    final backgroundColor = isDark
-        ? const Color(0xFF1A1B25)
-        : const Color(0xFFF2F2F5); // فاتح جدًا في اللايت
+    final backgroundColor =
+        isDark ? const Color(0xFF1A1B25) : const Color(0xFFF2F2F5);
 
     final hintColor = isDark ? Colors.white60 : Colors.grey.shade600;
     final textColor = isDark ? Colors.white : Colors.black87;
@@ -77,15 +76,16 @@ class _CustomTextFieldState extends State<CustomTextField> {
             width: 1.5,
           ),
         ),
-        suffixIcon: widget.obscureText
-            ? IconButton(
-                icon: Icon(
-                  _obscureText ? Icons.visibility_off : Icons.visibility,
-                  color: iconColor,
-                ),
-                onPressed: _toggleObscure,
-              )
-            : null,
+        suffixIcon:
+            widget.obscureText
+                ? IconButton(
+                  icon: Icon(
+                    _obscureText ? Icons.visibility_off : Icons.visibility,
+                    color: iconColor,
+                  ),
+                  onPressed: _toggleObscure,
+                )
+                : null,
       ),
       cursorColor: textColor,
     );

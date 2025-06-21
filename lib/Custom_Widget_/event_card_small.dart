@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class CompactEventCard extends StatelessWidget {
   final String title;
   final String location;
-  final String imageAsset; // URL from Supabase
+  final String imageAsset;
   final double price;
   final VoidCallback? onTap;
 
@@ -20,7 +20,8 @@ class CompactEventCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final backgroundColor = isDark ? const Color(0xFF1E1E2C) : const Color(0xFFE0E0E0);
+    final backgroundColor =
+        isDark ? const Color(0xFF1E1E2C) : const Color(0xFFE0E0E0);
     final textColor = isDark ? Colors.white : Colors.black;
     final subTextColor = isDark ? Colors.white70 : Colors.black54;
 
@@ -72,11 +73,7 @@ class CompactEventCard extends StatelessWidget {
                   SizedBox(height: 6.h),
                   Row(
                     children: [
-                      Icon(
-                        Icons.location_on,
-                        color: subTextColor,
-                        size: 14.sp,
-                      ),
+                      Icon(Icons.location_on, color: subTextColor, size: 14.sp),
                       SizedBox(width: 4.w),
                       Expanded(
                         child: Text(
@@ -108,4 +105,3 @@ class CompactEventCard extends StatelessWidget {
     );
   }
 }
-

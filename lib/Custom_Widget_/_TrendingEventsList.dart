@@ -41,11 +41,14 @@ class TrendingEventsList extends StatelessWidget {
                 }
               },
               child: TrendingEventCard(
-                image: event['image_cover'] ?? 'https://via.placeholder.com/150',
+                image:
+                    event['image_cover'] ?? 'https://via.placeholder.com/150',
                 title: event['title'] ?? 'No Title',
                 location: event['location'] ?? 'Unknown Location',
-                price: double.tryParse(event['price'].toString())
-                        ?.toStringAsFixed(2) ??
+                price:
+                    double.tryParse(
+                      event['price'].toString(),
+                    )?.toStringAsFixed(2) ??
                     '0.00',
               ),
             ),
@@ -73,7 +76,8 @@ class TrendingEventCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final Color cardColor = isDark ? const Color(0xFF1E1E2C) : Colors.grey[100]!;
+    final Color cardColor =
+        isDark ? const Color(0xFF1E1E2C) : Colors.grey[100]!;
 
     return Container(
       width: 180,
@@ -83,11 +87,7 @@ class TrendingEventCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(18),
         border: Border.all(color: cardColor, width: 1),
         boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 4,
-            offset: Offset(0, 2),
-          )
+          BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2)),
         ],
       ),
       clipBehavior: Clip.hardEdge,
@@ -146,7 +146,7 @@ class TrendingEventCard extends StatelessWidget {
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );

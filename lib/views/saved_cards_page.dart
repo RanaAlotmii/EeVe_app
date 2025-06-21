@@ -5,6 +5,7 @@ import 'package:eeve_app/views/payment_page.dart';
 import 'package:eeve_app/views/payment_success_page.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SavedCardsPage extends StatefulWidget {
   final double totalPrice;
@@ -90,18 +91,23 @@ class _SavedCardsPageState extends State<SavedCardsPage> {
 
     return Scaffold(
       backgroundColor: bgColor,
-      
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-        title: Text('Saved Cards', style: TextStyle(color: textColor)),
+        title: Text(
+          'Saved Cards',
+          style: TextStyle(
+            color: textColor,
+            fontSize: 20.sp,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: textColor),
           onPressed: () => Navigator.pop(context),
         ),
       ),
-
       body: isLoading
           ? const Center(
               child: CircularProgressIndicator(color: Color(0xFF7A4EB0)),
@@ -109,14 +115,13 @@ class _SavedCardsPageState extends State<SavedCardsPage> {
           : savedCards.isEmpty
               ? _buildEmptyState(textColor)
               : _buildCardsList(textColor, cardColor),
-
       bottomNavigationBar: selectedCard != null
           ? SafeArea(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 5, 16, 25),
+                padding: EdgeInsets.fromLTRB(16.w, 5.h, 16.w, 25.h),
                 child: CustomButton(
-                  text: isPaying 
-                      ? 'Processing...' 
+                  text: isPaying
+                      ? 'Processing...'
                       : 'Pay ${widget.totalPrice.toStringAsFixed(2)} SR',
                   onPressed: isPaying ? null : _handlePayment,
                 ),
@@ -133,28 +138,28 @@ class _SavedCardsPageState extends State<SavedCardsPage> {
         children: [
           Icon(
             Icons.credit_card_off,
-            size: 80,
+            size: 80.sp,
             color: textColor.withOpacity(0.3),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16.h),
           Text(
             'No Saved Cards',
             style: TextStyle(
-              fontSize: 24,
+              fontSize: 24.sp,
               fontWeight: FontWeight.bold,
               color: textColor,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
           Text(
             'Add a card to make payments faster',
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 16.sp,
               color: textColor.withOpacity(0.7),
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24.h),
           ElevatedButton(
             onPressed: () {
               Navigator.push(
@@ -170,14 +175,14 @@ class _SavedCardsPageState extends State<SavedCardsPage> {
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF7A4EB0),
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+              padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 12.h),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(8.r),
               ),
             ),
-            child: const Text(
+            child: Text(
               'Add New Card',
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(color: Colors.white, fontSize: 14.sp),
             ),
           ),
         ],
@@ -190,12 +195,12 @@ class _SavedCardsPageState extends State<SavedCardsPage> {
       children: [
         Expanded(
           child: ListView.builder(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(16.w),
             itemCount: savedCards.length,
             itemBuilder: (context, index) {
               final card = savedCards[index];
               final isSelected = selectedCard?['id'] == card['id'];
-              
+
               return GestureDetector(
                 onTap: () {
                   setState(() {
@@ -205,20 +210,18 @@ class _SavedCardsPageState extends State<SavedCardsPage> {
                   });
                 },
                 child: Container(
-                  margin: const EdgeInsets.only(bottom: 12),
+                  margin: EdgeInsets.only(bottom: 12.h),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(16.r),
                     border: Border.all(
-                      color: isSelected 
-                          ? const Color(0xFF1565FF) 
-                          : Colors.transparent,
-                      width: 4,
+                      color: isSelected ? const Color(0xFF1565FF) : Colors.transparent,
+                      width: 4.w,
                     ),
                   ),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(16.r),
                     child: Container(
-                      height: 200,
+                      height: 200.h,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
@@ -232,7 +235,7 @@ class _SavedCardsPageState extends State<SavedCardsPage> {
                       child: Stack(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.all(20),
+                            padding: EdgeInsets.all(20.w),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -240,47 +243,47 @@ class _SavedCardsPageState extends State<SavedCardsPage> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    const Text(
+                                    Text(
                                       'VISA',
                                       style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 18,
+                                        fontSize: 18.sp,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ],
                                 ),
-                                const SizedBox(height: 20),
+                                SizedBox(height: 20.h),
                                 Text(
                                   card['card_number'].toString(),
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 20,
+                                    fontSize: 20.sp,
                                     fontWeight: FontWeight.w600,
                                     letterSpacing: 3,
                                   ),
                                 ),
-                                const SizedBox(height: 20),
+                                SizedBox(height: 20.h),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        const Text(
+                                        Text(
                                           'CARD HOLDER',
                                           style: TextStyle(
                                             color: Colors.white70,
-                                            fontSize: 10,
+                                            fontSize: 10.sp,
                                             fontWeight: FontWeight.w500,
                                           ),
                                         ),
-                                        const SizedBox(height: 4),
+                                        SizedBox(height: 4.h),
                                         Text(
                                           card['card_name'] ?? 'Card Holder',
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 14,
+                                            fontSize: 14.sp,
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),
@@ -289,21 +292,20 @@ class _SavedCardsPageState extends State<SavedCardsPage> {
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.end,
                                       children: [
-                                        const Text(
+                                        Text(
                                           'EXPIRES',
                                           style: TextStyle(
                                             color: Colors.white70,
-                                            fontSize: 10,
+                                            fontSize: 10.sp,
                                             fontWeight: FontWeight.w500,
                                           ),
                                         ),
-                                        const SizedBox(height: 4),
+                                        SizedBox(height: 4.h),
                                         Text(
                                           _formatExpiryDate(card['expiry_date']),
-                                          // card['expiry_date'].toString(),
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 14,
+                                            fontSize: 14.sp,
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),
@@ -316,19 +318,19 @@ class _SavedCardsPageState extends State<SavedCardsPage> {
                           ),
                           if (isSelected)
                             Positioned(
-                              top: 8,
-                              right: 8,
+                              top: 8.h,
+                              right: 8.w,
                               child: Container(
-                                width: 24,
-                                height: 24,
+                                width: 24.w,
+                                height: 24.h,
                                 decoration: const BoxDecoration(
                                   color: Colors.white,
                                   shape: BoxShape.circle,
                                 ),
-                                child: const Icon(
+                                child: Icon(
                                   Icons.check,
-                                  color: Color(0xFF7A4EB0),
-                                  size: 16,
+                                  color: const Color(0xFF7A4EB0),
+                                  size: 16.sp,
                                 ),
                               ),
                             ),
@@ -341,15 +343,14 @@ class _SavedCardsPageState extends State<SavedCardsPage> {
             },
           ),
         ),
-        
         if (selectedCard != null) ...[
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(16.w),
             child: Container(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16.w),
               decoration: BoxDecoration(
                 color: cardColor,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12.r),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -358,22 +359,22 @@ class _SavedCardsPageState extends State<SavedCardsPage> {
                     'Enter CVV to complete payment',
                     style: TextStyle(
                       color: textColor,
-                      fontSize: 16,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12.h),
                   TextFormField(
                     controller: cvvController,
                     decoration: InputDecoration(
                       labelText: 'CVV',
-                      labelStyle: TextStyle(color: textColor.withOpacity(0.7)),
+                      labelStyle: TextStyle(color: textColor.withOpacity(0.7), fontSize: 14.sp),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(8.r),
                         borderSide: BorderSide(color: textColor.withOpacity(0.3)),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(8.r),
                         borderSide: const BorderSide(color: Color(0xFF7A4EB0)),
                       ),
                       suffixIcon: Icon(
@@ -381,7 +382,7 @@ class _SavedCardsPageState extends State<SavedCardsPage> {
                         color: textColor.withOpacity(0.5),
                       ),
                     ),
-                    style: TextStyle(color: textColor),
+                    style: TextStyle(color: textColor, fontSize: 16.sp),
                     keyboardType: TextInputType.number,
                     maxLength: 4,
                     obscureText: true,
@@ -413,11 +414,9 @@ class _SavedCardsPageState extends State<SavedCardsPage> {
       );
       return;
     }
-
     if (cvvCode != selectedCard!["cvv"].toString()) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('CVV isn\'t corrcet ')),
-        
       );
       return;
     }
@@ -427,10 +426,9 @@ class _SavedCardsPageState extends State<SavedCardsPage> {
     });
 
     try {
-
       final expiryMonth = selectedCard!['expiry_date'].toString();
-      final month = int.parse(expiryMonth.substring(0,2));
-      final year = int.parse("20${expiryMonth.substring(2,4)}");
+      final month = int.parse(expiryMonth.substring(0, 2));
+      final year = int.parse("20${expiryMonth.substring(2, 4)}");
 
       final url = Uri.parse('https://api.moyasar.com/v1/payments');
       final response = await http.post(
@@ -443,10 +441,10 @@ class _SavedCardsPageState extends State<SavedCardsPage> {
           "source": {
             "type": "creditcard",
             "name": selectedCard!["card_name"],
-            "number": selectedCard!["card_number"].toString(), 
+            "number": selectedCard!["card_number"].toString(),
             "month": month,
-            "year": year,  
-            "cvc": cvvCode , 
+            "year": year,
+            "cvc": cvvCode,
           },
           "amount": (widget.totalPrice * 100).toInt(),
           "currency": "SAR",
@@ -472,10 +470,9 @@ class _SavedCardsPageState extends State<SavedCardsPage> {
           SnackBar(content: Text('Payment Failed: ${response.statusCode}')),
         );
       }
-    }
-    catch (e) {
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('$selectedCard 🔴Error: $e')),
+        SnackBar(content: Text('Error: $e')),
       );
     } finally {
       setState(() {
