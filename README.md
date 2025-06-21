@@ -70,7 +70,7 @@ EeVe supports both **Light Mode** and **Dark Mode** for a smooth, comfortable ex
 - Supabase – Event data and user authentication
 - OpenAI GPT-3.5 – AI assistant responses
 - Prompt Engineering – To shape AI behavior and tone
-- Figma – UI/UX design and prototyping ([View Design](https://www.figma.com/your-figma-link-here))
+- Figma – UI/UX design and prototyping ([View Design](https://www.figma.com/design/Wlp6zxdrlQVdOyF3WKhdJC/Eeve-project?node-id=0-1&p=f&t=Bd7Ol6PNdNNFDvx0-0))
 - Dart – Programming language
 
 ##  Packages We Used
