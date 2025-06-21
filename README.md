@@ -38,17 +38,14 @@ So we decided to build something better:
   We crafted custom prompts so the AI gives helpful, friendly, and clear replies every time.
 
 ---
-
-
 ## 📸 Screenshots
 
-| Home                                    | AI Chat                                               | Event Detail                                               |
-|-----------------------------------------|-------------------------------------------------------|------------------------------------------------------------|
-| ![Home](ScreenShots/Dark mode/Home.jpg) | ![AI Chat](ScreenShots/Dark mode/EeVe AI.png) | ![Event Detail](ScreenShots/Dark mode/Events%Events Detail.jpg) |
+| Home                                         | AI Chat                                               | Event Detail                                                  |
+|----------------------------------------------|--------------------------------------------------------|---------------------------------------------------------------|
+| ![Home](ScreenShots/Dark%20mode/Home.jpg)     | ![AI Chat](ScreenShots/Dark%20mode/EeVe%20AI.png)      | ![Event Detail](ScreenShots/Dark%20mode/Events%20Detail.jpg) |
 
-> Find more views inside the `/ScreenShots/dark mode/` folder.
-> or '/ScreenShots/light mode/' folder
-
+> Find more views inside the `/ScreenShots/dark mode/` folder.  
+> or `/ScreenShots/light mode/` folder
 
 
 ---
