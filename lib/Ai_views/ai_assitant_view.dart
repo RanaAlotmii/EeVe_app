@@ -149,7 +149,7 @@ class _AiAssistantViewState extends State<AiAssistantView>
         messageText,
         currentMood: _currentMood,
         budget: _budgetPreference,
-        location: 'Riyadh', // Fixed to Riyadh
+        location: 'Riyadh', 
         timePreference: _timePreference,
         previousEvents: _previousEvents,
       );
@@ -172,7 +172,6 @@ class _AiAssistantViewState extends State<AiAssistantView>
       });
     }
 
-    // Auto scroll to the bottom
     await Future.delayed(const Duration(milliseconds: 100));
     _scrollController.animateTo(
       _scrollController.position.maxScrollExtent,
@@ -270,7 +269,7 @@ class _AiAssistantViewState extends State<AiAssistantView>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context); // Required for AutomaticKeepAliveClientMixin
+    super.build(context); 
 
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final backgroundColor = isDark ? const Color(0xFF0E131C) : Colors.white;
@@ -285,7 +284,6 @@ class _AiAssistantViewState extends State<AiAssistantView>
             child: Column(
               children: [
                 const SizedBox(height: 24),
-                // Perfectly centered welcome section with aggressive centering
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 0),
                   child: SizedBox(
@@ -326,7 +324,6 @@ class _AiAssistantViewState extends State<AiAssistantView>
                 ),
                 const SizedBox(height: 12),
 
-                // Context chips
                 _buildContextChips(),
 
                 Expanded(
@@ -335,7 +332,6 @@ class _AiAssistantViewState extends State<AiAssistantView>
                     padding: const EdgeInsets.all(16),
                     itemCount: _messages.length + (_showMoodButtons ? 1 : 0),
                     itemBuilder: (context, index) {
-                      // Show mood buttons after welcome message
                       if (_showMoodButtons && index == _messages.length) {
                         return Container(
                           margin: const EdgeInsets.symmetric(vertical: 12),
@@ -502,12 +498,10 @@ class _AiAssistantViewState extends State<AiAssistantView>
                   ),
                 ),
 
-                // Enhanced input area
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
                   child: Row(
                     children: [
-                      // Quick context button
                       GestureDetector(
                         onTap: () {
                           setState(() {
