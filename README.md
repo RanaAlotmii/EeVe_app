@@ -44,10 +44,10 @@ So we decided to build something better:
 
 | Home                                    | AI Chat                                               | Event Detail                                               |
 |-----------------------------------------|-------------------------------------------------------|------------------------------------------------------------|
-| ![Home](screenshots/Dark mode/Home.jpg) | ![AI Chat](screenshots/Dark mode/EeVe AI.png) | ![Event Detail](screenshots/Dark mode/Events%Events Detail.jpg) |
+| ![Home](screenShots/Dark mode/Home.jpg) | ![AI Chat](screenShots/Dark mode/EeVe AI.png) | ![Event Detail](screenShots/Dark mode/Events%Events Detail.jpg) |
 
-> Find more views inside the `/screenshots/dark mode/` folder.
-> or '/screenshots/light mode/' folder
+> Find more views inside the `/screenShots/dark mode/` folder.
+> or '/screenShots/light mode/' folder
 
 
 
