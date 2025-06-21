@@ -42,7 +42,7 @@ So we decided to build something better:
 
 | Home                                         | AI Chat                                               | Event Detail                                                  |
 |----------------------------------------------|--------------------------------------------------------|---------------------------------------------------------------|
-| ![Home](ScreenShots/Dark%20mode/Home.jpg)     | ![AI Chat](ScreenShots/Dark%20mode/My%20Ticket.png)      | ![Event Detail](ScreenShots/Dark%20mode/Events%20Detail.jpg) |
+| ![Home](ScreenShots/Dark%20mode/Home.jpg)     | ![My Ticket](ScreenShots/Dark%20mode/My%20Ticket.jpg)      | ![Event Detail](ScreenShots/Dark%20mode/Events%20Detail.jpg) |
 
 > Find more views inside the `/ScreenShots/dark mode/` folder.  
 > or `/ScreenShots/light mode/` folder
