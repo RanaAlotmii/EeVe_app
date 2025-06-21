@@ -47,7 +47,7 @@ So we decided to build something better:
 > Find more views inside the `/ScreenShots/dark mode/` folder.  
 > or `/ScreenShots/light mode/` folder
 
-✨ **EeVe adapts to your style!**  
+✨ <span style="font-size:1.1em"><strong>EeVe adapts to your style!</strong></span>
 Whether you love bright, clean designs or prefer a sleek dark interface —  
 EeVe supports both **Light Mode** and **Dark Mode** for a smooth, comfortable experience any time of day.
 
