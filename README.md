@@ -42,7 +42,7 @@ So we decided to build something better:
 
 | Home                                         | My Tickets                                               | Event Detail                                                  |
 |----------------------------------------------|--------------------------------------------------------|---------------------------------------------------------------|
-| ![Home](ScreenShots/Dark%20mode/Home.jpg)     | ![My Ticket](ScreenShots/Dark%20mode/My%20Ticket.jpg)      | ![Event Detail](ScreenShots/Dark%20mode/details.png) |
+| ![Home](ScreenShots/Dark%20mode/Home.jpg)     | ![Event Detail](ScreenShots/Dark%20mode/details.png)      | ![My Ticket](ScreenShots/Dark%20mode/My%20Ticket.jpg) |
 
 > Find more views inside the `/ScreenShots/dark mode/` folder.  
 > or `/ScreenShots/light mode/` folder
