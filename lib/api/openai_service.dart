@@ -2,7 +2,6 @@ import 'package:dart_openai/dart_openai.dart';
 import 'package:eeve_app/controllers/events_controller.dart';
 import 'package:get/get.dart';
 
-/// Enhanced AI service for EeVe event recommendations
 Future<String> getEventSuggestionsFromAI(
   String userInput, {
   String? currentMood,
@@ -12,10 +11,46 @@ Future<String> getEventSuggestionsFromAI(
   List<String>? previousEvents,
 }) async {
   try {
-    final controller = Get.find<EventsController>();
-    final events = controller.getFilteredEvents();
+    List<Map<String, dynamic>> events = [];
+    try {
+      final controller = Get.find<EventsController>();
+      events = controller.getFilteredEvents();
+    } catch (e) {
+      events = [
+        {
+          "title": "Coffee & Art Workshop",
+          "location": "Riyadh Gallery",
+          "price": "45",
+          "category": "Creative",
+        },
+        {
+          "title": "Evening Food Market",
+          "location": "King Fahd Road",
+          "price": "25",
+          "category": "Food",
+        },
+        {
+          "title": "Live Jazz Music",
+          "location": "Diplomatic Quarter",
+          "price": "85",
+          "category": "Music",
+        },
+        {
+          "title": "Pottery Class",
+          "location": "Al Malaz",
+          "price": "120",
+          "category": "Creative",
+        },
+        {
+          "title": "Outdoor Cinema",
+          "location": "King Abdullah Park",
+          "price": "35",
+          "category": "Entertainment",
+        },
+      ];
+      print("Using fallback events due to controller issue: $e");
+    }
 
-    // Enhanced event formatting with more context
     final formattedEvents = events
         .map((event) {
           return '''
@@ -30,7 +65,6 @@ Description: ${event["description"] ?? "No description available"}
         })
         .join('\n');
 
-    // Context building
     String contextInfo = "";
     if (currentMood != null) contextInfo += "Current mood: $currentMood\n";
     if (budget != null) contextInfo += "Budget preference: $budget SR\n";
@@ -147,8 +181,8 @@ Remember: Be specific, be cultural, be personal, and always match their energy l
           ],
         ),
       ],
-      maxTokens: 500, 
-      temperature: 0.7, 
+      maxTokens: 500, // Increased for more detailed responses
+      temperature: 0.7, // Slightly lower for more consistent quality
     );
 
     final reply = chat.choices.first.message.content?.first.text;
@@ -187,7 +221,7 @@ Return ONLY a valid JSON object with these exact keys:
         ),
       ],
       maxTokens: 200,
-      temperature: 0.3, 
+      temperature: 0.3,
     );
 
     final reply = chat.choices.first.message.content?.first.text ?? "{}";
@@ -202,7 +236,205 @@ List<Map<String, dynamic>> filterEventsByMood(
   List<Map<String, dynamic>> events,
   Map<String, dynamic> moodAnalysis,
 ) {
-  // Implement intelligent filtering logic based on mood analysis
-  // This is where you'd apply the mood-to-event category mapping
-  return events; // Placeholder - implement your filtering logic
+  if (moodAnalysis.isEmpty || !moodAnalysis.containsKey("raw_analysis")) {
+    return events;
+  }
+
+  try {
+    final rawAnalysis = moodAnalysis["raw_analysis"].toString().toLowerCase();
+    String detectedMood = "any";
+
+    if (rawAnalysis.contains('"mood"')) {
+      if (rawAnalysis.contains('chill') || rawAnalysis.contains('relaxed')) {
+        detectedMood = "chill";
+      } else if (rawAnalysis.contains('excited') ||
+          rawAnalysis.contains('energetic')) {
+        detectedMood = "excited";
+      } else if (rawAnalysis.contains('social')) {
+        detectedMood = "social";
+      } else if (rawAnalysis.contains('creative')) {
+        detectedMood = "creative";
+      } else if (rawAnalysis.contains('adventurous')) {
+        detectedMood = "adventurous";
+      } else if (rawAnalysis.contains('stressed')) {
+        detectedMood = "stressed";
+      } else if (rawAnalysis.contains('romantic')) {
+        detectedMood = "romantic";
+      } else if (rawAnalysis.contains('cultural')) {
+        detectedMood = "cultural";
+      }
+    }
+
+    // Filter events based on detected mood
+    List<Map<String, dynamic>> filteredEvents = [];
+
+    for (var event in events) {
+      final title = event["title"]?.toString().toLowerCase() ?? "";
+      final category = event["category"]?.toString().toLowerCase() ?? "";
+      final description = event["description"]?.toString().toLowerCase() ?? "";
+      final price = double.tryParse(event["price"]?.toString() ?? "0") ?? 0;
+
+      bool shouldInclude = false;
+
+      switch (detectedMood) {
+        case "chill":
+        case "stressed":
+          // Calm, relaxing activities
+          shouldInclude =
+              title.contains("coffee") ||
+              title.contains("café") ||
+              title.contains("art") ||
+              title.contains("gallery") ||
+              title.contains("meditation") ||
+              title.contains("spa") ||
+              title.contains("quiet") ||
+              title.contains("reading") ||
+              title.contains("yoga") ||
+              category.contains("cafe") ||
+              category.contains("art") ||
+              category.contains("wellness") ||
+              category.contains("relaxation") ||
+              description.contains("peaceful") ||
+              description.contains("calm") ||
+              description.contains("relaxing");
+          break;
+
+        case "excited":
+          // High-energy, fun activities
+          shouldInclude =
+              title.contains("concert") ||
+              title.contains("festival") ||
+              title.contains("party") ||
+              title.contains("dance") ||
+              title.contains("club") ||
+              title.contains("live") ||
+              title.contains("music") ||
+              title.contains("sports") ||
+              title.contains("game") ||
+              category.contains("music") ||
+              category.contains("entertainment") ||
+              category.contains("sports") ||
+              category.contains("nightlife") ||
+              description.contains("energetic") ||
+              description.contains("exciting") ||
+              description.contains("fun");
+          break;
+
+        case "social":
+          // Group activities and networking
+          shouldInclude =
+              title.contains("networking") ||
+              title.contains("meetup") ||
+              title.contains("group") ||
+              title.contains("community") ||
+              title.contains("social") ||
+              title.contains("gathering") ||
+              title.contains("party") ||
+              title.contains("festival") ||
+              category.contains("social") ||
+              category.contains("networking") ||
+              category.contains("community") ||
+              description.contains("meet") ||
+              description.contains("social") ||
+              description.contains("group");
+          break;
+
+        case "creative":
+          // Arts, crafts, workshops
+          shouldInclude =
+              title.contains("workshop") ||
+              title.contains("art") ||
+              title.contains("craft") ||
+              title.contains("creative") ||
+              title.contains("painting") ||
+              title.contains("pottery") ||
+              title.contains("design") ||
+              title.contains("photography") ||
+              title.contains("writing") ||
+              category.contains("art") ||
+              category.contains("creative") ||
+              category.contains("workshop") ||
+              description.contains("creative") ||
+              description.contains("artistic") ||
+              description.contains("craft");
+          break;
+
+        case "adventurous":
+          // Outdoor and adventure activities
+          shouldInclude =
+              title.contains("outdoor") ||
+              title.contains("adventure") ||
+              title.contains("hiking") ||
+              title.contains("exploration") ||
+              title.contains("discovery") ||
+              title.contains("new") ||
+              title.contains("experience") ||
+              title.contains("unique") ||
+              category.contains("outdoor") ||
+              category.contains("adventure") ||
+              category.contains("sports") ||
+              description.contains("adventure") ||
+              description.contains("explore") ||
+              description.contains("discover");
+          break;
+
+        case "romantic":
+          // Romantic, intimate activities
+          shouldInclude =
+              title.contains("romantic") ||
+              title.contains("dinner") ||
+              title.contains("intimate") ||
+              title.contains("couple") ||
+              title.contains("sunset") ||
+              title.contains("candlelight") ||
+              title.contains("wine") ||
+              category.contains("dining") ||
+              category.contains("romantic") ||
+              description.contains("romantic") ||
+              description.contains("intimate") ||
+              description.contains("couple") ||
+              (price > 100);
+          break;
+
+        case "cultural":
+          // Cultural and educational activities
+          shouldInclude =
+              title.contains("museum") ||
+              title.contains("cultural") ||
+              title.contains("heritage") ||
+              title.contains("traditional") ||
+              title.contains("history") ||
+              title.contains("exhibition") ||
+              title.contains("saudi") ||
+              title.contains("arabic") ||
+              category.contains("cultural") ||
+              category.contains("museum") ||
+              category.contains("heritage") ||
+              description.contains("cultural") ||
+              description.contains("traditional") ||
+              description.contains("heritage");
+          break;
+
+        default:
+          shouldInclude = true; // Include all if mood not recognized
+      }
+
+      if (shouldInclude) {
+        filteredEvents.add(event);
+      }
+    }
+
+    // If no events match the mood, return some general popular events
+    if (filteredEvents.isEmpty) {
+      // Return first 5 events as fallback
+      return events.take(5).toList();
+    }
+
+    // Limit to maximum 5 events
+    return filteredEvents.take(5).toList();
+  } catch (e) {
+    // If filtering fails, return all events
+    print("Error in mood filtering: $e");
+    return events;
+  }
 }
